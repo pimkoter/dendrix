@@ -9,6 +9,7 @@
       sha256 = "sha256-QyvJgQ7FHLoFmeVc9HPQSnOEmT0aAEpWFblh6PDyluw=";
     };
   in {
+    imports = [inputs.stylix.nixosModules.stylix];
     stylix = {
       enable = true;
       image = catppuccin-wall;
