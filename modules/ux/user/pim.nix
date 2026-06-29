@@ -4,6 +4,7 @@
   ...
 }: {
   flake.nixosModules.pim = {
+    imports = [inputs.home-manager.nixosModules.home-manager];
     home-manager.users.pim = {
       imports = with self.homeModules; [
         bat
