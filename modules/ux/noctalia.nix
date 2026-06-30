@@ -3,7 +3,7 @@
   inputs,
   ...
 }: {
-  flake.homeModules.noctalia = {lib, config, ...} @ args: {
+  flake.homeModules.noctalia = {lib, ...} @ args: {
     home.file.".config/noctalia/settings.json.template" = {
       text = builtins.toJSON {
         appLauncher = {
@@ -105,7 +105,7 @@
             ];
             left = [
               {
-                colorizeDistroLogo = false;
+                colorizeDistdistroLogo = false;
                 colorizeSystemIcon = "none";
                 customIconPath = "";
                 enableColorization = false;
@@ -261,7 +261,7 @@
           animationDisabled = false;
           animationSpeed = 1;
           autoStartAuth = false;
-          avatarImage = "${config.home.homeDirectory}/.face";
+          avatarImage = "/home/pim/.face";
           boxRadiusRatio = 1;
           clockFormat = "hh\nmm";
           clockStyle = "custom";

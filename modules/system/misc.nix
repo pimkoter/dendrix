@@ -29,9 +29,6 @@
       ELECTRON_OZONE_PLATFORM_HINT = "wayland";
       OZONE_PLATFORM = "wayland";
       GDK_BACKEND = "wayland";
-      GBM_BACKEND = "nvidia-drm";
-      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-      WLR_NO_HARDWARE_CURSORS = "1";
     };
 
     nix.settings.experimental-features = [

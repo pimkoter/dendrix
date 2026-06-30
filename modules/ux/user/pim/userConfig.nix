@@ -23,7 +23,7 @@
     home = {
       username = "pim";
       homeDirectory = "/home/pim";
-      stateVersion = "24.11";
+      stateVersion = "25.05";
     };
   };
 
@@ -123,7 +123,7 @@ in {
 
     users.users.pim = {
       isNormalUser = true;
-      description = "Main user";
+      description = "Main User";
       initialPassword = "12345";
       extraGroups = [
         "wheel"
@@ -132,9 +132,6 @@ in {
         "docker"
         "libvirtd"
         "kvm"
-        "video"
-        "render"
-        "input"
       ];
       ignoreShellProgramCheck = true;
     };

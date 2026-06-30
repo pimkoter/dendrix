@@ -3,17 +3,17 @@
   inputs,
   ...
 }: {
-  flake.nixosModules.drivers = {config, pkgs, ...}: {
-    services.xserver.videoDrivers = ["nvidia" "intel"];
+  flake.nixosModules.drivers = {config, ...}: {
+    services.xserver.videoDrivers = ["nvidia"];
     hardware = {
       nvidia = {
         modesetting.enable = true;
-        open = false;
+        open = true;
         nvidiaSettings = true;
         package = config.boot.kernelPackages.nvidiaPackages.latest;
         powerManagement = {
-          enable = true;
-          finegrained = true;
+          enable = false;
+          finegrained = false;
         };
         prime = {
           offload = {
@@ -28,12 +28,6 @@
       graphics = {
         enable = true;
         enable32Bit = true;
-        extraPackages = with pkgs; [
-          intel-media-driver
-          libvdpau-va-gl
-          nvidia-vaapi-driver
-          egl-wayland
-        ];
       };
     };
   };

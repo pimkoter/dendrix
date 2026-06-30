@@ -7,6 +7,7 @@
     <list default="true" id="d7e5b158-a294-4e42-b7f9-a4945b6195b0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/modules/system/drivers.nix" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/drivers.nix" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/system/misc.nix" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/misc.nix" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/ux/noctalia.nix" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ux/noctalia.nix" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/ux/user/pim/userConfig.nix" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ux/user/pim/userConfig.nix" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
