@@ -7,7 +7,7 @@
     config,
     lib,
     ...
-  }: let
+  } @ args: let
     c = config.stylix.base16Scheme;
   in {
     programs.starship = {

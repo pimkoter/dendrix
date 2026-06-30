@@ -22,7 +22,6 @@
       virtualisation
 
       # Users
-      pim
     ];
   };
 }

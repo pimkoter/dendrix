@@ -3,7 +3,7 @@
   inputs,
   ...
 }: {
-  flake.homeModules.tmux = {pkgs, ...}: {
+  flake.homeModules.tmux = {pkgs, ...} @ args: {
     programs.tmux = {
       enable = true;
       mouse = true;

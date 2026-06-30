@@ -3,7 +3,7 @@
   inputs,
   ...
 }: {
-  flake.homeModules.zsh = {hostName, ...}: {
+  flake.homeModules.zsh = {hostName, ...} @ args: {
     programs.zsh = {
       enable = true;
       autosuggestion.enable = true;
@@ -33,6 +33,7 @@
         ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
         cat = "bat";
         c = "clear";
+        e = "exit";
         bottom = "btm";
         update = "cd ~/.System && git add . && nix flake update && sudo nixos-rebuild switch --flake #${hostName}";
         upgrade = "cd ~/.System && git add . && sudo nixos-rebuild switch  --flake #${hostName}";

@@ -3,7 +3,7 @@
   inputs,
   ...
 }: {
-  flake.homeModules.kitty = {pkgs, ...}: {
+  flake.homeModules.kitty = {pkgs, ...} @ args: {
     programs.kitty = {
       enable = true;
       package = pkgs.kitty;

@@ -7,7 +7,7 @@
     config,
     pkgs,
     ...
-  }: let
+  } @ args: let
     catppuccin-walls = pkgs.fetchFromGitHub {
       owner = "orangci";
       repo = "walls-catppuccin-mocha";

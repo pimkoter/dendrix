@@ -3,11 +3,7 @@
   inputs,
   ...
 }: {
-  flake.nixosModules.pkgs = {
-    pkgs,
-    inputs,
-    ...
-  }: {
+  flake.nixosModules.pkgs = {pkgs, ...}: {
     environment.systemPackages = with pkgs; [
       # --- System & Core Utilities ---
       bat # cat clone with syntax highlighting
@@ -17,7 +13,6 @@
       ffmpeg # Audio/video processing toolkit
       fzf # Fuzzy finder
       git # Version control system
-      grub2 # Bootloader
       lazygit # TUI Git client
       neovim # Vim-based text editor
       openrgb # RGB lighting control software
@@ -66,7 +61,6 @@
 
       # --- Flake Inputs (External Packages) ---
       inputs.helium-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-      inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
   };
 }

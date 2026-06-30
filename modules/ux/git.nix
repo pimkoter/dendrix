@@ -3,7 +3,7 @@
   inputs,
   ...
 }: {
-  flake.homeModules.git = {config, ...}: let
+  flake.homeModules.git = {config, ...} @ args: let
     name = "pim";
     mail = "koter";
   in {

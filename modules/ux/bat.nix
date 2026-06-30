@@ -7,7 +7,7 @@
     pkgs,
     lib,
     ...
-  }: {
+  } @ args: {
     programs.bat = {
       enable = true;
       config = {
@@ -15,7 +15,7 @@
         style = "full";
         theme = lib.mkForce "Dracula";
       };
-      extraPackages = with pkgs.bat-extras; [
+      extraPackages = with args.pkgs.bat-extras; [
         batman
         batpipe
       ];

@@ -27,5 +27,16 @@
     };
   };
 
-  outputs = inputs: inputs.flake-parts.lib.mkFlake {inherit inputs;} (inputs.import-tree ./modules);
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} (
+      let
+        treeModules = inputs.import-tree ./modules;
+      in
+        {
+          imports = [
+            inputs.home-manager.flakeModules.home-manager
+          ];
+        }
+        // treeModules
+    );
 }
