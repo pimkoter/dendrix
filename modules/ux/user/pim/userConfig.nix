@@ -69,18 +69,6 @@
           popups = 12;
         };
       };
-      targets = {
-        nvf.enable = false;
-        # Only set NixOS targets if the option exists (i.e., we are in a NixOS module)
-      } // lib.optionalAttrs (options.stylix.targets ? plymouth) {
-        plymouth.enable = false;
-      } // lib.optionalAttrs (options.stylix.targets ? kmscon) {
-        kmscon.enable = false;
-      } // lib.optionalAttrs (options.stylix.targets ? niri) {
-        niri.enable = false;
-      } // lib.optionalAttrs (options.stylix.targets ? vesktop) {
-        vesktop.enable = false;
-      };
     };
   };
 in {
@@ -134,6 +122,7 @@ in {
         "kvm"
       ];
       ignoreShellProgramCheck = true;
+      shell = pkgs.zsh;
     };
   };
 }
