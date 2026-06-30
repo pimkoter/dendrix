@@ -5,16 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d7e5b158-a294-4e42-b7f9-a4945b6195b0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dendrix.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/ux/user/pim/userConfig.nix" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flake.nix" beforeDir="false" afterPath="$PROJECT_DIR$/flake.nix" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/hosts/NixBTW/NixBTW.nix" beforeDir="false" afterPath="$PROJECT_DIR$/modules/hosts/NixBTW/NixBTW.nix" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/ux/user/pim.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/ux/user/pim/userConfig.nix" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ux/user/pim/userConfig.nix" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
