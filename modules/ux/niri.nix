@@ -11,7 +11,9 @@
       right = "eDP-1";
     };
   in {
-    xdg.configFile."niri/config.kdl".text = ''
+    xdg.configFile."niri/config.kdl" = {
+      force = true;
+      text = ''
 
       // =====================
       // STARTUP APPS
@@ -252,5 +254,6 @@
           max-height 1080
       }
     '';
+    };
   };
 }

@@ -23,7 +23,7 @@
     home = {
       username = "pim";
       homeDirectory = "/home/pim";
-      stateVersion = "25.05";
+      stateVersion = "24.11";
     };
   };
 
