@@ -132,6 +132,9 @@ in {
         "docker"
         "libvirtd"
         "kvm"
+        "video"
+        "render"
+        "input"
       ];
       ignoreShellProgramCheck = true;
     };

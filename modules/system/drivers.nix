@@ -3,8 +3,8 @@
   inputs,
   ...
 }: {
-  flake.nixosModules.drivers = {config, ...}: {
-    services.xserver.videoDrivers = ["nvidia"];
+  flake.nixosModules.drivers = {config, pkgs, ...}: {
+    services.xserver.videoDrivers = ["nvidia" "intel"];
     hardware = {
       nvidia = {
         modesetting.enable = true;
@@ -28,6 +28,12 @@
       graphics = {
         enable = true;
         enable32Bit = true;
+        extraPackages = with pkgs; [
+          intel-media-driver
+          libvdpau-va-gl
+          nvidia-vaapi-driver
+          egl-wayland
+        ];
       };
     };
   };
