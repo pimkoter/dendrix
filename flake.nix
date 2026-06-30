@@ -26,17 +26,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
   outputs = inputs:
-    inputs.flake-parts.lib.mkFlake {inherit inputs;} (
-      let
-        treeModules = inputs.import-tree ./modules;
-      in
-        {
-          imports = [
-            inputs.home-manager.flakeModules.home-manager
-          ];
-        }
-        // treeModules
-    );
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [
+        (inputs.import-tree ./modules)
+        inputs.home-manager.flakeModules.home-manager
+      ];
+    };
 }
