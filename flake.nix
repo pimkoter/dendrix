@@ -5,6 +5,10 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
+    nix-wrapper-modules = {
+      url = "github:birdeehub/nix-wrapper-modules";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
