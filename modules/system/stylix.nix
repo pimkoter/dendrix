@@ -3,7 +3,12 @@
   inputs,
   ...
 }: {
-  flake.nixosModules.stylix = {pkgs, ...}: let
+  flake.nixosModules.stylix = {
+    pkgs,
+    lib,
+    options,
+    ...
+  }: let
     catppuccin-wall = pkgs.fetchurl {
       url = "https://files.orangc.net/media/walls-catppuccin-mocha/abstract-swirls.jpg";
       sha256 = "sha256-QyvJgQ7FHLoFmeVc9HPQSnOEmT0aAEpWFblh6PDyluw=";
@@ -42,8 +47,15 @@
       };
       targets = {
         nvf.enable = false;
+        # Disable problematic or unused targets
+      } // lib.optionalAttrs (options.stylix.targets ? plymouth) {
         plymouth.enable = false;
+      } // lib.optionalAttrs (options.stylix.targets ? kmscon) {
         kmscon.enable = false;
+      } // lib.optionalAttrs (options.stylix.targets ? niri) {
+        niri.enable = false;
+      } // lib.optionalAttrs (options.stylix.targets ? vesktop) {
+        vesktop.enable = false;
       };
     };
   };

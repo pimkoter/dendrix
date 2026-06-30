@@ -76,6 +76,10 @@
         plymouth.enable = false;
       } // lib.optionalAttrs (options.stylix.targets ? kmscon) {
         kmscon.enable = false;
+      } // lib.optionalAttrs (options.stylix.targets ? niri) {
+        niri.enable = false;
+      } // lib.optionalAttrs (options.stylix.targets ? vesktop) {
+        vesktop.enable = false;
       };
     };
   };
@@ -107,6 +111,7 @@ in {
     home-manager = {
       useGlobalPkgs = true;
       useUserPackages = true;
+      backupFileExtension = "backup";
       extraSpecialArgs = {
         inherit self inputs;
         hostName = config.networking.hostName;
