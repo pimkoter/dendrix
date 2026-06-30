@@ -3,7 +3,7 @@
   inputs,
   ...
 }: {
-  flake.homeModules.zsh = {hostName, ...} @ args: {
+  flake.homeModules.zsh = {
     programs.zsh = {
       enable = true;
       autosuggestion.enable = true;
@@ -21,7 +21,7 @@
       historySubstringSearch.enable = true;
 
       initContent = ''
-        if [[ $- == *i* ]]; then
+        if [[ $- == *i* ]] && [ -z "$TMUX" ]; then
           tmux
           fastfetch
         fi
@@ -35,10 +35,8 @@
         c = "clear";
         e = "exit";
         bottom = "btm";
-        update = "cd ~/.System && git add . && nix flake update && sudo nixos-rebuild switch --flake #${hostName}";
-        upgrade = "cd ~/.System && git add . && sudo nixos-rebuild switch  --flake #${hostName}";
         ssn = "sudo systemctl poweroff";
-        ssr = "sudo systemctl reboot";
+        srn = "sudo systemctl reboot";
         ff = "fastfetch";
         gens = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
 
@@ -47,7 +45,6 @@
         shell = "nix-shell -p";
 
         ls = "eza";
-        lt = "eza --tree --level-2";
         ll = "eza -lh --no-user --long";
         la = "eza -lah";
         tree = "eza --tree";
