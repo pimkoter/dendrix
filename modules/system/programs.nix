@@ -3,7 +3,7 @@
   inputs,
   ...
 }: {
-  flake.nixosModules.programs = {
+  flake.nixosModules.programs = {pkgs, ...}: {
     programs = {
       nix-ld.enable = true;
       niri.enable = true;
@@ -15,5 +15,7 @@
         dedicatedServer.openFirewall = true;
       };
     };
+
+    services.displayManager.sessionPackages = [pkgs.niri];
   };
 }
