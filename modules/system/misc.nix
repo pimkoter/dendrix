@@ -36,7 +36,12 @@
       "flakes"
     ];
 
-    nixpkgs.config.allowUnfree = true;
+    nixpkgs.config = {
+      allowUnfree = true;
+      permittedInsecurePackages = [
+        "pnpm-10.29.2"
+      ];
+    };
 
     time.timeZone = "Europe/Amsterdam";
     i18n.defaultLocale = "en_US.UTF-8";
