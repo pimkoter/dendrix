@@ -1,4 +1,8 @@
-{self, ...}: {
+{
+  self,
+  inputs,
+  ...
+}: {
   flake.commonModules.stylix = {pkgs, ...}: let
     catppuccin-wall = pkgs.fetchurl {
       url = "https://files.orangc.net/media/walls-catppuccin-mocha/abstract-swirls.jpg";
@@ -38,4 +42,5 @@
     };
   };
   flake.homeModules.stylix = self.commonModules.stylix;
+  flake.nixosModules.stylix = {imports = [inputs.stylix.nixosModules.stylix self.commonModules.stylix];};
 }
