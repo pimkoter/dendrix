@@ -21,8 +21,10 @@
       historySubstringSearch.enable = true;
 
       initContent = ''
-        if [[ $- == *i* ]] && [ -z "$TMUX" ]; then
-          tmux
+        if [[ $- == *i* ]]; then
+          if [ -z "$TMUX" ]; then
+            tmux
+          fi
           fastfetch
         fi
       '';
