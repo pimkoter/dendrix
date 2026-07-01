@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d7e5b158-a294-4e42-b7f9-a4945b6195b0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/modules/system/drivers.nix" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/drivers.nix" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/misc.nix" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/misc.nix" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/ux/noctalia.nix" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ux/noctalia.nix" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/ux/user/pim/userConfig.nix" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ux/user/pim/userConfig.nix" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/ux/user/pim/home.nix" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/ux/user/pim/nixos.nix" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/ux/user/pim/standalone.nix" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/ux/user/pim/stylix.nix" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/planningMode.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/planningMode.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/hosts/NixBTW/hardware-configuration.nix" beforeDir="false" afterPath="$PROJECT_DIR$/modules/hosts/NixBTW/hardware-configuration.nix" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/ux/user/pim/userConfig.nix" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +29,9 @@
   &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="3FrSPZ0xxFc167mjYb1YjGQvBSl" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
