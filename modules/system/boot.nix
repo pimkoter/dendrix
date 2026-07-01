@@ -28,6 +28,7 @@
         "rd.systemd.show_status=false"
         "rd.udev.log_level=3"
         "nvidia-drm.modeset=1"
+        "nvidia-drm.fbdev=1"
         "i915.fastboot=1"
         "video=2560x1600"
         "video=efifb:mode=0"
