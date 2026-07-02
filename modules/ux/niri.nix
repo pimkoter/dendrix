@@ -236,7 +236,7 @@
       }
 
       output "${monitors.right}" {
-          mode "2560x1080@60"
+          mode "2560x1600@60"
           scale 1.5
           position x=3840 y=0
       }
