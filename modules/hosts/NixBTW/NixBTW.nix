@@ -14,7 +14,6 @@
       misc
       networking
       pkgs
-      plymouth
       programs
       sddm
       services
