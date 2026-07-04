@@ -6,6 +6,7 @@
   flake.nixosModules.pkgs = {pkgs, ...}: {
     environment.systemPackages = with pkgs; [
       # --- System & Core Utilities ---
+      awww # Wallpaper engine
       bat # cat clone with syntax highlighting
       blueman # Bluetooth manager GUI
       bottom # System monitor (htop-like)
@@ -34,7 +35,6 @@
       qbittorrent # BitTorrent client
       spotify # Music streaming client
       thunderbird # Email Client
-      winboat # Windows emulation software
 
       # --- Gaming Ecosystem ---
       heroic # Epic/GOG game launcher
