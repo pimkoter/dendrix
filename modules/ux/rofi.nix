@@ -30,7 +30,7 @@
       in {
         "window" = {
           width = mkLiteral "680px";
-          height = mkLiteral "680px";
+          height = mkLiteral "700px";
           border = mkLiteral "2px";
           border-radius = mkLiteral "0px";
           padding = mkLiteral "20px";
@@ -42,8 +42,8 @@
         };
 
         "listview" = {
-          columns = 4;
-          lines = 4;
+          columns = 1;
+          lines = 6;
           spacing = mkLiteral "15px";
           cycle = true;
           dynamic = true;
@@ -51,19 +51,19 @@
         };
 
         "element" = {
-          orientation = mkLiteral "vertical";
+          orientation = mkLiteral "horizontal";
           padding = mkLiteral "15px 10px";
           border-radius = mkLiteral "0px";
         };
 
         "element-icon" = {
-          size = mkLiteral "64px";
+          size = mkLiteral "32px";
           horizontal-align = mkLiteral "0.5";
         };
 
         "element-text" = {
           horizontal-align = mkLiteral "0.5";
-          margin = mkLiteral "10px 0px 0px 0px";
+          margin = mkLiteral "0px 10px 0px 0px";
         };
       };
     };
