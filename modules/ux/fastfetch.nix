@@ -30,6 +30,7 @@
           {
             type = "packages";
             key = "│ ├󰏖";
+            format = "{1} ({10} sys, {11} usr)";
           }
           {
             type = "command";
