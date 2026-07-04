@@ -11,6 +11,7 @@
       self.homeModules.noctalia
       self.homeModules.nvf
       self.homeModules.rofi
+      self.homeModules.scripts
       self.homeModules.starship
       self.homeModules.tmux
       self.homeModules.wallpapers
