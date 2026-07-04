@@ -10,6 +10,7 @@
       self.homeModules.niri
       self.homeModules.noctalia
       self.homeModules.nvf
+      self.homeModules.rofi
       self.homeModules.starship
       self.homeModules.tmux
       self.homeModules.wallpapers
