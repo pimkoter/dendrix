@@ -31,8 +31,11 @@
             Mod+Shift+Slash { show-hotkey-overlay; }
 
             // --- Applications ---
-            Mod+Space   cooldown-ms=200            { spawn-sh "rofi -show drun"; }
-            Mod+T        cooldown-ms=200            { spawn "kitty"; }
+            Mod+Space    cooldown-ms=200            { spawn-sh "rofi -show drun"; }
+            Mod+Y        cooldown-ms=200            { spawn-sh "rofi-bookmarks";}
+            Mod+G        cooldown-ms=200            { spawn-sh "rofi-repos";}
+            Mod+V        cooldown-ms=200            { spawn-sh "rofi-wallpaper";}
+            Mod+N        cooldown-ms=200            { spawn-sh "nix";}
             Mod+D        cooldown-ms=200            { spawn "legcord"; }
             Mod+B        cooldown-ms=200            { spawn "helium"; }
             Mod+Shift+M  cooldown-ms=200            { spawn "pavucontrol"; }
