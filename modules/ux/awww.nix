@@ -1,6 +1,6 @@
 {
-  flake.homeModules = {
-    programs.awww = {
+  flake.homeModules.awww = {
+    services.awww = {
       enable = true;
     };
   };
