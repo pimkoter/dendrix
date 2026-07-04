@@ -1,6 +1,7 @@
 {self, ...}: {
   flake.homeModules.pim = {pkgs, ...}: {
     imports = [
+      self.homeModules.awww
       self.homeModules.bat
       self.homeModules.eza
       self.homeModules.fastfetch
