@@ -30,10 +30,11 @@
       '';
 
       shellAliases = {
-        sv = "sudo nvim";
         v = "nvim";
+        sv = "sudo nvim";
         ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
         cat = "bat";
+        find = "fd";
         c = "clear";
         e = "exit";
         bottom = "btm";
