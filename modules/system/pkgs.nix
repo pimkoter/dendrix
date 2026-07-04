@@ -10,6 +10,7 @@
       blueman # Bluetooth manager GUI
       bottom # System monitor (htop-like)
       curl # Command-line HTTP client
+      fd # Better find alternative
       ffmpeg # Audio/video processing toolkit
       fzf # Fuzzy finder
       git # Version control system
