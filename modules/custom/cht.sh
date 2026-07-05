@@ -44,7 +44,7 @@ cht_search() {
   # --- TMUX WINDOW HANDLING ---
   # If inside a tmux session, open the result in a new temporary window
   if [[ -n "$TMUX" ]]; then
-    tmux new-window -n "cht.sh-$selection" "curl -s '$url' | less -R"
+    tmux new-window -n "chtsh-$selection" "curl -s '$url' | less -R"
   else
     # Fallback for non-tmux environments
     echo -e "\n\033[1;32mFetching: $url ...\033[0m\n"
