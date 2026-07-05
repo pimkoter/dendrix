@@ -7,7 +7,7 @@
     inputs,
     lib,
     ...
-  } @ args: {
+  }: {
     imports = [inputs.nvf.homeManagerModules.default];
     programs.nvf = {
       enable = true;
@@ -44,14 +44,13 @@
           {
             key = "<leader>fw";
             mode = "n";
-            action = "<cmd>FzfLua grep_cword";
+            action = "<cmd>FzfLua grep_cword<CR>";
             silent = true;
           }
           {
             key = "<leader>fr>";
             mode = "n";
-            action = "<cmd>FzfLua resume";
-            silent = true;
+            action = "<cmd>FzfLua resume<CR>";
           }
           {
             key = "<leader>ff";
@@ -114,35 +113,37 @@
             silent = true;
           }
         ];
-        # --- AI INTEGRATION ---
 
         # --- THEMING ---
         theme = {
           enable = true;
           name = lib.mkForce "catppuccin";
           style = lib.mkForce "auto";
+          transparent = lib.mkForce true;
         };
 
         # --- PLUGINS & LSP CONFIGURATION ---
-        lsp = {
-          enable = true;
-          formatOnSave = true;
-        };
         binds.whichKey.enable = true;
         git.gitsigns.enable = true;
         autopairs.nvim-autopairs.enable = true;
         comments.comment-nvim.enable = true;
         autocomplete.blink-cmp.enable = true;
+        fzf-lua.enable = true;
+        lsp = {
+          enable = true;
+          formatOnSave = true;
+        };
         languages = {
           enableFormat = true;
           enableTreesitter = true;
           nix.enable = true;
+          clang.enable = true;
           typescript.enable = true;
           python.enable = true;
         };
-        fzf-lua.enable = true;
         statusline.lualine = {
           enable = true;
+          theme = lib.mkForce "auto";
         };
       };
     };
