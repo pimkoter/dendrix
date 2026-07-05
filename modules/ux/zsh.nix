@@ -43,7 +43,6 @@
         ff = "fastfetch";
         gens = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
 
-        ssh = "kitten ssh";
         tsh = "tailscale ssh";
         shell = "nix-shell -p";
 
