@@ -4,24 +4,42 @@
   ...
 }: {
   flake.nixosModules.howdy = {
+    lib,
     config,
     pkgs,
     ...
   }: {
-    services.howdy = {
-      enable = true;
-      control = "sufficient";
-      settings = {
-        video = {
-          device_path = "/dev/video2";
+    config = {
+      services.howdy = {
+        enable = true;
+        control = "sufficient";
+        settings = {
+          video = {
+            device_path = "/dev/video2";
+          };
         };
       };
-    };
-    services.linux-enable-ir-emitter.enable = true;
-    security.pam.services.sddm.rules.auth.howdy = {
-      order = 10; # Put it at the very beginning of the auth stack
-      control = "sufficient";
-      modulePath = "pam_howdy.so";
+
+      services.linux-enable-ir-emitter.enable = true;
+
+      # Dynamically inject PAM rules by checking which display manager is enabled
+      security.pam.services =
+        # Check for Ly
+        (lib.mkIf (config.services.displayManager.ly.enable or false) {
+          ly.rules.auth.howdy = lib.mkDefault {
+            order = 10;
+            control = "sufficient";
+            modulePath = "pam_howdy.so";
+          };
+        })
+        // # Merge with check for SDDM
+        (lib.mkIf (config.services.displayManager.sddm.enable or false) {
+          sddm.rules.auth.howdy = lib.mkDefault {
+            order = 10;
+            control = "sufficient";
+            modulePath = "pam_howdy.so";
+          };
+        });
     };
   };
 }
