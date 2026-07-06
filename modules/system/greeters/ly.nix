@@ -26,7 +26,6 @@
 
         # Language and Console settings
         lang = "en";
-        tty = 2; # The TTY Ly will run on (default is usually 2)
       };
     };
   };
