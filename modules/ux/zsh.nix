@@ -23,7 +23,7 @@
       initContent = ''
         if [[ $- == *i* ]]; then
           if [ -z "$TMUX" ]; then
-            tmux
+            exec tmux
           fi
           fastfetch
         fi
