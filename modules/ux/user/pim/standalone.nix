@@ -10,9 +10,5 @@
       self.commonModules.stylix
       self.homeModules.pim
     ];
-    extraSpecialArgs = {
-      inherit self inputs;
-      hostName = "NixBTW"; # Default for standalone
-    };
   };
 }
