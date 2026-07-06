@@ -12,11 +12,11 @@
       boot
       drivers
       howdy
+      ly
       misc
       networking
       pkgs
       programs
-      sddm
       services
       stylix
       virtualisation
