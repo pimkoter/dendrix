@@ -19,9 +19,6 @@
         // STARTUP APPS
         // =====================
         spawn-at-startup "noctalia-shell"
-        spawn-at-startup "spotify"
-        spawn-at-startup "legcord"
-        spawn-at-startup "steam"
 
         // =====================
         // KEYBINDS
