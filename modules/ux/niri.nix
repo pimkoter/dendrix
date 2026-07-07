@@ -35,7 +35,7 @@
             Mod+N        cooldown-ms=200            { spawn-sh "nix"; }
             Mod+T        cooldown-ms=200            { spawn "kitty"; }
             Mod+D        cooldown-ms=200            { spawn "legcord"; }
-            Mod+B        cooldown-ms=200            { spawn "helium"; }
+            Mod+B        cooldown-ms=200            { spawn "zen"; }
             Mod+Shift+M  cooldown-ms=200            { spawn "pavucontrol"; }
 
             // --- Media / Volume ---
