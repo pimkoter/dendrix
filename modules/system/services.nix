@@ -5,6 +5,13 @@
 }: {
   flake.nixosModules.services = {
     services = {
+      avahi = {
+        enable = true;
+        openFirewall = true; # <-- This opens the UDP port 5353 for mDNS discovery
+      };
+      printing = {
+        enable = true;
+      };
       openssh.enable = true;
       upower.enable = true;
       xserver.xkb = {
