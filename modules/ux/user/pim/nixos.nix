@@ -27,7 +27,7 @@
 
     users.users.pim = {
       isNormalUser = true;
-      description = "Main User";
+      description = "Pim";
       initialPassword = "12345";
       extraGroups = [
         "wheel"
