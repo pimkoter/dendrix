@@ -45,6 +45,7 @@
 
         tsh = "tailscale ssh";
         shell = "nix-shell -p";
+        nd = "nix develop -c zsh";
 
         ls = "eza";
         ll = "eza -lh --no-user --long";
