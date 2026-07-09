@@ -5,7 +5,7 @@ set -eu
 terminal="kitty"
 
 # Pick repo
-configs="$(ls -1d "$HOME"/repos/*/ 2>/dev/null | xargs -n1 basename)"
+configs="$(ls -1d "$HOME"/Repos/*/ 2>/dev/null | xargs -n1 basename)"
 [ -n "$configs" ] || exit 0
 chosen="$(printf '%s\n' $configs | rofi -dmenu -i -matching fuzzy -sort -p 'Projects:')"
 [ -n "$chosen" ] || exit 0
