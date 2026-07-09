@@ -21,7 +21,8 @@
           "[](fg:#${c.base02} bg:#${c.base03})"
           "$git_branch$git_status"
           "[](fg:#${c.base03} bg:#${c.base0D})"
-          "$clanguage$elixir$elm$golang$haskell$java$julia$nodejs$nim$rust"
+          # INJECTED: Added $nix_shell right next to your programming languages module group
+          "$clanguage$elixir$elm$golang$haskell$java$julia$nodejs$nim$rust$nix_shell"
           "[](fg:#${c.base0D} bg:#${c.base0C})"
           "$docker_context"
           "[](fg:#${c.base0C} bg:#${c.base0A})"
@@ -91,6 +92,13 @@
           symbol = "";
           style = "bg:#${c.base0D}";
           format = "[ $symbol ($version) ]($style)";
+        };
+
+        nix_shell = {
+          disabled = false;
+          symbol = "❄️ ";
+          style = "bg:#${c.base0D}";
+          format = "[ $symbol(dev) ]($style)";
         };
       };
     };
