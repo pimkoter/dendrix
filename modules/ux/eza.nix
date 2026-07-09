@@ -14,7 +14,6 @@
         "--group-directories-first"
         "--no-quotes"
         "--header"
-        "--git-ignore"
         "--icons=always"
         "--classify"
         "--hyperlink"
