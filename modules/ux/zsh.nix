@@ -49,8 +49,8 @@
 
         ls = "eza";
         ll = "eza -lh --no-user --long";
-        la = "eza -lah";
-        tree = "eza --tree";
+        la = "eza -lah --no-git";
+        tree = "eza --no-git --tree";
       };
     };
   };
