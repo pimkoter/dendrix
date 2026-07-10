@@ -38,7 +38,7 @@
 
       # --- Gaming Ecosystem ---
       heroic # Epic/GOG game launcher
-      legcord # Discord client
+      vesktop # Discord client
       prismlauncher # Minecraft launcher
       satisfactorymodmanager # Modmanager for satisfactory
       steam # Steam game platform client
