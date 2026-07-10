@@ -140,6 +140,7 @@
           clang.enable = true;
           python.enable = true;
           rust.enable = true;
+          bash.enable = true;
         };
         statusline.lualine = {
           enable = true;
