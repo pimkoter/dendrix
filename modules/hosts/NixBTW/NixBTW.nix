@@ -12,7 +12,6 @@
       boot
       drivers
       howdy
-      laptop
       ly
       misc
       networking
@@ -20,6 +19,7 @@
       programs
       services
       stylix
+      swaylock
       virtualisation
 
       # Users

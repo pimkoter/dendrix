@@ -10,8 +10,8 @@ EXTENSIONS="jpg|jpeg|png|webp"
 
 # Check if the wallpaper directory exists
 if [ ! -d "$WALLPAPER_DIR" ]; then
-    notify-send "Wallpaper Selector" "Directory $WALLPAPER_DIR does not exist."
-    exit 1
+  notify-send "Wallpaper Selector" "Directory $WALLPAPER_DIR does not exist."
+  exit 1
 fi
 
 # Change to the wallpaper directory
@@ -20,7 +20,7 @@ cd "$WALLPAPER_DIR" || exit 1
 # Generate the wallpaper list and pipe it DIRECTLY into Rofi.
 # Layout: Fixed 3x3 grid, 256px preview size, text hidden completely.
 SELECTION=$(find . -type f | grep -E "\.(${EXTENSIONS})$" | sed 's|^\./||' | while read -r file; do
-    echo -e "${file}\x00icon\x1f${WALLPAPER_DIR}/${file}"
+  echo -e "${file}\x00icon\x1f${WALLPAPER_DIR}/${file}"
 done | rofi -dmenu -i -p "Select Wallpaper" -show-icons -theme-str '
     window {
         width: 85%;
@@ -51,10 +51,7 @@ done | rofi -dmenu -i -p "Select Wallpaper" -show-icons -theme-str '
     }')
 
 if [ -n "$SELECTION" ]; then
-    FULL_PATH="${WALLPAPER_DIR}/${SELECTION}"
-    awww img "$FULL_PATH"
-
-    if command -v noctalia &> /dev/null; then
-        noctalia msg palette-generate "$FULL_PATH"
-    fi
+  FULL_PATH="${WALLPAPER_DIR}/${SELECTION}"
+  awww img "$FULL_PATH"
+  noctalia msg palette-generate "$FULL_PATH"
 fi

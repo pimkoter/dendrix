@@ -47,8 +47,11 @@
       compose2nix # Tool for transferring docker-compose.yaml to .nix files
       dig # DNS Tester
       gcc # C / C++ compiler
+      clang # C compiler
       nmap # Network Mapper
       python315 # Python compiler
+      rustc # Rust compiler
+      cargo # Rust package manager
       sdkmanager # Android tool
       adb-sync # App to sync acces android files
       android-tools # Fastboot options
