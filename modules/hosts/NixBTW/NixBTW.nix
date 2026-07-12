@@ -19,7 +19,6 @@
       programs
       services
       stylix
-      swaylock
       virtualisation
 
       # Users
