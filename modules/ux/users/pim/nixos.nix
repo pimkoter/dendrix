@@ -41,7 +41,6 @@
             clang # C compiler
             compose2nix # Tool for transferring docker-compose.yaml to .nix files
             dig # DNS Tester
-            gcc # C / C++ compiler
             nmap # Network Mapper
             python315 # Python interpreter
             rustc # Rust compiler
