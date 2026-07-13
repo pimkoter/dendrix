@@ -1,8 +1,4 @@
 {
-  self,
-  inputs,
-  ...
-}: {
   flake.homeModules.nvf = {
     inputs,
     lib,
@@ -38,7 +34,7 @@
           {
             key = "<leader>cd";
             mode = "n";
-            action = "<cmd>Ex<CR>";
+            action = "<cmd>Neotree filesystem reveal left<CR>";
             silent = true;
           }
           {
@@ -123,6 +119,7 @@
         };
 
         # --- PLUGINS & LSP CONFIGURATION ---
+        filetree.neo-tree.enable = true;
         binds.whichKey.enable = true;
         git.gitsigns.enable = true;
         autopairs.nvim-autopairs.enable = true;
@@ -141,6 +138,7 @@
           python.enable = true;
           rust.enable = true;
           bash.enable = true;
+          lua.enable = true;
         };
         statusline.lualine = {
           enable = true;
