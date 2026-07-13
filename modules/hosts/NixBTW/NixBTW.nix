@@ -15,6 +15,7 @@
       ly
       misc
       networking
+      niri
       pkgs
       programs
       services

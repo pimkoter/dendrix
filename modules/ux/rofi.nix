@@ -1,8 +1,4 @@
 {
-  self,
-  inputs,
-  ...
-}: {
   flake.homeModules.rofi = {
     pkgs,
     lib,

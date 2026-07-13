@@ -1,8 +1,4 @@
 {
-  self,
-  inputs,
-  ...
-}: {
   flake.homeModules.tmux = {
     config,
     lib,
@@ -24,6 +20,7 @@
       extraConfig = ''
         set -ga terminal-overrides ",*:RGB"
         set -g set-clipboard on
+        set -g focus-events on
 
         unbind C-b
         set -g prefix C-a
@@ -87,9 +84,10 @@
 
         set -g status "on"
         set -g status-bg "${c.base00}"
-        set -g status-justify "left"
-        set -g status-left-length "0"
-        set -g status-right-length "100"
+        set -g status-justify "centre" # Changed to centre so Neovim data can sit elegantly on the sides
+
+        set -g status-left-length "1000"
+        set -g status-right-length "1000"
 
         ##### Panes #####
 
@@ -100,7 +98,8 @@
 
         set -g window-status-activity-style "fg=${c.base09},bg=${c.base00},none"
         set -g window-status-separator ""
-        set -g window-status-style "fg=${c.base03},bg=${c.base00},none"
+        # Set the default window style background to base02 for the tab shape
+        set -g window-status-style "fg=${c.base03},bg=${c.base02},none"
 
         ##### Messages #####
 
@@ -113,15 +112,12 @@
 
         ##### Statusline - other windows #####
 
-        set -g window-status-format "#[fg=${c.base03},bg=${c.base00}] #I: #[fg=${c.base03},bg=${c.base00}]#W"
+        # Using base02 here creates a beautiful, subtle dark-gray tab container
+        set -g window-status-format "#[fg=${c.base03},bg=${c.base02}] #I: #[fg=${c.base03},bg=${c.base02}]#W #[fg=${c.base03},bg=${c.base02}]"
 
-        ##### Statusline - right side #####
-
-        set -g status-right "#[fg=${c.base03},bg=${c.base00},nobold,nounderscore,noitalics]#[fg=${c.base03},bg=${c.base00},nobold,nounderscore,noitalics] #[fg=${c.base05},bg=${c.base00}] #W #{?client_prefix,#[fg=${c.base09}],#[fg=${c.base0D}]}#[bg=${c.base00}]#{?client_prefix,#[bg=${c.base00}],#[bg=${c.base00}]}#[fg=${c.base05}] #[fg=${c.base05},bg=${c.base00}] #S "
-
-        ##### Statusline - left side #####
-
+        ##### Statusline - Left & Right Side overrides #####
         set -g status-left ""
+        set -g status-right "#[fg=${c.base05},bg=${c.base00}] #S "
 
         ##### Modes #####
 

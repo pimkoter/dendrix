@@ -1,21 +1,20 @@
 {self, ...}: {
-  flake.homeModules.kiki = {pkgs, ...}: {
+  flake.homeModules.default = {pkgs, ...}: {
     imports = [
-      self.homeModules.awww
       self.homeModules.bat
-      self.homeModules.chicago95
       self.homeModules.eza
       self.homeModules.fastfetch
       self.homeModules.kitty
       self.homeModules.nvf
+      self.homeModules.rofi
       self.homeModules.starship
       self.homeModules.tmux
       self.homeModules.zoxide
       self.homeModules.zsh
     ];
     home = {
-      username = "kiki";
-      homeDirectory = "/home/kiki";
+      username = "default";
+      homeDirectory = "/home/default";
       stateVersion = "25.05";
     };
   };

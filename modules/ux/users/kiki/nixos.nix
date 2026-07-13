@@ -7,7 +7,25 @@
     config,
     pkgs,
     ...
-  }: {
+  }: let
+    packagesJsonPath = ./packages.json;
+    packagesJson =
+      if builtins.pathExists packagesJsonPath
+      then builtins.fromJSON (builtins.readFile packagesJsonPath)
+      else {};
+
+    packageNames = builtins.attrNames packagesJson;
+
+    jsonPackages =
+      builtins.filter
+      (pkg: pkg != null)
+      (map
+        (name:
+          if builtins.hasAttr name pkgs
+          then builtins.hasAttr name pkgs
+          else null)
+        packageNames);
+  in {
     imports = [
       inputs.home-manager.nixosModules.home-manager
     ];
@@ -22,6 +40,11 @@
       };
       users.kiki = {
         imports = [self.homeModules.kiki];
+        home.packages = jsonPackages;
+        stylix.targets = {
+          kde.enable = false;
+          qt.enable = false;
+        };
       };
     };
 

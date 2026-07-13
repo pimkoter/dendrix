@@ -2,6 +2,8 @@
   flake.homeModules.nvf = {
     inputs,
     lib,
+    pkgs,
+    config,
     ...
   }: {
     imports = [inputs.nvf.homeManagerModules.default];
@@ -16,6 +18,7 @@
           shiftwidth = 2;
           tabstop = 2;
           smartindent = true;
+          cmdheight = 0;
         };
 
         # --- CLIPBOARD CONFIGURATION ---
@@ -114,7 +117,7 @@
         theme = {
           enable = true;
           name = lib.mkForce "catppuccin";
-          style = lib.mkForce "auto";
+          style = lib.mkForce "mocha"; # Sets Catppuccin variant (latte, frappe, macchiato, mocha)
           transparent = lib.mkForce true;
         };
 
@@ -142,7 +145,79 @@
         };
         statusline.lualine = {
           enable = true;
-          theme = lib.mkForce "auto";
+          setupOpts = {
+            options = {
+              # We feed your global stylix base16 color mapping directly into lualine!
+              theme = {
+                normal = {
+                  a = {
+                    fg = config.lib.stylix.colors.withHashtag.base00;
+                    bg = config.lib.stylix.colors.withHashtag.base0D;
+                    bold = true;
+                  };
+                  b = {
+                    fg = config.lib.stylix.colors.withHashtag.base05;
+                    bg = config.lib.stylix.colors.withHashtag.base02;
+                  };
+                  c = {
+                    fg = config.lib.stylix.colors.withHashtag.base05;
+                    bg = config.lib.stylix.colors.withHashtag.base01;
+                  };
+                };
+                insert = {
+                  a = {
+                    fg = config.lib.stylix.colors.withHashtag.base00;
+                    bg = config.lib.stylix.colors.withHashtag.base0B;
+                    bold = true;
+                  };
+                };
+                visual = {
+                  a = {
+                    fg = config.lib.stylix.colors.withHashtag.base00;
+                    bg = config.lib.stylix.colors.withHashtag.base0E;
+                    bold = true;
+                  };
+                };
+                replace = {
+                  a = {
+                    fg = config.lib.stylix.colors.withHashtag.base00;
+                    bg = config.lib.stylix.colors.withHashtag.base08;
+                    bold = true;
+                  };
+                };
+                inactive = {
+                  a = {
+                    fg = config.lib.stylix.colors.withHashtag.base03;
+                    bg = config.lib.stylix.colors.withHashtag.base01;
+                  };
+                  b = {
+                    fg = config.lib.stylix.colors.withHashtag.base03;
+                    bg = config.lib.stylix.colors.withHashtag.base01;
+                  };
+                  c = {
+                    fg = config.lib.stylix.colors.withHashtag.base03;
+                    bg = config.lib.stylix.colors.withHashtag.base01;
+                  };
+                };
+              };
+              section_separators = "";
+              component_separators = "";
+              icons_enabled = true;
+            };
+            sections = {
+              lualine_a = ["mode"];
+              lualine_b = ["branch" "diagnostics"];
+              lualine_c = ["filename"];
+              lualine_x = ["filetype"];
+              lualine_y = ["progress"];
+              lualine_z = ["location"];
+            };
+          };
+        };
+        extraPlugins = with pkgs.vimPlugins; {
+          vim-tpipeline = {
+            package = vim-tpipeline;
+          };
         };
       };
     };

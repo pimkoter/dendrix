@@ -6,7 +6,6 @@
   flake.nixosModules.programs = {pkgs, ...}: {
     programs = {
       nix-ld.enable = true;
-      niri.enable = true;
       xwayland.enable = true;
       gamemode.enable = true;
       steam = {
@@ -15,7 +14,5 @@
         dedicatedServer.openFirewall = true;
       };
     };
-
-    services.displayManager.sessionPackages = [pkgs.niri];
   };
 }

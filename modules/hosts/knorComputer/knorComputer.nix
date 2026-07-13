@@ -3,7 +3,7 @@
   inputs,
   ...
 }: {
-  flake.nixosConfigurations.NixBTW = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.knorComputer = inputs.nixpkgs.lib.nixosSystem {
     modules = with self.nixosModules; [
       # Hardware
       knorComputer
@@ -12,13 +12,14 @@
       boot
       drivers
       howdy
+      kde
       ly
       misc
       networking
       pkgs
       programs
       services
-      xfce
+      stylix
 
       # Users
       kiki

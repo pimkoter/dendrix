@@ -3,7 +3,11 @@
   inputs,
   ...
 }: {
-  flake.homeModules.niri = {config, ...} @ args: let
+  flake.nixosModules.niri = {
+    programs.niri.enable = true;
+  };
+
+  flake.homeModules.niri = {config, ...}: let
     colors = config.stylix.base16Scheme;
     monitors = {
       left = "DP-4";
