@@ -19,6 +19,7 @@
           tabstop = 2;
           smartindent = true;
           cmdheight = 0;
+          scrolloff = 999;
         };
 
         # --- CLIPBOARD CONFIGURATION ---
@@ -117,7 +118,7 @@
         theme = {
           enable = true;
           name = lib.mkForce "catppuccin";
-          style = lib.mkForce "mocha"; # Sets Catppuccin variant (latte, frappe, macchiato, mocha)
+          style = lib.mkForce "mocha";
           transparent = lib.mkForce true;
         };
 
