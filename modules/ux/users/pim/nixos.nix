@@ -65,6 +65,7 @@
             fzf # Fuzzy finder
             jq # JSON tool
             lazygit # TUI Git client
+            sops # Secret management
             ripgrep # Fast recursive search (grep alternative)
             unzip # Zipping tool
             wl-clipboard-rs # Wayland clipboard utilities (wl-copy/wl-paste)

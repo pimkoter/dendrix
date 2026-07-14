@@ -3,15 +3,12 @@
   inputs,
   ...
 }: {
-  flake.homeModules.git = {config, ...} @ args: let
-    name = "pim";
-    mail = "koter";
-  in {
+  flake.homeModules.git = {config, ...}: {
     programs.git = {
       enable = true;
       settings = {
-        user.name = name;
-        user.email = "${name}@${mail}";
+        user.name = "pimkoter";
+        user.email = "pim@koter";
         init.defaultBranch = "main";
         pull.rebase = true;
         color.ui = "auto";
