@@ -46,10 +46,6 @@
             rustc # Rust compiler
             sdkmanager # Android tool
 
-            # --- Flake Inputs (External Packages) ---
-            inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
-            inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-
             # --- Gaming Ecosystem ---
             heroic # Epic/GOG game launcher
             prismlauncher # Minecraft launcher
@@ -72,6 +68,11 @@
             ripgrep # Fast recursive search (grep alternative)
             unzip # Zipping tool
             wl-clipboard-rs # Wayland clipboard utilities (wl-copy/wl-paste)
+
+            # --- Flake Inputs (External Packages) ---
+            inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+            inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+            inputs.zennotes.packages.${pkgs.stdenv.hostPlatform.system}.zennotes-desktop
           ];
         };
       };
