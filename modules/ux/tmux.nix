@@ -84,7 +84,7 @@
 
         set -g status "on"
         set -g status-bg "${c.base00}"
-        set -g status-justify "centre" # Changed to centre so Neovim data can sit elegantly on the sides
+        set -g status-justify "centre"
 
         set -g status-left-length "1000"
         set -g status-right-length "1000"
@@ -112,12 +112,14 @@
 
         ##### Statusline - other windows #####
 
-        # Using base02 here creates a beautiful, subtle dark-gray tab container
         set -g window-status-format "#[fg=${c.base03},bg=${c.base02}] #I: #[fg=${c.base03},bg=${c.base02}]#W #[fg=${c.base03},bg=${c.base02}]"
 
         ##### Statusline - Left & Right Side overrides #####
-        set -g status-left ""
-        set -g status-right "#[fg=${c.base05},bg=${c.base00}] #S "
+        # Show your session name (#S) in base05/base00 colors, followed by the vim-tpipeline left status
+        set -g status-left "#[fg=${c.base05},bg=${c.base00}] #S #[fg=default,bg=default] #(cat #{socket_path}-\#{session_id}-vimbridge)"
+
+        # Show the vim-tpipeline right status on the right side
+        set -g status-right "#(cat #{socket_path}-\#{session_id}-vimbridge-R)"
 
         ##### Modes #####
 

@@ -121,20 +121,167 @@
           name = lib.mkForce "catppuccin";
           style = lib.mkForce "mocha";
           transparent = lib.mkForce true;
+          extraConfig = ''
+            require("catppuccin").setup({
+              flavour = "mocha",
+              transparent_background = true,
+              integrations = {
+                blink_cmp = true,
+                gitsigns = true,
+                indent_blankline = { enabled = true },
+                neotree = true,
+                noice = true,
+                treesitter = true,
+                which_key = true,
+              }
+            })
+          '';
         };
 
+        # --- SHARP CORNERS & GLOBAL UI OVERRIDES ---
+        luaConfigRC.borders = ''
+          -- Force built-in LSP floating windows to use sharp/single borders
+          local _border = "single"
+
+          vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+            vim.lsp.handlers.hover, {
+              border = _border
+            }
+          )
+
+          vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+            vim.lsp.handlers.signatureHelp, {
+              border = _border
+            }
+          )
+
+          vim.diagnostic.config({
+            float = { border = _border },
+          })
+        '';
+
         # --- PLUGINS & LSP CONFIGURATION ---
-        filetree.neo-tree.enable = true;
+        # Fixed: we removed top-level `visuals.enable` and configured submodules directly
+        visuals = {
+          nvim-web-devicons.enable = true;
+          indent-blankline.enable = true; # Fixed: Corrected option name for newer NVF
+        };
+
+        tabline = {
+          nvimBufferline = {
+            enable = true;
+            setupOpts.options = {
+              diagnostics = "nvim_lsp";
+              separator_style = "thin";
+              offsets = [
+                {
+                  filetype = "neo-tree";
+                  text = "File Explorer";
+                  highlight = "Directory";
+                  text_align = "left";
+                }
+              ];
+            };
+          };
+        };
+
+        ui = {
+          noice = {
+            enable = true;
+            setupOpts = {
+              lsp = {
+                override = {
+                  "vim.lsp.util.convert_markdown_to_lines" = true;
+                  "vim.lsp.util.stylize_markdown" = true;
+                  "cmp.entry.get_documentation" = true;
+                };
+              };
+              presets = {
+                bottom_search = true;
+                command_palette = true;
+                long_message_to_split = true;
+              };
+              views = {
+                cmdline_popup = {
+                  border = {
+                    style = "single";
+                  };
+                };
+                hover = {
+                  border = {
+                    style = "single";
+                  };
+                };
+              };
+            };
+          };
+        };
+
+        filetree.neo-tree = {
+          enable = true;
+          setupOpts = {
+            window = {
+              width = 30;
+              position = "left";
+            };
+            filesystem = {
+              filtered_items = {
+                visible = false;
+                hide_dotfiles = false;
+                hide_gitignored = true;
+                hide_by_name = [
+                  ".git"
+                  ".DS_Store"
+                  "thumbs.db"
+                ];
+              };
+            };
+          };
+        };
+
         binds.whichKey.enable = true;
         git.gitsigns.enable = true;
         autopairs.nvim-autopairs.enable = true;
         comments.comment-nvim.enable = true;
-        autocomplete.blink-cmp.enable = true;
-        fzf-lua.enable = true;
+
+        autocomplete.blink-cmp = {
+          enable = true;
+          setupOpts = {
+            completion = {
+              menu = {
+                border = "single";
+              };
+              documentation = {
+                window = {
+                  border = "single";
+                };
+              };
+            };
+          };
+        };
+
+        fzf-lua = {
+          enable = true;
+          setupOpts = {
+            winopts = {
+              height = 0.85;
+              width = 0.80;
+              row = 0.35;
+              col = 0.5;
+              border = "single";
+              preview = {
+                layout = "vertical";
+                border = "single";
+              };
+            };
+          };
+        };
+
         lsp = {
           enable = true;
           formatOnSave = true;
         };
+
         languages = {
           enableFormat = true;
           enableTreesitter = true;
@@ -145,11 +292,11 @@
           bash.enable = true;
           lua.enable = true;
         };
+
         statusline.lualine = {
           enable = true;
           setupOpts = {
             options = {
-              # We feed your global stylix base16 color mapping directly into lualine!
               theme = {
                 normal = {
                   a = {
@@ -216,6 +363,7 @@
             };
           };
         };
+
         extraPlugins = with pkgs.vimPlugins; {
           vim-tpipeline = {
             package = vim-tpipeline;
