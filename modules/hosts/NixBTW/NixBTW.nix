@@ -11,6 +11,7 @@
       # Core modules
       boot
       drivers
+      howdy
       ly
       misc
       networking

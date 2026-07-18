@@ -9,7 +9,22 @@
     pkgs,
     ...
   }: {
-    config = {
+    config = let
+      pkgs-stable = import inputs.nixpkgs-stable {
+        inherit (pkgs.stdenv.hostPlatform) system;
+        config = {
+          allowUnfree = true;
+        };
+      };
+    in {
+      # The rest of your module config block stays exactly the same...
+      nixpkgs.overlays = [
+        (final: prev: {
+          howdy = pkgs-stable.howdy;
+          linux-enable-ir-emitter = pkgs-stable.linux-enable-ir-emitter;
+        })
+      ];
+
       services.howdy = {
         enable = true;
         control = "sufficient";

@@ -41,6 +41,7 @@
       allowUnfree = true;
       permittedInsecurePackages = [
         "pnpm-10.29.2"
+        "electron-40.10.5"
       ];
     };
 
