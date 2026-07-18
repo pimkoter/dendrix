@@ -14,6 +14,7 @@
       curl # Command-line HTTP client
       git # Version control system
       polkit # Authorization framework
+      newt # TUI-tool
     ];
   };
 }
