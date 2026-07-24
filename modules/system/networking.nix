@@ -1,8 +1,4 @@
 {
-  self,
-  inputs,
-  ...
-}: {
   flake.nixosModules.networking = {
     networking = {
       hostName = "NixBTW";
