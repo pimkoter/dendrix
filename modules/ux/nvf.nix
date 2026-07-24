@@ -285,7 +285,10 @@
         languages = {
           enableFormat = true;
           enableTreesitter = true;
-          nix.enable = true;
+          nix = {
+            enable = true;
+            format.type = ["nixfmt"];
+          };
           clang.enable = true;
           python.enable = true;
           rust.enable = true;
