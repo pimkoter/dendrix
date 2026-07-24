@@ -47,6 +47,7 @@
           clang
           compose2nix
           dig
+          gh
           nmap
           python315
           rustc
