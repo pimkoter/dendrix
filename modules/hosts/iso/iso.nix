@@ -12,7 +12,7 @@
           squashfsCompression = "gzip -Xcompression-level 1";
           contents = [
             {
-              source = ../..; # Points to the root of your dendrix repository
+              source = ../..;
               target = "/etc/dendrix";
             }
           ];
@@ -57,7 +57,7 @@
         systemd.targets = {
           sleep.enable = false;
           suspend.enable = false;
-          hibernate.enable = false; # Fixed typo: 'i' instead of 'y'
+          hibernate.enable = false;
           hybrid-sleep.enable = false;
         };
 
