@@ -2,10 +2,11 @@
   self,
   inputs,
   ...
-}: {
+}:
+{
   flake = {
-    # 1. HOME MANAGER PROFILE: Your apps, themes, and shell configs
-    homeModules.pim = {pkgs, ...}: {
+    # --- HOME MANAGER MODULE: Your apps, themes, and shell configs ---
+    homeModules.pim = { pkgs, ... }: {
       imports = with self.homeModules; [
         awww
         bat
@@ -31,6 +32,7 @@
         homeDirectory = "/home/pim";
         stateVersion = "25.05";
         pointerCursor.enable = true;
+
         packages = with pkgs; [
           # Apps & Desktop Production
           evince
@@ -85,37 +87,61 @@
       };
     };
 
-    # 2. NIXOS CONFIGURATION
-    nixosModules.pim = {
-      config,
-      pkgs,
-      ...
-    }: {
-      imports = [
-        inputs.home-manager.nixosModules.home-manager
+    # --- STANDALONE HOME MANAGER CONFIGURATION ---
+    homeConfigurations.pim = inputs.home-manager.lib.homeManagerConfiguration {
+      pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+
+      extraSpecialArgs = {
+        inherit self inputs;
+      };
+
+      modules = [
+        self.homeModules.pim
       ];
-
-      users.users.pim = {
-        isNormalUser = true;
-        description = "Pim";
-        initialPassword = "12345";
-        extraGroups = ["wheel" "networkmanager" "wireshark" "docker" "libvirtd" "kvm"];
-        ignoreShellProgramCheck = true;
-        shell = pkgs.zsh;
-      };
-
-      home-manager = {
-        useGlobalPkgs = true;
-        useUserPackages = true;
-        backupFileExtension = "backup";
-        extraSpecialArgs = {
-          inherit self inputs;
-          hostName = config.networking.hostName;
-        };
-        users.pim = {
-          imports = [self.homeModules.pim];
-        };
-      };
     };
+
+    # --- NIXOS CONFIGURATION ---
+    nixosModules.pim =
+      {
+        config,
+        pkgs,
+        ...
+      }:
+      {
+        imports = [
+          inputs.home-manager.nixosModules.home-manager
+        ];
+
+        users.users.pim = {
+          isNormalUser = true;
+          description = "Pim";
+          initialPassword = "12345";
+          extraGroups = [
+            "wheel"
+            "networkmanager"
+            "wireshark"
+            "docker"
+            "libvirtd"
+            "kvm"
+          ];
+          ignoreShellProgramCheck = true;
+          shell = pkgs.zsh;
+        };
+
+        home-manager = {
+          useGlobalPkgs = true;
+          useUserPackages = true;
+          backupFileExtension = "backup";
+
+          extraSpecialArgs = {
+            inherit self inputs;
+            hostName = config.networking.hostName;
+          };
+
+          users.pim = {
+            imports = [ self.homeModules.pim ];
+          };
+        };
+      };
   };
 }
