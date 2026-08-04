@@ -1,282 +1,67 @@
+{ inputs, ... }:
 {
   flake.homeModules.nvf =
     {
-      inputs,
-      lib,
       pkgs,
-      config,
+      lib,
       ...
     }:
     {
       imports = [ inputs.nvf.homeManagerModules.default ];
       programs.nvf = {
         enable = true;
-        defaultEditor = true;
         settings.vim = {
-          # --- OPTIONS ---
-          options = {
-            number = true;
-            relativenumber = true;
-            expandtab = true;
-            shiftwidth = 2;
-            tabstop = 2;
-            smartindent = true;
-            cmdheight = 0;
-            scrolloff = 999;
-          };
 
-          # --- CLIPBOARD CONFIGURATION ---
+          # --- Clipboard settings ---
           clipboard = {
             enable = true;
             registers = "unnamedplus";
-            providers = {
-              wl-copy.enable = true;
-              xsel.enable = true;
-            };
+          };
+          options = {
+            number = true;
+            relativenumber = true;
+            scrolloff = 999;
+
+            expandtab = true;
+            shiftwidth = 2;
+            tabstop = 2;
+            softtabstop = 2;
+
+            autoindent = true;
+            smartindent = true;
+
+            signcolumn = "yes";
+            wrap = false;
+            cmdheight = 0;
+            ignorecase = true;
+            smartcase = true;
           };
 
-          # --- KEY MAPPINGS ---
-          globals.mapleader = " ";
-          keymaps = [
-            {
-              key = "<leader>cd";
-              mode = "n";
-              action = "<cmd>Neotree filesystem reveal left<CR>";
-              silent = true;
-            }
-            {
-              key = "<leader>fw";
-              mode = "n";
-              action = "<cmd>FzfLua grep_cword<CR>";
-              silent = true;
-            }
-            {
-              key = "<leader>fr>";
-              mode = "n";
-              action = "<cmd>FzfLua resume<CR>";
-            }
-            {
-              key = "<leader>ff";
-              mode = "n";
-              action = "<cmd>FzfLua files<CR>";
-              silent = true;
-            }
-            {
-              key = "<leader>fo";
-              mode = "n";
-              action = "<cmd>FzfLua oldfiles<CR>";
-              silent = true;
-            }
-            {
-              key = "<leader>fb";
-              mode = "n";
-              action = "<cmd>FzfLua buffers<CR>";
-              silent = true;
-            }
-            {
-              key = "<leader>fg";
-              mode = "n";
-              action = "<cmd>FzfLua live_grep<CR>";
-              silent = true;
-            }
-            {
-              key = "gd";
-              mode = "n";
-              action = "<cmd>lua vim.lsp.buf.definition()<CR>";
-              silent = true;
-            }
-            {
-              key = "gr";
-              mode = "n";
-              action = "<cmd>lua vim.lsp.buf.references()<CR>";
-              silent = true;
-            }
-            {
-              key = "K";
-              mode = "n";
-              action = "<cmd>lua vim.lsp.buf.hover()<CR>";
-              silent = true;
-            }
-            {
-              key = "gl";
-              mode = "n";
-              action = "<cmd>lua vim.diagnostic.open_float()<CR>";
-              silent = true;
-            }
-            {
-              key = "<leader>nd";
-              mode = "n";
-              action = "<cmd>lua vim.diagnostic.goto_next()<CR>";
-              silent = true;
-            }
-            {
-              key = "<leader>pd";
-              mode = "n";
-              action = "<cmd>lua vim.diagnostic.goto_prev()<CR>";
-              silent = true;
-            }
-          ];
-
-          # --- THEMING ---
-          theme = {
+          # --- Plugins ---
+          telescope = {
             enable = true;
-            name = lib.mkForce "catppuccin";
-            style = lib.mkForce "mocha";
-            transparent = lib.mkForce true;
-            extraConfig = ''
-              require("catppuccin").setup({
-                flavour = "mocha",
-                transparent_background = true,
-                integrations = {
-                  blink_cmp = true,
-                  gitsigns = true,
-                  indent_blankline = { enabled = true },
-                  neotree = true,
-                  noice = true,
-                  treesitter = true,
-                  which_key = true,
-                }
+          };
+
+          # Have Telescope automatically use the nearest .git for root of fuzzyfinder, else use current directory
+          luaConfigRC = {
+            telescope = ''
+              local telescope = require("telescope.builtin")
+
+              local function find_files()
+                local root = vim.fs.root(0, { ".git" })
+                telescope.find_files({
+                  cwd = root or vim.fn.getcwd(),
+                })
+              end
+
+              vim.keymap.set("n", "<leader>ff", find_files, {
+                desc = "Find files",
               })
             '';
           };
 
-          # --- SHARP CORNERS & GLOBAL UI OVERRIDES ---
-          luaConfigRC.borders = ''
-            -- Force built-in LSP floating windows to use sharp/single borders
-            local _border = "single"
-
-            vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-              vim.lsp.handlers.hover, {
-                border = _border
-              }
-            )
-
-            vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
-              vim.lsp.handlers.signatureHelp, {
-                border = _border
-              }
-            )
-
-            vim.diagnostic.config({
-              float = { border = _border },
-            })
-          '';
-
-          # --- PLUGINS & LSP CONFIGURATION ---
-          # Fixed: we removed top-level `visuals.enable` and configured submodules directly
-          visuals = {
-            nvim-web-devicons.enable = true;
-            indent-blankline.enable = true; # Fixed: Corrected option name for newer NVF
-          };
-
-          tabline = {
-            nvimBufferline = {
-              enable = true;
-              setupOpts.options = {
-                diagnostics = "nvim_lsp";
-                separator_style = "thin";
-                offsets = [
-                  {
-                    filetype = "neo-tree";
-                    text = "File Explorer";
-                    highlight = "Directory";
-                    text_align = "left";
-                  }
-                ];
-              };
-            };
-          };
-
-          ui = {
-            noice = {
-              enable = true;
-              setupOpts = {
-                lsp = {
-                  override = {
-                    "vim.lsp.util.convert_markdown_to_lines" = true;
-                    "vim.lsp.util.stylize_markdown" = true;
-                    "cmp.entry.get_documentation" = true;
-                  };
-                };
-                presets = {
-                  bottom_search = true;
-                  command_palette = true;
-                  long_message_to_split = true;
-                };
-                views = {
-                  cmdline_popup = {
-                    border = {
-                      style = "single";
-                    };
-                  };
-                  hover = {
-                    border = {
-                      style = "single";
-                    };
-                  };
-                };
-              };
-            };
-          };
-
-          filetree.neo-tree = {
-            enable = true;
-            setupOpts = {
-              window = {
-                width = 30;
-                position = "left";
-              };
-              filesystem = {
-                filtered_items = {
-                  visible = false;
-                  hide_dotfiles = false;
-                  hide_gitignored = true;
-                  hide_by_name = [
-                    ".git"
-                    ".DS_Store"
-                    "thumbs.db"
-                  ];
-                };
-              };
-            };
-          };
-
-          binds.whichKey.enable = true;
-          git.gitsigns.enable = true;
-          autopairs.nvim-autopairs.enable = true;
-          comments.comment-nvim.enable = true;
-
           autocomplete.blink-cmp = {
             enable = true;
-            setupOpts = {
-              completion = {
-                menu = {
-                  border = "single";
-                };
-                documentation = {
-                  window = {
-                    border = "single";
-                  };
-                };
-              };
-            };
-          };
-
-          fzf-lua = {
-            enable = true;
-            setupOpts = {
-              winopts = {
-                height = 0.85;
-                width = 0.80;
-                row = 0.35;
-                col = 0.5;
-                border = "single";
-                preview = {
-                  layout = "vertical";
-                  border = "single";
-                };
-              };
-            };
           };
 
           lsp = {
@@ -291,92 +76,221 @@
               enable = true;
               format.type = [ "nixfmt" ];
             };
-            clang.enable = true;
             python.enable = true;
+            clang.enable = true;
             rust.enable = true;
-            bash.enable = true;
-            lua.enable = true;
           };
 
-          statusline.lualine = {
+          git = {
+            gitsigns.enable = true;
+            neogit.enable = true;
+          };
+
+          # Make gh behave like a toggle for "diffthis"
+          luaConfigRC.gitsigns = ''
+            vim.keymap.set("n", "<leader>gh", function()
+              if vim.wo.diff then
+                vim.cmd("diffoff!")
+                vim.cmd("only")
+              else
+                vim.cmd("Gitsigns diffthis")
+              end
+            end, { silent = true })
+          '';
+
+          utility.oil-nvim.enable = true;
+          # Opens oil at the root of the project
+          luaConfigRC.projectRoot = ''
+            vim.keymap.set("n", "<leader>md", function()
+              local root = vim.fs.root(0, { ".git" })
+
+              if root then
+                vim.api.nvim_set_current_dir(root)
+                vim.notify("Project root: " .. root)
+              else
+                vim.notify("No Git root found", vim.log.levels.WARN)
+              end
+            end, {
+              desc = "Change to project root",
+              silent = true,
+            })
+          '';
+
+          # --- Hotkeys ---
+          globals.mapleader = " ";
+          keymaps = [
+            # --- TELESCOPE ---
+            {
+              key = "<leader>fg";
+              mode = "n";
+              action = "<cmd>Telescope live_grep<CR>";
+              desc = "Live grep";
+              silent = true;
+            }
+            {
+              key = "<leader>fr";
+              mode = "n";
+              action = "<cmd>Telescope oldFiles<CR>";
+              desc = "Recent files";
+              silent = true;
+            }
+            {
+              key = "<leader>fd";
+              mode = "n";
+              action = "<cmd>Telescope diagnostics<CR>";
+              desc = "Diagnostics";
+              silent = true;
+            }
+            {
+              key = "<leader>fs";
+              mode = "n";
+              action = "<cmd>Telescope lsp_document_symbols<CR>";
+              desc = "Document symbols";
+              silent = true;
+            }
+            {
+              key = "<leader>fS";
+              mode = "n";
+              action = "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>";
+              desc = "Workspace symbols";
+              silent = true;
+            }
+
+            # --- OIL ---
+            {
+              key = "<leader>cd";
+              mode = "n";
+              action = "<cmd>Oil<CR>";
+              desc = "Open file explorer";
+              silent = true;
+            }
+
+            # --- LSP ---
+            {
+              key = "gd";
+              mode = "n";
+              action = "<cmd>lua vim.lsp.buf.definition()<CR>";
+              desc = "Go to definition";
+              silent = true;
+            }
+            {
+              key = "gr";
+              mode = "n";
+              action = "<cmd>lua vim.lsp.buf.references()<CR>";
+              desc = "Find references";
+              silent = true;
+            }
+            {
+              key = "K";
+              mode = "n";
+              action = "<cmd>lua vim.lsp.buf.hover()<CR>";
+              desc = "Show documentation";
+              silent = true;
+            }
+            {
+              key = "<leader>nd";
+              mode = "n";
+              action = "<cmd>lua vim.diagnostic.jump({ count = 1, float = true })<CR>";
+              desc = "Next diagnostic";
+              silent = true;
+            }
+            {
+              key = "<leader>pd";
+              mode = "n";
+              action = "<cmd>lua vim.diagnostic.jump({ count = -1, float = true })<CR>";
+              desc = "Previous diagnostic";
+              silent = true;
+            }
+            # --- Code Actions ---
+            {
+              key = "<leader>la";
+              mode = "n";
+              action = "<cmd>lua vim.lsp.buf.code_action()<CR>";
+              desc = "Code actions";
+              silent = true;
+            }
+
+            # --- GIT ---
+
+            {
+              key = "<leader>gn";
+              mode = "n";
+              action = "<cmd>Gitsigns next_hunk<CR>";
+              desc = "Next hunk";
+              silent = true;
+            }
+            {
+              key = "<leader>gp";
+              mode = "n";
+              action = "<cmd>Gitsigns prev_hunk<CR>";
+              desc = "Previous hunk";
+              silent = true;
+            }
+            {
+              key = "<leader>gs";
+              mode = "n";
+              action = "<cmd>Gitsigns stage_hunk<CR>";
+              desc = "Stage hunk";
+              silent = true;
+            }
+            {
+              key = "<leader>gr";
+              mode = "n";
+              action = "<cmd>Gitsigns reset_hunk<CR>";
+              desc = "Reset hunk";
+              silent = true;
+            }
+            {
+              key = "<leader>gl";
+              mode = "n";
+              action = "<cmd>Gitsigns blame_line<CR>";
+              desc = "Blame line";
+              silent = true;
+            }
+            {
+              key = "<leader>gg";
+              mode = "n";
+              action = "<cmd>Neogit<CR>";
+              desc = "Open Neogit";
+              silent = true;
+            }
+          ];
+
+          binds.whichKey = {
             enable = true;
+
             setupOpts = {
-              options = {
-                theme = {
-                  normal = {
-                    a = {
-                      fg = config.lib.stylix.colors.withHashtag.base00;
-                      bg = config.lib.stylix.colors.withHashtag.base0D;
-                      bold = true;
-                    };
-                    b = {
-                      fg = config.lib.stylix.colors.withHashtag.base05;
-                      bg = config.lib.stylix.colors.withHashtag.base02;
-                    };
-                    c = {
-                      fg = config.lib.stylix.colors.withHashtag.base05;
-                      bg = config.lib.stylix.colors.withHashtag.base01;
-                    };
-                  };
-                  insert = {
-                    a = {
-                      fg = config.lib.stylix.colors.withHashtag.base00;
-                      bg = config.lib.stylix.colors.withHashtag.base0B;
-                      bold = true;
-                    };
-                  };
-                  visual = {
-                    a = {
-                      fg = config.lib.stylix.colors.withHashtag.base00;
-                      bg = config.lib.stylix.colors.withHashtag.base0E;
-                      bold = true;
-                    };
-                  };
-                  replace = {
-                    a = {
-                      fg = config.lib.stylix.colors.withHashtag.base00;
-                      bg = config.lib.stylix.colors.withHashtag.base08;
-                      bold = true;
-                    };
-                  };
-                  inactive = {
-                    a = {
-                      fg = config.lib.stylix.colors.withHashtag.base03;
-                      bg = config.lib.stylix.colors.withHashtag.base01;
-                    };
-                    b = {
-                      fg = config.lib.stylix.colors.withHashtag.base03;
-                      bg = config.lib.stylix.colors.withHashtag.base01;
-                    };
-                    c = {
-                      fg = config.lib.stylix.colors.withHashtag.base03;
-                      bg = config.lib.stylix.colors.withHashtag.base01;
-                    };
-                  };
+              plugins = {
+                presets = {
+                  operators = false;
+                  motions = false;
+                  text_objects = false;
+                  windows = false;
+                  nav = false;
+                  z = false;
+                  g = false;
                 };
-                section_separators = "";
-                component_separators = "";
-                icons_enabled = true;
-              };
-              sections = {
-                lualine_a = [ "mode" ];
-                lualine_b = [
-                  "branch"
-                  "diagnostics"
-                ];
-                lualine_c = [ "filename" ];
-                lualine_x = [ "filetype" ];
-                lualine_y = [ "progress" ];
-                lualine_z = [ "location" ];
               };
             };
           };
 
-          extraPlugins = with pkgs.vimPlugins; {
-            vim-tpipeline = {
-              package = vim-tpipeline;
-            };
+          # --- Theme ---
+          theme = {
+            enable = true;
+            name = lib.mkForce "catppuccin";
+            style = lib.mkForce "mocha";
+            transparent = lib.mkForce true;
           };
+
+          luaConfigRC.floats = ''
+            vim.api.nvim_set_hl(0, "NormalFloat", {
+              bg = "#1e1e2e",
+            })
+
+            vim.api.nvim_set_hl(0, "FloatBorder", {
+              bg = "#1e1e2e",
+            })
+          '';
         };
       };
     };
