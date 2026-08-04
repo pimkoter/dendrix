@@ -59,6 +59,7 @@
               Mod+X repeat=false { toggle-overview; }
 
               Mod+A { focus-column-left; }
+              Mod+D { focus-column-right; }
               Mod+S { focus-workspace-down; }
               Mod+W { focus-workspace-up; }
               Mod+Right { focus-column-right; } // Fixed the lowercase 'mod+D' conflict/typo here
