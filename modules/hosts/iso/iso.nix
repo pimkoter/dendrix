@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 
 {
   flake.nixosConfigurations.iso = inputs.nixpkgs.lib.nixosSystem {
@@ -6,6 +6,7 @@
       ({ pkgs, modulesPath, ... }: {
         imports = [
           "${modulesPath}/installer/cd-dvd/installation-cd-base.nix"
+          self.nixosModules.i3
         ];
 
         isoImage = {
@@ -36,22 +37,23 @@
             install = "/etc/dendrix/modules/custom/scripts/install.sh";
           };
 
-          interactiveShellInit = ''
-            echo ""
-            echo -e "\e[1;35m  ____                  _     _ \e[0m"
-            echo -e "\e[1;35m |  _ \  ___ _ __  _ __| |_ _| |\e[0m"
-            echo -e "\e[1;35m | | | |/ _ \ '_ \| '__| __/ _\` |\e[0m"
-            echo -e "\e[1;35m | |_| |  __/ | | | |  | || (_| |\e[0m"
-            echo -e "\e[1;35m |____/ \___|_| |_|_|   \__\__,_|\e[0m"
-            echo ""
-            echo -e "\e[1;32mWelcome to your custom Dendrix NixOS Live Environment!\e[0m"
-            echo ""
-            echo -e "\e[1;34mUseful Commands:\e[0m"
-            echo -e "  \e[33minstall\e[0m       - Run Dendrix installscript"
-            echo -e "  \e[33mnmtui\e[0m         - Connect to Wi-Fi"
-            echo -e "  \e[33mdisko\e[0m         - Run declarative partitioning"
-            echo ""
-          '';
+          interactiveShellInit = "
+            ██████╗ ███████╗███╗   ██╗██████╗ ██████╗ ██╗██╗  ██╗
+            ██╔══██╗██╔════╝████╗  ██║██╔══██╗██╔══██╗██║╚██╗██╔╝
+            ██║  ██║█████╗  ██╔██╗ ██║██║  ██║██████╔╝██║ ╚███╔╝
+            ██║  ██║██╔══╝  ██║╚██╗██║██║  ██║██╔══██╗██║ ██╔██╗
+            ██████╔╝███████╗██║ ╚████║██████╔╝██║  ██║██║██╔╝ ██╗
+            ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝
+            ";
+        };
+
+        users.users.nixos = {
+          isNormalUser = true;
+          password = "";
+          extraGroups = [
+            "wheel"
+            "networkmanager"
+          ];
         };
 
         systemd.targets = {
