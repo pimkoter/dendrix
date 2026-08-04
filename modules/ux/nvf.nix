@@ -2,7 +2,6 @@
 {
   flake.homeModules.nvf =
     {
-      pkgs,
       lib,
       ...
     }:
@@ -99,22 +98,6 @@
           '';
 
           utility.oil-nvim.enable = true;
-          # Opens oil at the root of the project
-          luaConfigRC.projectRoot = ''
-            vim.keymap.set("n", "<leader>md", function()
-              local root = vim.fs.root(0, { ".git" })
-
-              if root then
-                vim.api.nvim_set_current_dir(root)
-                vim.notify("Project root: " .. root)
-              else
-                vim.notify("No Git root found", vim.log.levels.WARN)
-              end
-            end, {
-              desc = "Change to project root",
-              silent = true,
-            })
-          '';
 
           # --- Hotkeys ---
           globals.mapleader = " ";
@@ -252,6 +235,13 @@
               mode = "n";
               action = "<cmd>Neogit<CR>";
               desc = "Open Neogit";
+              silent = true;
+            }
+            {
+              key = "<leader>gc";
+              mode = "n";
+              action = "<cmd>Neogit commit<CR>";
+              desc = "Commit staged changes";
               silent = true;
             }
           ];
