@@ -6,7 +6,7 @@
 {
   flake = {
     # --- HOME MANAGER MODULE: Your apps, themes, and shell configs ---
-    homeModules.pim = { pkgs, ... }: {
+    homeModules.pim = { pkgs, lib, ... }: {
       imports = with self.homeModules; [
         awww
         bat
@@ -21,11 +21,21 @@
         rofi
         scripts
         starship
+        stylix
         tmux
         wallpapers
         zoxide
         zsh
       ];
+
+      nixpkgs.config.allowUnfreePredicate =
+        pkg:
+        builtins.elem (lib.getName pkg) [
+          "spotify"
+          "android-sdk-platform-tools"
+          "platform-tools"
+          "android-studio"
+        ];
 
       home = {
         username = "pim";
@@ -36,7 +46,6 @@
         packages = with pkgs; [
           # Apps & Desktop Production
           evince
-          obsidian
           qbittorrent
           spotify
           thunderbird
