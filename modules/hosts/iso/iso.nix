@@ -49,7 +49,7 @@
 
         users.users.nixos = {
           isNormalUser = true;
-          password = "";
+          password = null;
           extraGroups = [
             "wheel"
             "networkmanager"
