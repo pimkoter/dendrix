@@ -106,6 +106,7 @@
 
       modules = [
         self.homeModules.pim
+        inputs.stylix.homeModules.stylix
       ];
     };
 
