@@ -29,6 +29,8 @@
             autoindent = true;
             smartindent = true;
 
+            undofile = true;
+
             signcolumn = "yes";
             wrap = false;
             cmdheight = 0;
@@ -145,6 +147,15 @@
               mode = "n";
               action = "<C-w>l";
               desc = "Move to right window";
+              silent = true;
+            }
+
+            # --- UNDO ---
+            {
+              key = "<leader>u";
+              mode = "n";
+              action = "<cmd>packadd nvim.undotree | lua require('undotree').open()<CR>";
+              desc = "Undo tree";
               silent = true;
             }
 
