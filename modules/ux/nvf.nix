@@ -11,7 +11,6 @@
       programs.nvf = {
         enable = true;
         settings.vim = {
-
           # --- Additional packages ---
           startPlugins = with pkgs.vimPlugins; [
             harpoon2
@@ -244,14 +243,14 @@
               silent = true;
             }
             {
-              key = "<C-s>";
+              key = "<C-x>";
               mode = "n";
               action = "<cmd>lua require('harpoon'):list():prev()<CR>";
               desc = "Harpoon previous";
               silent = true;
             }
             {
-              key = "<C-d>";
+              key = "<C-c>";
               mode = "n";
               action = "<cmd>lua require('harpoon'):list():next()<CR>";
               desc = "Harpoon next";
@@ -315,6 +314,8 @@
               desc = "Show documentation";
               silent = true;
             }
+
+            # -- Diagnostics ---
             {
               key = "<leader>dn";
               mode = "n";
@@ -329,6 +330,7 @@
               desc = "Previous diagnostic";
               silent = true;
             }
+
             # --- Code Actions ---
             {
               key = "<leader>la";
