@@ -198,7 +198,7 @@
 
             # --- OIL ---
             {
-              key = "<leader>cd";
+              key = "<leader>e";
               mode = "n";
               action = "<cmd>Oil<CR>";
               desc = "Open file explorer";
@@ -228,14 +228,14 @@
               silent = true;
             }
             {
-              key = "<leader>nd";
+              key = "<leader>dn";
               mode = "n";
               action = "<cmd>lua vim.diagnostic.jump({ count = 1, float = true })<CR>";
               desc = "Next diagnostic";
               silent = true;
             }
             {
-              key = "<leader>pd";
+              key = "<leader>dp";
               mode = "n";
               action = "<cmd>lua vim.diagnostic.jump({ count = -1, float = true })<CR>";
               desc = "Previous diagnostic";
@@ -249,9 +249,29 @@
               desc = "Code actions";
               silent = true;
             }
+            {
+              key = "<leader>lr";
+              mode = "n";
+              action = "<cmd>lua vim.lsp.buf.rename()<CR>";
+              desc = "Rename symbol";
+              silent = true;
+            }
+            {
+              key = "<leader>li";
+              mode = "n";
+              action = "<cmd>lua vim.lsp.buf.implementation()<CR>";
+              desc = "Go to implementation";
+              silent = true;
+            }
+            {
+              key = "<leader>lt";
+              mode = "n";
+              action = "<cmd>lua vim.lsp.buf.type_definition()<CR>";
+              desc = "Go to type definition";
+              silent = true;
+            }
 
             # --- GIT ---
-
             {
               key = "<leader>gn";
               mode = "n";
@@ -338,6 +358,67 @@
               bg = "#1e1e2e",
             })
           '';
+
+          # --- Dashboard
+          dashboard.dashboard-nvim = {
+            enable = true;
+
+            setupOpts = {
+              theme = "hyper";
+
+              config = {
+                header = [
+                  ""
+                  "        ███╗   ██╗██╗   ██╗██╗███╗   ███╗"
+                  "        ████╗  ██║██║   ██║██║████╗ ████║"
+                  "        ██╔██╗ ██║██║   ██║██║██╔████╔██║"
+                  "        ██║╚██╗██║╚██╗ ██╔╝██║██║╚██╔╝██║"
+                  "        ██║ ╚████║ ╚████╔╝ ██║██║ ╚═╝ ██║"
+                  "        ╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═╝     ╚═╝"
+                  ""
+                ];
+
+                shortcut = [
+                  {
+                    desc = "Find file";
+                    group = "Telescope";
+                    key = "f";
+                    action = "Telescope find_files";
+                  }
+                  {
+                    desc = "Recent files";
+                    group = "Telescope";
+                    key = "r";
+                    action = "Telescope oldfiles";
+                  }
+                  {
+                    desc = "Live grep";
+                    group = "Telescope";
+                    key = "g";
+                    action = "Telescope live_grep";
+                  }
+                  {
+                    desc = "File explorer";
+                    group = "Oil";
+                    key = "e";
+                    action = "Oil";
+                  }
+                  {
+                    desc = "Git";
+                    group = "Neogit";
+                    key = "G";
+                    action = "Neogit";
+                  }
+                  {
+                    desc = "Quit";
+                    group = "Neovim";
+                    key = "q";
+                    action = "qa";
+                  }
+                ];
+              };
+            };
+          };
         };
       };
     };
