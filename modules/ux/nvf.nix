@@ -82,7 +82,23 @@
 
           git = {
             gitsigns.enable = true;
-            neogit.enable = true;
+            neogit = {
+              enable = true;
+
+              setupOpts = {
+                disable_commit_confirmation = true;
+
+                integrations = {
+                  telescope = true;
+                };
+
+                kind = "split";
+
+                commit_popup = {
+                  kind = "split";
+                };
+              };
+            };
           };
 
           # Make gh behave like a toggle for "diffthis"
@@ -102,6 +118,36 @@
           # --- Hotkeys ---
           globals.mapleader = " ";
           keymaps = [
+            # --- WINDOW NAVIGATION ---
+            {
+              key = "<C-h>";
+              mode = "n";
+              action = "<C-w>h";
+              desc = "Move to left window";
+              silent = true;
+            }
+            {
+              key = "<C-j>";
+              mode = "n";
+              action = "<C-w>j";
+              desc = "Move to lower window";
+              silent = true;
+            }
+            {
+              key = "<C-k>";
+              mode = "n";
+              action = "<C-w>k";
+              desc = "Move to upper window";
+              silent = true;
+            }
+            {
+              key = "<C-l>";
+              mode = "n";
+              action = "<C-w>l";
+              desc = "Move to right window";
+              silent = true;
+            }
+
             # --- TELESCOPE ---
             {
               key = "<leader>fg";
