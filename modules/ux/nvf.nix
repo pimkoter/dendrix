@@ -2,6 +2,7 @@
 {
   flake.homeModules.nvf =
     {
+      pkgs,
       lib,
       ...
     }:
@@ -10,6 +11,12 @@
       programs.nvf = {
         enable = true;
         settings.vim = {
+
+          # --- Additional packages ---
+          startPlugins = with pkgs.vimPlugins; [
+            harpoon2
+            plenary-nvim
+          ];
 
           # --- Clipboard settings ---
           clipboard = {
@@ -117,6 +124,22 @@
 
           utility.oil-nvim.enable = true;
 
+          # Enable harpoon and configure settings
+          luaConfigRC.harpoon = ''
+            local harpoon = require("harpoon")
+
+            harpoon:setup({
+              settings = {
+                save_on_toggle = true,
+                save_on_change = true,
+                mark_branch = true,
+              },
+            })
+
+            pcall(vim.keymap.del, "n", "<C-w>d")
+            pcall(vim.keymap.del, "n", "<C-w><C-d>")
+          '';
+
           # --- Hotkeys ---
           globals.mapleader = " ";
           keymaps = [
@@ -198,10 +221,75 @@
 
             # --- OIL ---
             {
-              key = "<leader>e";
+              key = "<leader>cd";
               mode = "n";
               action = "<cmd>Oil<CR>";
               desc = "Open file explorer";
+              silent = true;
+            }
+
+            # --- HARPOON ---
+            {
+              key = "<leader>ha";
+              mode = "n";
+              action = "<cmd>lua require('harpoon'):list():add()<CR>";
+              desc = "Harpoon add file";
+              silent = true;
+            }
+            {
+              key = "<leader>hh";
+              mode = "n";
+              action = "<cmd>lua require('harpoon').ui:toggle_quick_menu(require('harpoon'):list())<CR>";
+              desc = "Harpoon menu";
+              silent = true;
+            }
+            {
+              key = "<C-s>";
+              mode = "n";
+              action = "<cmd>lua require('harpoon'):list():prev()<CR>";
+              desc = "Harpoon previous";
+              silent = true;
+            }
+            {
+              key = "<C-d>";
+              mode = "n";
+              action = "<cmd>lua require('harpoon'):list():next()<CR>";
+              desc = "Harpoon next";
+              silent = true;
+            }
+            {
+              key = "<C-q>";
+              mode = "n";
+              action = "<cmd>lua require('harpoon'):list():select(1)<CR>";
+              desc = "Harpoon file 1";
+              silent = true;
+            }
+            {
+              key = "<C-w>";
+              mode = "n";
+              action = "<cmd>lua require('harpoon'):list():select(2)<CR>";
+              desc = "Harpoon file 2";
+              silent = true;
+            }
+            {
+              key = "<C-e>";
+              mode = "n";
+              action = "<cmd>lua require('harpoon'):list():select(3)<CR>";
+              desc = "Harpoon file 3";
+              silent = true;
+            }
+            {
+              key = "<C-r>";
+              mode = "n";
+              action = "<cmd>lua require('harpoon'):list():select(4)<CR>";
+              desc = "Harpoon file 4";
+              silent = true;
+            }
+            {
+              key = "<C-r>";
+              mode = "n";
+              action = "<cmd>lua require('harpoon'):list():select(4)<CR>";
+              desc = "Harpoon file 4";
               silent = true;
             }
 
@@ -400,8 +488,6 @@
                   {
                     desc = "File explorer";
                     group = "Oil";
-                    key = "e";
-                    action = "Oil";
                   }
                   {
                     desc = "Git";
