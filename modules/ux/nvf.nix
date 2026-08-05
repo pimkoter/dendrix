@@ -11,6 +11,7 @@
       programs.nvf = {
         enable = true;
         settings.vim = {
+
           # --- Additional packages ---
           startPlugins = with pkgs.vimPlugins; [
             harpoon2
@@ -109,18 +110,6 @@
             };
           };
 
-          # Make gh behave like a toggle for "diffthis"
-          luaConfigRC.gitsigns = ''
-            vim.keymap.set("n", "<leader>gh", function()
-              if vim.wo.diff then
-                vim.cmd("diffoff!")
-                vim.cmd("only")
-              else
-                vim.cmd("Gitsigns diffthis")
-              end
-            end, { silent = true })
-          '';
-
           utility.oil-nvim.enable = true;
 
           # Enable harpoon and configure settings
@@ -137,6 +126,217 @@
 
             pcall(vim.keymap.del, "n", "<C-w>d")
             pcall(vim.keymap.del, "n", "<C-w><C-d>")
+          '';
+
+          # --- Terminal ---
+          luaConfigRC.terminal = ''
+            -- ==============================================================
+            -- Floating tmux terminal
+            --
+            -- <leader>t → open terminal
+            -- <Esc>     → close floating window
+            --
+            -- The terminal connects to a persistent tmux session named
+            -- "neovim".
+            --
+            -- Closing the floating window does NOT terminate tmux.
+            -- Running "exit" DOES terminate tmux and causes the terminal
+            -- state to be reset so the next <leader>t starts fresh.
+            -- ==============================================================
+
+            local terminal = {
+              buf = nil,
+              win = nil,
+              job = nil,
+            }
+
+            -- --------------------------------------------------------------
+            -- Helpers
+            -- --------------------------------------------------------------
+
+            local function is_window_open()
+              return terminal.win
+                and vim.api.nvim_win_is_valid(terminal.win)
+            end
+
+            local function is_terminal_running()
+              if not terminal.job then
+                return false
+              end
+
+              -- jobwait() returns:
+              --   -1 → still running
+              --   >=0 → process has exited
+              local result = vim.fn.jobwait({ terminal.job }, 0)[1]
+
+              return result == -1
+            end
+
+            local function reset_terminal()
+              terminal.job = nil
+              terminal.buf = nil
+              terminal.win = nil
+            end
+
+            -- --------------------------------------------------------------
+            -- Close floating window
+            -- --------------------------------------------------------------
+
+            local function close_terminal()
+              if is_window_open() then
+                vim.api.nvim_win_close(terminal.win, true)
+              end
+
+              terminal.win = nil
+            end
+
+            -- --------------------------------------------------------------
+            -- Create floating window
+            -- --------------------------------------------------------------
+
+            local function create_window()
+              local width = math.floor(vim.o.columns * 0.8)
+              local height = math.floor(vim.o.lines * 0.7)
+
+              local row = math.floor((vim.o.lines - height) / 2)
+              local col = math.floor((vim.o.columns - width) / 2)
+
+              terminal.win = vim.api.nvim_open_win(
+                terminal.buf,
+                true,
+                {
+                  relative = "editor",
+                  width = width,
+                  height = height,
+                  row = row,
+                  col = col,
+                  border = "rounded",
+                  style = "minimal",
+                }
+              )
+            end
+
+            -- --------------------------------------------------------------
+            -- Start terminal
+            -- --------------------------------------------------------------
+
+            local function start_terminal()
+              -- Always create a fresh buffer when starting a new terminal.
+              terminal.buf = vim.api.nvim_create_buf(false, true)
+
+              vim.api.nvim_buf_set_option(
+                terminal.buf,
+                "bufhidden",
+                "hide"
+              )
+
+              create_window()
+
+              -- Start tmux.
+              --
+              -- `new-session -A`:
+              --   create the session if it doesn't exist
+              --   otherwise attach to the existing session
+              --
+              -- `-s neovim`:
+              --   use the persistent session named "neovim"
+              terminal.job = vim.fn.termopen(
+                "tmux new-session -A -s neovim",
+                {
+                  on_exit = function()
+                    -- on_exit can happen while Neovim is processing another
+                    -- event, so defer the cleanup safely.
+                    vim.schedule(function()
+                      -- The tmux session has ended, so this terminal can no
+                      -- longer be reused.
+                      if is_window_open() then
+                        vim.api.nvim_win_close(terminal.win, true)
+                      end
+
+                      reset_terminal()
+                    end)
+                  end,
+                }
+              )
+
+              vim.cmd("startinsert")
+            end
+
+            -- --------------------------------------------------------------
+            -- Open terminal
+            -- --------------------------------------------------------------
+
+            local function open_terminal()
+              -- If the terminal job is still running, simply reopen its window.
+              if is_terminal_running() then
+                if not is_window_open() then
+                  create_window()
+                end
+
+                vim.cmd("startinsert")
+                return
+              end
+
+              -- The previous terminal process has exited.
+              --
+              -- Clean up the old buffer before starting a new one.
+              if terminal.buf and vim.api.nvim_buf_is_valid(terminal.buf) then
+                vim.api.nvim_buf_delete(
+                  terminal.buf,
+                  { force = true }
+                )
+              end
+
+              reset_terminal()
+
+              start_terminal()
+            end
+
+            -- --------------------------------------------------------------
+            -- Toggle
+            -- --------------------------------------------------------------
+
+            local function toggle_terminal()
+              if is_window_open() then
+                close_terminal()
+              else
+                open_terminal()
+              end
+            end
+
+            -- --------------------------------------------------------------
+            -- Keymaps
+            -- --------------------------------------------------------------
+
+            -- Normal mode:
+            -- open/reopen the floating terminal.
+            vim.keymap.set("n", "<leader>t", toggle_terminal, {
+              desc = "Toggle terminal",
+              silent = true,
+            })
+
+            -- Terminal mode:
+            -- Escape closes only the floating window.
+            --
+            -- The tmux session remains alive, so processes continue running.
+            vim.keymap.set("t", "<Esc>", close_terminal, {
+              desc = "Close terminal",
+              silent = true,
+            })
+
+            -- --------------------------------------------------------------
+            -- Window lifecycle
+            -- --------------------------------------------------------------
+
+            vim.api.nvim_create_autocmd("WinClosed", {
+              callback = function(args)
+                if terminal.win
+                  and tostring(terminal.win) == args.match
+                then
+                  terminal.win = nil
+                end
+              end,
+            })
           '';
 
           # --- Hotkeys ---
@@ -257,35 +457,28 @@
               silent = true;
             }
             {
-              key = "<C-q>";
+              key = "<leader>hq";
               mode = "n";
               action = "<cmd>lua require('harpoon'):list():select(1)<CR>";
               desc = "Harpoon file 1";
               silent = true;
             }
             {
-              key = "<C-w>";
+              key = "<leader>hw";
               mode = "n";
               action = "<cmd>lua require('harpoon'):list():select(2)<CR>";
               desc = "Harpoon file 2";
               silent = true;
             }
             {
-              key = "<C-e>";
+              key = "<leader>he";
               mode = "n";
               action = "<cmd>lua require('harpoon'):list():select(3)<CR>";
               desc = "Harpoon file 3";
               silent = true;
             }
             {
-              key = "<C-r>";
-              mode = "n";
-              action = "<cmd>lua require('harpoon'):list():select(4)<CR>";
-              desc = "Harpoon file 4";
-              silent = true;
-            }
-            {
-              key = "<C-r>";
+              key = "<leader>hr";
               mode = "n";
               action = "<cmd>lua require('harpoon'):list():select(4)<CR>";
               desc = "Harpoon file 4";
@@ -314,8 +507,22 @@
               desc = "Show documentation";
               silent = true;
             }
+            {
+              key = "<C-k>";
+              mode = "i";
+              action = "<cmd>lua vim.lsp.buf.signature_help()<CR>";
+              desc = "Show signature help";
+              silent = true;
+            }
 
             # -- Diagnostics ---
+            {
+              key = "<leader>do";
+              mode = "n";
+              action = "<cmd>lua vim.diagnostic.open_float()<CR>";
+              desc = "Show diagnostic";
+              silent = true;
+            }
             {
               key = "<leader>dn";
               mode = "n";
@@ -374,6 +581,13 @@
               mode = "n";
               action = "<cmd>Gitsigns prev_hunk<CR>";
               desc = "Previous hunk";
+              silent = true;
+            }
+            {
+              key = "<leader>gh";
+              mode = "n";
+              action = "<cmd>Gitsigns preview_hunk<CR>";
+              desc = "Preview hunk";
               silent = true;
             }
             {
@@ -440,16 +654,57 @@
           };
 
           luaConfigRC.floats = ''
+            vim.o.winborder = "rounded"
+
             vim.api.nvim_set_hl(0, "NormalFloat", {
               bg = "#1e1e2e",
             })
 
             vim.api.nvim_set_hl(0, "FloatBorder", {
+              fg = "#585b70",
               bg = "#1e1e2e",
+            })
+
+            vim.api.nvim_set_hl(0, "FloatTitle", {
+              fg = "#cdd6f4",
+              bg = "#1e1e2e",
+              bold = true,
+            })
+
+
+            local original_hover = vim.lsp.handlers["textDocument/hover"]
+
+            vim.lsp.handlers["textDocument/hover"] = function(
+              err,
+              result,
+              ctx,
+              config
+            )
+              config = config or {}
+
+              config.border = "rounded"
+
+              config.max_width = 100
+              config.max_height = 30
+
+              return original_hover(err, result, ctx, config)
+            end
+          '';
+
+          luaConfigRC.diagnostics = ''
+            vim.diagnostic.config({
+              float = {
+                border = "rounded",
+                source = "if_many",
+                header = "",
+                prefix = "",
+                max_width = 100,
+                max_height = 20,
+              },
             })
           '';
 
-          # --- Dashboard
+          # --- Dashboard ---
           dashboard.dashboard-nvim = {
             enable = true;
 
