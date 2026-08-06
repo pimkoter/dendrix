@@ -1,296 +1,138 @@
-
 #!/usr/bin/env bash
 
 set -euo pipefail
 
-# ─────────────────────────────────────────────────────────────
+# Discover flake location
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
-# DENDRIX INSTALLER
+FLAKE="$SCRIPT_DIR"
 
-# ─────────────────────────────────────────────────────────────
+while [[ "$FLAKE" != "/" && ! -f "$FLAKE/flake.nix" ]]; do
+    FLAKE="$(dirname "$FLAKE")"
+done
 
-FLAKE="$(git -C "$(dirname -- "${BASH_SOURCE[0]}")" rev-parse --show-toplevel)"
-
-export NIX_CONFIG="experimental-features = nix-command flakes"
-
-# ─────────────────────────────────────────────────────────────
-
-# Helpers
-
-# ─────────────────────────────────────────────────────────────
-
-die() {
-echo
-echo "Error: $*" >&2
-exit 1
-}
-
-pause() {
-read -rp "Press Enter to continue..."
-}
-
-# ─────────────────────────────────────────────────────────────
-
-# Root check
-
-# ─────────────────────────────────────────────────────────────
-
-if [[ $EUID -ne 0 ]]; then
-exec sudo -- "$0" "$@"
-fi
-
-# ─────────────────────────────────────────────────────────────
-
-# Splash
-
-# ─────────────────────────────────────────────────────────────
-
-clear
-
-cat <<'EOF'
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║                     DENDRIX INSTALLER                        ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
-EOF
-
-echo
-
-[[ -f "$FLAKE/flake.nix" ]] ||
-die "Could not find flake.nix in $FLAKE"
-
-echo "Flake:"
-echo "  $FLAKE"
-echo
-
-# ─────────────────────────────────────────────────────────────
-
-# Discover hosts
-
-# ─────────────────────────────────────────────────────────────
-
-echo "Discovering available hosts..."
-echo
-
-mapfile -t HOSTS < <(
-    nix eval --impure --raw \
-        --expr "
-          let
-            flake = builtins.getFlake \"$FLAKE\";
-          in
-            builtins.concatStringsSep \"\\n\"
-              (builtins.attrNames flake.nixosConfigurations)
-        "
-)
-
-if [[ ${#HOSTS[@]} -eq 0 ]]; then
-    echo
-    echo "Error: No nixosConfigurations found in the flake."
+if [[ ! -f "$FLAKE/flake.nix" ]]; then
+    echo "Error: could not find flake.nix."
     exit 1
 fi
 
-echo "Available hosts:"
-echo
+# Discover hosts
+mapfile -t HOSTS < <(
+    nix --extra-experimental-features 'nix-command flakes' eval --raw "$FLAKE#nixosConfigurations" \
+        --apply 'x: builtins.concatStringsSep "\n" (builtins.attrNames x)' \
+        </dev/null
+)
 
+if (( ${#HOSTS[@]} == 0 )); then
+    echo "Error: no NixOS hosts found."
+    exit 1
+fi
+
+# Select host
 for i in "${!HOSTS[@]}"; do
-    printf "  %d) %s\n" "$((i + 1))" "${HOSTS[$i]}"
+    printf '%d. %s\n' "$((i + 1))" "${HOSTS[$i]}"
 done
 
 echo
+printf 'Select a host: '
+read -r CHOICE
 
-while true; do
-    read -rp "Select a host [1-${#HOSTS[@]}]: " SELECTION
-
-    if [[ "$SELECTION" =~ ^[0-9]+$ ]] &&
-       (( SELECTION >= 1 && SELECTION <= ${#HOSTS[@]} )); then
-        break
-    fi
-
+if [[ ! "$CHOICE" =~ ^[0-9]+$ ]] ||
+   (( CHOICE < 1 || CHOICE > ${#HOSTS[@]} )); then
     echo "Invalid selection."
-done
-
-HOST="${HOSTS[$((SELECTION - 1))]}"
-
-# ─────────────────────────────────────────────────────────────
-
-# Host selection
-
-# ─────────────────────────────────────────────────────────────
-
-while true; do
-read -rp "Select a host [1-${#HOSTS[@]}]: " SELECTION
-
-```
-if [[ "$SELECTION" =~ ^[0-9]+$ ]] &&
-   (( SELECTION >= 1 && SELECTION <= ${#HOSTS[@]} )); then
-    break
+    exit 1
 fi
 
-echo "Invalid selection."
-```
-
-done
-
-HOST="${HOSTS[$((SELECTION - 1))]}"
-
-# ─────────────────────────────────────────────────────────────
-
-# Validate configuration
-
-# ─────────────────────────────────────────────────────────────
+HOST="${HOSTS[$((CHOICE - 1))]}"
 
 echo
-echo "Selected host:"
-echo
-echo "  $HOST"
-echo
-
-echo "Validating NixOS configuration..."
-
-nix eval 
-"$FLAKE#nixosConfigurations.$HOST.config.system.build.toplevel.drvPath" 
->/dev/null ||
-die "The NixOS configuration '$HOST' could not be evaluated."
-
-# ─────────────────────────────────────────────────────────────
-
-# Show Disko configuration
-
-# ─────────────────────────────────────────────────────────────
+echo "Selected host: $HOST"
+echo 
 
 echo
-echo "Disk configuration:"
+echo "Disk layout:"
 echo
 
-DISKO_DEVICES="$(
-nix eval 
---json 
-"$FLAKE#nixosConfigurations.$HOST.config.disko.devices.disk" 
-2>/dev/null || echo '{}'
-)"
+nix --extra-experimental-features 'nix-command flakes' eval --raw "$FLAKE#nixosConfigurations.$HOST.config.disko.devices" \
+    --apply '
+      devices:
+      let
+        formatPartition = disk: name: last:
+          let
+            partition = disk.content.partitions.${name};
+            content = partition.content;
+            format = content.format or content.type;
+            mountpoint = content.mountpoint or "";
+            prefix = if last then "  └─" else "  ├─";
+            suffix = if mountpoint == "" then "" else "  ${mountpoint}";
+          in
+            "${prefix} ${name}  ${partition.size}  ${format}${suffix}";
 
-if [[ "$DISKO_DEVICES" == "{}" ]]; then
-echo "  No Disko configuration found."
+        formatDisk = name:
+          let
+            disk = devices.disk.${name};
+            partitions = builtins.attrNames disk.content.partitions;
+            count = builtins.length partitions;
+          in
+            "  ${disk.device}\n"
+            + "  ├─ ${disk.content.type}\n"
+            + builtins.concatStringsSep "\n"
+              (builtins.genList
+                (i:
+                  formatPartition
+                    disk
+                    (builtins.elemAt partitions i)
+                    (i == count - 1))
+                count);
+      in
+        builtins.concatStringsSep "\n\n"
+          (builtins.map formatDisk (builtins.attrNames devices.disk))
+    '
+
 echo
-echo "This installer expects the selected host to provide"
-echo "a disko.devices configuration."
-exit 1
-fi
-
-echo "$DISKO_DEVICES" |
-jq -r '
-to_entries[] |
-"  (.key): (.value.device)"
-'
-
 echo
+read -r -p "Continue with installation? [y/N] " CONFIRM
 
-# ─────────────────────────────────────────────────────────────
-
-# Confirmation
-
-# ─────────────────────────────────────────────────────────────
-
-cat <<EOF
-
-╔══════════════════════════════════════════════════════════════╗
-║                         WARNING                              ║
-╚══════════════════════════════════════════════════════════════╝
-
-Host:
-
-$HOST
-
-The disks listed above will be partitioned and formatted
-according to the Disko configuration of this host.
-
-Existing data on those disks may be DESTROYED.
-
-EOF
-
-read -rp "Continue with installation? [y/N]: " CONFIRM
+[[ "$CONFIRM" =~ ^[Yy]$ ]] || exit 0
 
 if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
-echo
-echo "Installation cancelled."
-exit 0
+    echo "Installation cancelled."
+    exit 0
 fi
 
-# ─────────────────────────────────────────────────────────────
-
-# Run Disko
-
-# ─────────────────────────────────────────────────────────────
-
-clear
-
-cat <<EOF
-╔══════════════════════════════════════════════════════════════╗
-║                     DENDRIX INSTALLER                        ║
-╚══════════════════════════════════════════════════════════════╝
-
-Installing:
-
-$HOST
-
-EOF
-
-echo "==> Running Disko..."
-
-nix run github:nix-community/disko/latest -- 
---mode disko 
---flake "$FLAKE#$HOST"
-
-# ─────────────────────────────────────────────────────────────
-
-# Generate hardware configuration
-
-# ─────────────────────────────────────────────────────────────
-
 echo
-echo "==> Generating hardware configuration..."
+echo "Installing $HOST..."
+echo
+# Partition, format and mount
+echo
+echo "Partitioning and mounting disks..."
 
-nixos-generate-config 
---root /mnt
+if ! sudo disko \
+    --flake "$FLAKE#$HOST" \
+    --mode destroy,format,mount \
+    --yes-wipe-all-disks \
+    >/dev/null 2>&1; then
+    echo "Error: Disko failed."
+    exit 1
+fi
 
-# ─────────────────────────────────────────────────────────────
+echo "Disks set up successfully."
+echo
 
 # Install NixOS
-
-# ─────────────────────────────────────────────────────────────
-
-echo
-echo "==> Installing NixOS..."
-
-nixos-install 
---root /mnt 
---flake "$FLAKE#$HOST"
-
-# ─────────────────────────────────────────────────────────────
-
-# Done
-
-# ─────────────────────────────────────────────────────────────
-
-clear
-
-cat <<EOF
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║                 INSTALLATION COMPLETE                        ║
-║                                                              ║
-║  Host: $HOST
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
-EOF
-
-echo
-echo "The system has been installed successfully."
+echo "Installing NixOS..."
 echo
 
-read -rp "Reboot now? [y/N]: " REBOOT
+if ! sudo nixos-install --flake "$FLAKE#$HOST"; then
+    echo "Error: NixOS installation failed."
+    exit 1
+fi
 
-if [[ "$REBOOT" =~ ^[Yy]$ ]]; then
-reboot
+echo
+echo "Installation completed successfully."
+
+read -r -p "Reboot now? [y/N] " REBOOT
+
+if [[ "$REBOOT" =~ ^[Yy][Ee][Ss]$ || "$REBOOT" =~ ^[Yy]$ ]]; then
+    sudo reboot
 fi
