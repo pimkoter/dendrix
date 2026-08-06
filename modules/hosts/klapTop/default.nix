@@ -13,8 +13,7 @@
       # Core modules
       boot
       drivers
-      howdy
-      ly
+      sddm
       misc
       networking
       niri
