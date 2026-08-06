@@ -1,123 +1,138 @@
 #!/usr/bin/env bash
+
 set -euo pipefail
 
-# --- Color Formatting ---
-BOLD='\033[1m'
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-NC='\033[0m'
+# Discover flake location
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
-echo -e "${BOLD}${BLUE}===========================================${NC}"
-echo -e "${BOLD}${BLUE}       Dendrix NixOS Installer Tool        ${NC}"
-echo -e "${BOLD}${BLUE}===========================================${NC}\n"
+FLAKE="$SCRIPT_DIR"
 
-# 1. Root Check
-if [ "$EUID" -ne 0 ]; then
-  echo -e "${RED}Error: Please run this script with root privileges (sudo ./install.sh)${NC}"
-  exit 1
-fi
-
-FLAKE_DIR="/etc/dendrix"
-
-# Fall back to local directory if script is run outside the baked ISO path
-if [ ! -d "$FLAKE_DIR" ]; then
-  FLAKE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-fi
-
-echo -e "${GREEN}--> Using Flake configuration from:${NC} $FLAKE_DIR"
-
-# 2. Select Target Host Configuration
-HOSTS=($(ls -d $FLAKE_DIR/modules/hosts/*/ | xargs -n 1 basename | grep -v 'iso'))
-
-if [ ${#HOSTS[@]} -eq 0 ]; then
-  echo -e "${RED}No host configurations found in modules/hosts/!${NC}"
-  exit 1
-fi
-
-echo -e "\n${BOLD}Available host configurations:${NC}"
-select HOST in "${HOSTS[@]}"; do
-  if [ -n "$HOST" ]; then
-    echo -e "${GREEN}Selected host:${NC} ${BOLD}$HOST${NC}"
-    break
-  else
-    echo -e "${RED}Invalid selection. Try again.${NC}"
-  fi
+while [[ "$FLAKE" != "/" && ! -f "$FLAKE/flake.nix" ]]; do
+    FLAKE="$(dirname "$FLAKE")"
 done
 
-# 3. Partitioning Strategy Selection
-DISKO_CONFIG="$FLAKE_DIR/modules/hosts/$HOST/disk-config.nix"
-
-echo -e "\n${BOLD}Select Partitioning Method:${NC}"
-echo "1) Automated (Disko - format drives according to disk-config.nix)"
-echo "2) Manual (Skip formatting, assume drives are already mounted under /mnt)"
-
-read -rp "Choice [1-2]: " PART_CHOICE
-
-case $PART_CHOICE in
-1)
-  if [ ! -f "$DISKO_CONFIG" ]; then
-    echo -e "${RED}Error: Disko config not found at $DISKO_CONFIG${NC}"
+if [[ ! -f "$FLAKE/flake.nix" ]]; then
+    echo "Error: could not find flake.nix."
     exit 1
-  fi
-  echo -e "${YELLOW}WARNING: Disko will format your target drive(s) and wipe all existing data!${NC}"
-  read -rp "Are you sure you want to proceed? [y/N]: " CONFIRM
-  if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
-    echo -e "${RED}Installation aborted.${NC}"
+fi
+
+# Discover hosts
+mapfile -t HOSTS < <(
+    nix --extra-experimental-features 'nix-command flakes' eval --raw "$FLAKE#nixosConfigurations" \
+        --apply 'x: builtins.concatStringsSep "\n" (builtins.attrNames x)' \
+        </dev/null
+)
+
+if (( ${#HOSTS[@]} == 0 )); then
+    echo "Error: no NixOS hosts found."
+    exit 1
+fi
+
+# Select host
+for i in "${!HOSTS[@]}"; do
+    printf '%d. %s\n' "$((i + 1))" "${HOSTS[$i]}"
+done
+
+echo
+printf 'Select a host: '
+read -r CHOICE
+
+if [[ ! "$CHOICE" =~ ^[0-9]+$ ]] ||
+   (( CHOICE < 1 || CHOICE > ${#HOSTS[@]} )); then
+    echo "Invalid selection."
+    exit 1
+fi
+
+HOST="${HOSTS[$((CHOICE - 1))]}"
+
+echo
+echo "Selected host: $HOST"
+echo 
+
+echo
+echo "Disk layout:"
+echo
+
+nix --extra-experimental-features 'nix-command flakes' eval --raw "$FLAKE#nixosConfigurations.$HOST.config.disko.devices" \
+    --apply '
+      devices:
+      let
+        formatPartition = disk: name: last:
+          let
+            partition = disk.content.partitions.${name};
+            content = partition.content;
+            format = content.format or content.type;
+            mountpoint = content.mountpoint or "";
+            prefix = if last then "  └─" else "  ├─";
+            suffix = if mountpoint == "" then "" else "  ${mountpoint}";
+          in
+            "${prefix} ${name}  ${partition.size}  ${format}${suffix}";
+
+        formatDisk = name:
+          let
+            disk = devices.disk.${name};
+            partitions = builtins.attrNames disk.content.partitions;
+            count = builtins.length partitions;
+          in
+            "  ${disk.device}\n"
+            + "  ├─ ${disk.content.type}\n"
+            + builtins.concatStringsSep "\n"
+              (builtins.genList
+                (i:
+                  formatPartition
+                    disk
+                    (builtins.elemAt partitions i)
+                    (i == count - 1))
+                count);
+      in
+        builtins.concatStringsSep "\n\n"
+          (builtins.map formatDisk (builtins.attrNames devices.disk))
+    '
+
+echo
+echo
+read -r -p "Continue with installation? [y/N] " CONFIRM
+
+[[ "$CONFIRM" =~ ^[Yy]$ ]] || exit 0
+
+if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
+    echo "Installation cancelled."
     exit 0
-  fi
-  echo -e "${GREEN}--> Running Disko partitioning...${NC}"
-  nix --extra-experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko "$DISKO_CONFIG"
-  ;;
-2)
-  echo -e "${GREEN}--> Skipping Disko formatting.${NC}"
-  if ! mountpoint -q /mnt; then
-    echo -e "${RED}Error: /mnt is not mounted. Please mount your root target partition to /mnt manually.${NC}"
+fi
+
+echo
+echo "Installing $HOST..."
+echo
+# Partition, format and mount
+echo
+echo "Partitioning and mounting disks..."
+
+if ! sudo disko \
+    --flake "$FLAKE#$HOST" \
+    --mode destroy,format,mount \
+    --yes-wipe-all-disks \
+    >/dev/null 2>&1; then
+    echo "Error: Disko failed."
     exit 1
-  fi
-  ;;
-*)
-  echo -e "${RED}Invalid choice. Aborting.${NC}"
-  exit 1
-  ;;
-esac
-
-# 4. Generate Hardware Configuration (if missing)
-TARGET_HW_CONFIG="$FLAKE_DIR/modules/hosts/$HOST/hardware-configuration.nix"
-
-if [ ! -f "$TARGET_HW_CONFIG" ]; then
-  echo -e "${YELLOW}--> $TARGET_HW_CONFIG missing. Generating hardware configuration from live detection...${NC}"
-  nixos-generate-config --root /mnt --show-hardware-config >"$TARGET_HW_CONFIG"
-  echo -e "${GREEN}--> Hardware config written to $TARGET_HW_CONFIG${NC}"
 fi
 
-# 5. Optional Secrets Key Copying (age / sops)
-echo -e "\n${BOLD}Secrets Management (sops/age):${NC}"
-read -rp "Do you need to copy an age/sops key to the new host before building? [y/N]: " COPY_KEY
-if [[ "$COPY_KEY" =~ ^[Yy]$ ]]; then
-  read -rp "Enter source path to your key file (e.g. /media/usb/keys.txt): " KEY_SRC
-  if [ -f "$KEY_SRC" ]; then
-    mkdir -p /mnt/var/lib/sops-nix/ /mnt/root/.config/sops/age/
-    cp "$KEY_SRC" /mnt/var/lib/sops-nix/key.txt
-    cp "$KEY_SRC" /mnt/root/.config/sops/age/keys.txt
-    chmod 600 /mnt/var/lib/sops-nix/key.txt
-    echo -e "${GREEN}--> Secret keys imported successfully.${NC}"
-  else
-    echo -e "${RED}File $KEY_SRC not found. Skipping key copy...${NC}"
-  fi
+echo "Disks set up successfully."
+echo
+
+# Install NixOS
+echo "Installing NixOS..."
+echo
+
+if ! sudo nixos-install --flake "$FLAKE#$HOST"; then
+    echo "Error: NixOS installation failed."
+    exit 1
 fi
 
-# 6. Execute Installation
-echo -e "\n${BOLD}${GREEN}===========================================${NC}"
-echo -e "${BOLD}${GREEN}    Starting NixOS Installation for $HOST  ${NC}"
-echo -e "${BOLD}${GREEN}===========================================${NC}\n"
+echo
+echo "Installation completed successfully."
 
-nixos-install --flake "$FLAKE_DIR#$HOST"
+read -r -p "Reboot now? [y/N] " REBOOT
 
-# 7. Post-install prompt
-echo -e "\n${BOLD}${GREEN}Installation Complete!${NC}"
-read -rp "Would you like to reboot into your new system now? [y/N]: " REBOOT_CHOICE
-if [[ "$REBOOT_CHOICE" =~ ^[Yy]$ ]]; then
-  reboot
+if [[ "$REBOOT" =~ ^[Yy][Ee][Ss]$ || "$REBOOT" =~ ^[Yy]$ ]]; then
+    sudo reboot
 fi
