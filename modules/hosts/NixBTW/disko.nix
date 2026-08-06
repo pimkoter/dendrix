@@ -1,0 +1,69 @@
+{
+  flake.nixosModules.NixBTW = {
+    disko.devices = {
+      disk = {
+        nvme1n1 = {
+          type = "disk";
+          device = "/dev/nvme1n1";
+
+          content = {
+            type = "gpt";
+
+            partitions = {
+              ESP = {
+                size = "1G";
+                type = "EF00";
+
+                content = {
+                  type = "filesystem";
+                  format = "vfat";
+                  mountpoint = "/boot";
+                  mountOptions = [ "umask=0077" ];
+                };
+              };
+
+              swap = {
+                size = "8G";
+
+                content = {
+                  type = "swap";
+                };
+              };
+
+              root = {
+                size = "100%";
+
+                content = {
+                  type = "filesystem";
+                  format = "ext4";
+                  mountpoint = "/";
+                };
+              };
+            };
+          };
+        };
+
+        nvme0n1 = {
+          type = "disk";
+          device = "/dev/nvme0n1";
+
+          content = {
+            type = "gpt";
+
+            partitions = {
+              home = {
+                size = "100%";
+
+                content = {
+                  type = "filesystem";
+                  format = "ext4";
+                  mountpoint = "/home";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+}

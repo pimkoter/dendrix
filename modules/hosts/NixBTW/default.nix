@@ -2,10 +2,12 @@
   self,
   inputs,
   ...
-}: {
+}:
+{
   flake.nixosConfigurations.NixBTW = inputs.nixpkgs.lib.nixosSystem {
     modules = with self.nixosModules; [
       # Hardware
+      { nixpkgs.hostPlatform = "x86_64-linux"; }
       NixBTW
 
       # Core modules
