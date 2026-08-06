@@ -1,7 +1,7 @@
 {
-  flake.nixosModules.networking = {
+  flake.nixosModules.networking = { lib, ... }: {
     networking = {
-      hostName = "NixBTW";
+      hostName = lib.mkDefault builtins.getEnv "HOSTNAME";
       networkmanager = {
         enable = true;
       };
