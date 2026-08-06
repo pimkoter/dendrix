@@ -1,123 +1,296 @@
+
 #!/usr/bin/env bash
+
 set -euo pipefail
 
-# --- Color Formatting ---
-BOLD='\033[1m'
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-NC='\033[0m'
+# ─────────────────────────────────────────────────────────────
 
-echo -e "${BOLD}${BLUE}===========================================${NC}"
-echo -e "${BOLD}${BLUE}       Dendrix NixOS Installer Tool        ${NC}"
-echo -e "${BOLD}${BLUE}===========================================${NC}\n"
+# DENDRIX INSTALLER
 
-# 1. Root Check
-if [ "$EUID" -ne 0 ]; then
-  echo -e "${RED}Error: Please run this script with root privileges (sudo ./install.sh)${NC}"
-  exit 1
+# ─────────────────────────────────────────────────────────────
+
+FLAKE="$(git -C "$(dirname -- "${BASH_SOURCE[0]}")" rev-parse --show-toplevel)"
+
+export NIX_CONFIG="experimental-features = nix-command flakes"
+
+# ─────────────────────────────────────────────────────────────
+
+# Helpers
+
+# ─────────────────────────────────────────────────────────────
+
+die() {
+echo
+echo "Error: $*" >&2
+exit 1
+}
+
+pause() {
+read -rp "Press Enter to continue..."
+}
+
+# ─────────────────────────────────────────────────────────────
+
+# Root check
+
+# ─────────────────────────────────────────────────────────────
+
+if [[ $EUID -ne 0 ]]; then
+exec sudo -- "$0" "$@"
 fi
 
-FLAKE_DIR="/etc/dendrix"
+# ─────────────────────────────────────────────────────────────
 
-# Fall back to local directory if script is run outside the baked ISO path
-if [ ! -d "$FLAKE_DIR" ]; then
-  FLAKE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+# Splash
+
+# ─────────────────────────────────────────────────────────────
+
+clear
+
+cat <<'EOF'
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║                     DENDRIX INSTALLER                        ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+EOF
+
+echo
+
+[[ -f "$FLAKE/flake.nix" ]] ||
+die "Could not find flake.nix in $FLAKE"
+
+echo "Flake:"
+echo "  $FLAKE"
+echo
+
+# ─────────────────────────────────────────────────────────────
+
+# Discover hosts
+
+# ─────────────────────────────────────────────────────────────
+
+echo "Discovering available hosts..."
+echo
+
+mapfile -t HOSTS < <(
+    nix eval --impure --raw \
+        --expr "
+          let
+            flake = builtins.getFlake \"$FLAKE\";
+          in
+            builtins.concatStringsSep \"\\n\"
+              (builtins.attrNames flake.nixosConfigurations)
+        "
+)
+
+if [[ ${#HOSTS[@]} -eq 0 ]]; then
+    echo
+    echo "Error: No nixosConfigurations found in the flake."
+    exit 1
 fi
 
-echo -e "${GREEN}--> Using Flake configuration from:${NC} $FLAKE_DIR"
+echo "Available hosts:"
+echo
 
-# 2. Select Target Host Configuration
-HOSTS=($(ls -d $FLAKE_DIR/modules/hosts/*/ | xargs -n 1 basename | grep -v 'iso'))
-
-if [ ${#HOSTS[@]} -eq 0 ]; then
-  echo -e "${RED}No host configurations found in modules/hosts/!${NC}"
-  exit 1
-fi
-
-echo -e "\n${BOLD}Available host configurations:${NC}"
-select HOST in "${HOSTS[@]}"; do
-  if [ -n "$HOST" ]; then
-    echo -e "${GREEN}Selected host:${NC} ${BOLD}$HOST${NC}"
-    break
-  else
-    echo -e "${RED}Invalid selection. Try again.${NC}"
-  fi
+for i in "${!HOSTS[@]}"; do
+    printf "  %d) %s\n" "$((i + 1))" "${HOSTS[$i]}"
 done
 
-# 3. Partitioning Strategy Selection
-DISKO_CONFIG="$FLAKE_DIR/modules/hosts/$HOST/disk-config.nix"
+echo
 
-echo -e "\n${BOLD}Select Partitioning Method:${NC}"
-echo "1) Automated (Disko - format drives according to disk-config.nix)"
-echo "2) Manual (Skip formatting, assume drives are already mounted under /mnt)"
+while true; do
+    read -rp "Select a host [1-${#HOSTS[@]}]: " SELECTION
 
-read -rp "Choice [1-2]: " PART_CHOICE
+    if [[ "$SELECTION" =~ ^[0-9]+$ ]] &&
+       (( SELECTION >= 1 && SELECTION <= ${#HOSTS[@]} )); then
+        break
+    fi
 
-case $PART_CHOICE in
-1)
-  if [ ! -f "$DISKO_CONFIG" ]; then
-    echo -e "${RED}Error: Disko config not found at $DISKO_CONFIG${NC}"
-    exit 1
-  fi
-  echo -e "${YELLOW}WARNING: Disko will format your target drive(s) and wipe all existing data!${NC}"
-  read -rp "Are you sure you want to proceed? [y/N]: " CONFIRM
-  if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
-    echo -e "${RED}Installation aborted.${NC}"
-    exit 0
-  fi
-  echo -e "${GREEN}--> Running Disko partitioning...${NC}"
-  nix --extra-experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko "$DISKO_CONFIG"
-  ;;
-2)
-  echo -e "${GREEN}--> Skipping Disko formatting.${NC}"
-  if ! mountpoint -q /mnt; then
-    echo -e "${RED}Error: /mnt is not mounted. Please mount your root target partition to /mnt manually.${NC}"
-    exit 1
-  fi
-  ;;
-*)
-  echo -e "${RED}Invalid choice. Aborting.${NC}"
-  exit 1
-  ;;
-esac
+    echo "Invalid selection."
+done
 
-# 4. Generate Hardware Configuration (if missing)
-TARGET_HW_CONFIG="$FLAKE_DIR/modules/hosts/$HOST/hardware-configuration.nix"
+HOST="${HOSTS[$((SELECTION - 1))]}"
 
-if [ ! -f "$TARGET_HW_CONFIG" ]; then
-  echo -e "${YELLOW}--> $TARGET_HW_CONFIG missing. Generating hardware configuration from live detection...${NC}"
-  nixos-generate-config --root /mnt --show-hardware-config >"$TARGET_HW_CONFIG"
-  echo -e "${GREEN}--> Hardware config written to $TARGET_HW_CONFIG${NC}"
+# ─────────────────────────────────────────────────────────────
+
+# Host selection
+
+# ─────────────────────────────────────────────────────────────
+
+while true; do
+read -rp "Select a host [1-${#HOSTS[@]}]: " SELECTION
+
+```
+if [[ "$SELECTION" =~ ^[0-9]+$ ]] &&
+   (( SELECTION >= 1 && SELECTION <= ${#HOSTS[@]} )); then
+    break
 fi
 
-# 5. Optional Secrets Key Copying (age / sops)
-echo -e "\n${BOLD}Secrets Management (sops/age):${NC}"
-read -rp "Do you need to copy an age/sops key to the new host before building? [y/N]: " COPY_KEY
-if [[ "$COPY_KEY" =~ ^[Yy]$ ]]; then
-  read -rp "Enter source path to your key file (e.g. /media/usb/keys.txt): " KEY_SRC
-  if [ -f "$KEY_SRC" ]; then
-    mkdir -p /mnt/var/lib/sops-nix/ /mnt/root/.config/sops/age/
-    cp "$KEY_SRC" /mnt/var/lib/sops-nix/key.txt
-    cp "$KEY_SRC" /mnt/root/.config/sops/age/keys.txt
-    chmod 600 /mnt/var/lib/sops-nix/key.txt
-    echo -e "${GREEN}--> Secret keys imported successfully.${NC}"
-  else
-    echo -e "${RED}File $KEY_SRC not found. Skipping key copy...${NC}"
-  fi
+echo "Invalid selection."
+```
+
+done
+
+HOST="${HOSTS[$((SELECTION - 1))]}"
+
+# ─────────────────────────────────────────────────────────────
+
+# Validate configuration
+
+# ─────────────────────────────────────────────────────────────
+
+echo
+echo "Selected host:"
+echo
+echo "  $HOST"
+echo
+
+echo "Validating NixOS configuration..."
+
+nix eval 
+"$FLAKE#nixosConfigurations.$HOST.config.system.build.toplevel.drvPath" 
+>/dev/null ||
+die "The NixOS configuration '$HOST' could not be evaluated."
+
+# ─────────────────────────────────────────────────────────────
+
+# Show Disko configuration
+
+# ─────────────────────────────────────────────────────────────
+
+echo
+echo "Disk configuration:"
+echo
+
+DISKO_DEVICES="$(
+nix eval 
+--json 
+"$FLAKE#nixosConfigurations.$HOST.config.disko.devices.disk" 
+2>/dev/null || echo '{}'
+)"
+
+if [[ "$DISKO_DEVICES" == "{}" ]]; then
+echo "  No Disko configuration found."
+echo
+echo "This installer expects the selected host to provide"
+echo "a disko.devices configuration."
+exit 1
 fi
 
-# 6. Execute Installation
-echo -e "\n${BOLD}${GREEN}===========================================${NC}"
-echo -e "${BOLD}${GREEN}    Starting NixOS Installation for $HOST  ${NC}"
-echo -e "${BOLD}${GREEN}===========================================${NC}\n"
+echo "$DISKO_DEVICES" |
+jq -r '
+to_entries[] |
+"  (.key): (.value.device)"
+'
 
-nixos-install --flake "$FLAKE_DIR#$HOST"
+echo
 
-# 7. Post-install prompt
-echo -e "\n${BOLD}${GREEN}Installation Complete!${NC}"
-read -rp "Would you like to reboot into your new system now? [y/N]: " REBOOT_CHOICE
-if [[ "$REBOOT_CHOICE" =~ ^[Yy]$ ]]; then
-  reboot
+# ─────────────────────────────────────────────────────────────
+
+# Confirmation
+
+# ─────────────────────────────────────────────────────────────
+
+cat <<EOF
+
+╔══════════════════════════════════════════════════════════════╗
+║                         WARNING                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+Host:
+
+$HOST
+
+The disks listed above will be partitioned and formatted
+according to the Disko configuration of this host.
+
+Existing data on those disks may be DESTROYED.
+
+EOF
+
+read -rp "Continue with installation? [y/N]: " CONFIRM
+
+if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
+echo
+echo "Installation cancelled."
+exit 0
+fi
+
+# ─────────────────────────────────────────────────────────────
+
+# Run Disko
+
+# ─────────────────────────────────────────────────────────────
+
+clear
+
+cat <<EOF
+╔══════════════════════════════════════════════════════════════╗
+║                     DENDRIX INSTALLER                        ║
+╚══════════════════════════════════════════════════════════════╝
+
+Installing:
+
+$HOST
+
+EOF
+
+echo "==> Running Disko..."
+
+nix run github:nix-community/disko/latest -- 
+--mode disko 
+--flake "$FLAKE#$HOST"
+
+# ─────────────────────────────────────────────────────────────
+
+# Generate hardware configuration
+
+# ─────────────────────────────────────────────────────────────
+
+echo
+echo "==> Generating hardware configuration..."
+
+nixos-generate-config 
+--root /mnt
+
+# ─────────────────────────────────────────────────────────────
+
+# Install NixOS
+
+# ─────────────────────────────────────────────────────────────
+
+echo
+echo "==> Installing NixOS..."
+
+nixos-install 
+--root /mnt 
+--flake "$FLAKE#$HOST"
+
+# ─────────────────────────────────────────────────────────────
+
+# Done
+
+# ─────────────────────────────────────────────────────────────
+
+clear
+
+cat <<EOF
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║                 INSTALLATION COMPLETE                        ║
+║                                                              ║
+║  Host: $HOST
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+EOF
+
+echo
+echo "The system has been installed successfully."
+echo
+
+read -rp "Reboot now? [y/N]: " REBOOT
+
+if [[ "$REBOOT" =~ ^[Yy]$ ]]; then
+reboot
 fi
