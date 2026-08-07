@@ -28,15 +28,6 @@
         zsh
       ];
 
-      nixpkgs.config.allowUnfreePredicate =
-        pkg:
-        builtins.elem (lib.getName pkg) [
-          "spotify"
-          "android-sdk-platform-tools"
-          "platform-tools"
-          "android-studio"
-        ];
-
       home = {
         username = "pim";
         homeDirectory = "/home/pim";
@@ -115,6 +106,7 @@
       {
         config,
         pkgs,
+        lib,
         ...
       }:
       {
@@ -152,6 +144,15 @@
             imports = [ self.homeModules.pim ];
           };
         };
+
+        nixpkgs.config.allowUnfreePredicate =
+          pkg:
+          builtins.elem (lib.getName pkg) [
+            "spotify"
+            "android-sdk-platform-tools"
+            "platform-tools"
+            "android-studio"
+          ];
       };
   };
 }
