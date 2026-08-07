@@ -625,6 +625,13 @@
               desc = "Commit staged changes";
               silent = true;
             }
+            # --- HOTKEYS ---
+            {
+              key = "<leader>y";
+              mode = "n";
+              action = "<cmd>%y+<CR>";
+              desc = "Copy whole file";
+            }
           ];
 
           binds.whichKey = {
