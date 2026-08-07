@@ -1,10 +1,25 @@
-{
-  flake.nixosModules.NixBTW = {
+{ inputs, ... }: {
+  flake.nixosModules.disko-NixBTW = {
+    imports = [ inputs.disko.nixosModules.disko ];
+
+    fileSystems."/nix".neededForBoot = true;
+    fileSystems."/preserve".neededForBoot = true;
+
     disko.devices = {
+      nodev = {
+        "/" = {
+          fsType = "tmpfs";
+          mountOptions = [
+            "size=25%"
+            "mode=755"
+          ];
+        };
+      };
+
       disk = {
-        nvme1n1 = {
+        system = {
           type = "disk";
-          device = "/dev/nvme1n1";
+          device = "/dev/disk/by-id/nvme-CT2000T500SSD8_25094E70AC15";
 
           content = {
             type = "gpt";
@@ -18,7 +33,10 @@
                   type = "filesystem";
                   format = "vfat";
                   mountpoint = "/boot";
-                  mountOptions = [ "umask=0077" ];
+                  mountOptions = [
+                    "fmask=0077"
+                    "dmask=0077"
+                  ];
                 };
               };
 
@@ -30,34 +48,34 @@
                 };
               };
 
-              root = {
+              nix = {
                 size = "100%";
 
                 content = {
                   type = "filesystem";
                   format = "ext4";
-                  mountpoint = "/";
+                  mountpoint = "/nix";
                 };
               };
             };
           };
         };
 
-        nvme0n1 = {
+        preserve = {
           type = "disk";
-          device = "/dev/nvme0n1";
+          device = "/dev/disk/by-id/nvme-PCSPECIALIST_PCS3480_256GB_MQ16B75900699";
 
           content = {
             type = "gpt";
 
             partitions = {
-              home = {
+              preserve = {
                 size = "100%";
 
                 content = {
                   type = "filesystem";
                   format = "ext4";
-                  mountpoint = "/home";
+                  mountpoint = "/preserve";
                 };
               };
             };
