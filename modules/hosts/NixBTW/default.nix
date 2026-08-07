@@ -8,7 +8,8 @@
     modules = with self.nixosModules; [
       # Hardware
       { nixpkgs.hostPlatform = "x86_64-linux"; }
-      NixBTW
+      disko-NixBTW
+      preservation-NixBTW
 
       # Core modules
       boot
