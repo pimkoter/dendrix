@@ -159,7 +159,7 @@ mkdir -p "$(dirname "$OUTPUT")"
 {
   flake.homeModules.noctalia = { lib, ... }: {
     imports = [ inputs.noctalia.homeModules.default ];
-    home.file.".config/noctalia/settings.json.template" = {
+    home.file.".config/noctalia/settings.json" = {
       text = builtins.toJSON
 EOF
 
