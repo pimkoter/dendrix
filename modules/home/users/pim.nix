@@ -19,13 +19,14 @@
         noctalia
         nvf
         rofi
-        scripts
+        bashScripts
+        pythonScripts
         starship
         stylix
         tmux
         wallpapers
+        xonsh
         zoxide
-        zsh
       ];
 
       home = {
@@ -127,7 +128,7 @@
             "kvm"
           ];
           ignoreShellProgramCheck = true;
-          shell = pkgs.zsh;
+          shell = pkgs.xonsh;
         };
 
         home-manager = {

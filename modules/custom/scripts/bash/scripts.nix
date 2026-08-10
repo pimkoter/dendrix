@@ -1,5 +1,5 @@
 {
-  flake.homeModules.scripts =
+  flake.homeModules.bashScripts =
     {
       config,
       pkgs,
