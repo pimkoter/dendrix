@@ -2,6 +2,10 @@
 {
   flake.nixosModules.preservation-NixBTW = {
     imports = [ inputs.preservation.nixosModules.default ];
+
+    # Disable Systemd warning for id-commit
+    systemd.services.systemd-machine-id-commit.enable = false;
+
     preservation = {
       enable = true;
       preserveAt."/preserve" = {
@@ -33,6 +37,9 @@
             "Projects"
             "Repos"
             "Games"
+            ".config/zen"
+            ".local/share/xonsh/history_json"
+            ".local/share/zoxide"
           ]
           ++ [ ".ssh" ];
         };
