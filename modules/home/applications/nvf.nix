@@ -10,6 +10,7 @@
       imports = [ inputs.nvf.homeManagerModules.default ];
       programs.nvf = {
         enable = true;
+        defaultEditor = true;
         settings.vim = {
 
           # --- Additional packages ---
