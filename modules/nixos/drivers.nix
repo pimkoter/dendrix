@@ -1,10 +1,6 @@
 {
-  self,
-  inputs,
-  ...
-}: {
-  flake.nixosModules.drivers = {config, ...}: {
-    services.xserver.videoDrivers = ["nvidia"];
+  flake.nixosModules.drivers = { config, ... }: {
+    services.xserver.videoDrivers = [ "nvidia" ];
     hardware = {
       nvidia = {
         modesetting.enable = true;
@@ -29,6 +25,7 @@
         enable = true;
         enable32Bit = true;
       };
+      enableRedistributableFirmware = true;
     };
   };
 }
