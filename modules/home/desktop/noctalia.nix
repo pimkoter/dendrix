@@ -1,10 +1,11 @@
 {
-  self,
   inputs,
   ...
-}: {
-  flake.homeModules.noctalia = {lib, ...}: {
-    home.file.".config/noctalia/settings.json.template" = {
+}:
+{
+  flake.homeModules.noctalia = { lib, ... }: {
+    imports = [ inputs.noctalia.homeModules.default ];
+    home.file.".config/noctalia/settings.json" = {
       text = builtins.toJSON {
         appLauncher = {
           autoPasteClipboard = false;
@@ -24,7 +25,7 @@
           iconMode = "native";
           ignoreMouseInput = false;
           overviewLayer = true;
-          pinnedApps = [];
+          pinnedApps = [ ];
           position = "center";
           screenshotAnnotationTool = "";
           showCategories = true;
@@ -34,7 +35,7 @@
           viewMode = "list";
         };
         audio = {
-          mprisBlacklist = [];
+          mprisBlacklist = [ ];
           preferredPlayer = "spotify";
           spectrumFrameRate = 30;
           spectrumMirrored = true;
@@ -64,7 +65,7 @@
           middleClickAction = "none";
           middleClickCommand = "";
           middleClickFollowMouse = false;
-          monitors = [];
+          monitors = [ ];
           mouseWheelAction = "none";
           mouseWheelWrap = true;
           outerCorners = true;
@@ -73,7 +74,7 @@
           rightClickAction = "controlCenter";
           rightClickCommand = "";
           rightClickFollowMouse = true;
-          screenOverrides = [];
+          screenOverrides = [ ];
           showCapsule = true;
           showOnWorkspaceSwitch = true;
           showOutline = false;
@@ -141,10 +142,6 @@
             ];
             right = [
               {
-                iconColor = "none";
-                id = "WallpaperSelector";
-              }
-              {
                 displayMode = "onhover";
                 iconColor = "none";
                 id = "Bluetooth";
@@ -154,14 +151,11 @@
                 iconColor = "error";
                 id = "SessionMenu";
               }
-              {
-                id = "plugin:hassio";
-              }
             ];
           };
         };
         brightness = {
-          backlightDeviceMappings = [];
+          backlightDeviceMappings = [ ];
           brightnessStep = 5;
           enableDdcSupport = false;
           enforceMinimum = true;
@@ -224,16 +218,29 @@
           position = "close_to_bar_button";
           shortcuts = {
             left = [
-              {id = "Network";}
-              {id = "Bluetooth";}
-              {id = "WallpaperSelector";}
-              {id = "NoctaliaPerformance";}
+              {
+                id = "Network";
+              }
+              {
+                id = "Bluetooth";
+              }
+              {
+                id = "NoctaliaPerformance";
+              }
             ];
             right = [
-              {id = "Notifications";}
-              {id = "PowerProfile";}
-              {id = "KeepAwake";}
-              {id = "NightLight";}
+              {
+                id = "Notifications";
+              }
+              {
+                id = "PowerProfile";
+              }
+              {
+                id = "KeepAwake";
+              }
+              {
+                id = "NightLight";
+              }
             ];
           };
         };
@@ -244,7 +251,7 @@
           monitorWidgets = [
             {
               name = "DP-6";
-              widgets = [];
+              widgets = [ ];
             }
             {
               name = "eDP-1";
@@ -336,9 +343,9 @@
           launcherIconColor = "none";
           launcherPosition = "end";
           launcherUseDistroLogo = false;
-          monitors = [];
+          monitors = [ ];
           onlySameOutput = true;
-          pinnedApps = [];
+          pinnedApps = [ ];
           pinnedStatic = false;
           position = "bottom";
           showDockIndicator = false;
@@ -365,20 +372,35 @@
           forceBlackScreenCorners = false;
           iRadiusRatio = 1;
           keybinds = {
-            keyDown = ["Down"];
-            keyEnter = ["Return"];
-            keyEscape = ["Esc"];
-            keyLeft = ["Left"];
-            keyRemove = ["Del"];
-            keyRight = ["Right"];
-            keyUp = ["Up"];
+            keyDown = [
+              "Down"
+            ];
+            keyEnter = [
+              "Return"
+              "Enter"
+            ];
+            keyEscape = [
+              "Esc"
+            ];
+            keyLeft = [
+              "Left"
+            ];
+            keyRemove = [
+              "Del"
+            ];
+            keyRight = [
+              "Right"
+            ];
+            keyUp = [
+              "Up"
+            ];
           };
           language = "";
           lockOnSuspend = true;
           lockScreenAnimations = true;
           lockScreenBlur = 0.2;
           lockScreenCountdownDuration = 10000;
-          lockScreenMonitors = [];
+          lockScreenMonitors = [ ];
           lockScreenTint = 0;
           passwordChars = true;
           radiusRatio = 1;
@@ -388,7 +410,7 @@
           shadowDirection = "bottom_right";
           shadowOffsetX = 2;
           shadowOffsetY = 3;
-          showChangelogOnStartup = true;
+          showChangelogOnStartup = false;
           showHibernateOnLockScreen = true;
           showScreenCorners = false;
           showSessionButtonsOnLockScreen = true;
@@ -435,39 +457,236 @@
           useFahrenheit = false;
           weatherEnabled = true;
           weatherShowEffects = true;
+          weatherTaliaMascotAlways = false;
+        };
+        network = {
+          bluetoothAutoConnect = true;
+          bluetoothDetailsViewMode = "grid";
+          bluetoothHideUnnamedDevices = false;
+          bluetoothRssiPollIntervalMs = 60000;
+          bluetoothRssiPollingEnabled = false;
+          disableDiscoverability = false;
+          networkPanelView = "wifi";
+          wifiDetailsViewMode = "grid";
+        };
+        nightLight = {
+          autoSchedule = true;
+          dayTemp = "6500";
+          enabled = false;
+          forced = false;
+          manualSunrise = "06:30";
+          manualSunset = "18:30";
+          nightTemp = "4000";
+        };
+        noctaliaPerformance = {
+          disableDesktopWidgets = true;
+          disableWallpaper = true;
+        };
+        notifications = {
+          backgroundOpacity = 1;
+          clearDismissed = true;
+          criticalUrgencyDuration = 15;
+          density = "default";
+          enableBatteryToast = true;
+          enableKeyboardLayoutToast = true;
+          enableMarkdown = false;
+          enableMediaToast = false;
+          enabled = true;
+          location = "top_right";
+          lowUrgencyDuration = 3;
+          monitors = [ ];
+          normalUrgencyDuration = 8;
+          overlayLayer = true;
+          respectExpireTimeout = false;
+          saveToHistory = {
+            critical = true;
+            low = true;
+            normal = true;
+          };
+          sounds = {
+            criticalSoundFile = "";
+            enabled = false;
+            excludedApps = "discord,firefox,chrome,chromium,edge";
+            lowSoundFile = "";
+            normalSoundFile = "";
+            separateSounds = false;
+            volume = 0.5;
+          };
+        };
+        osd = {
+          autoHideMs = 2000;
+          backgroundOpacity = 1;
+          enabled = true;
+          enabledTypes = [
+            0
+            1
+            2
+          ];
+          location = "top_right";
+          monitors = [ ];
+          overlayLayer = true;
+        };
+        plugins = {
+          autoUpdate = false;
+          notifyUpdates = true;
+        };
+        sessionMenu = {
+          countdownDuration = 10000;
+          enableCountdown = true;
+          largeButtonsLayout = "single-row";
+          largeButtonsStyle = true;
+          position = "center";
+          powerOptions = [
+            {
+              action = "lock";
+              command = "";
+              countdownEnabled = true;
+              enabled = true;
+              keybind = "1";
+            }
+            {
+              action = "suspend";
+              command = "";
+              countdownEnabled = true;
+              enabled = true;
+              keybind = "2";
+            }
+            {
+              action = "hibernate";
+              command = "";
+              countdownEnabled = true;
+              enabled = true;
+              keybind = "3";
+            }
+            {
+              action = "reboot";
+              command = "";
+              countdownEnabled = true;
+              enabled = true;
+              keybind = "4";
+            }
+            {
+              action = "logout";
+              command = "";
+              countdownEnabled = true;
+              enabled = true;
+              keybind = "5";
+            }
+            {
+              action = "shutdown";
+              command = "";
+              countdownEnabled = true;
+              enabled = true;
+              keybind = "6";
+            }
+            {
+              action = "rebootToUefi";
+              command = "";
+              countdownEnabled = true;
+              enabled = true;
+              keybind = "7";
+            }
+            {
+              action = "userspaceReboot";
+              command = "";
+              countdownEnabled = true;
+              enabled = false;
+              keybind = "";
+            }
+          ];
+          showHeader = true;
+          showKeybinds = true;
+        };
+        settingsVersion = 59;
+        systemMonitor = {
+          batteryCriticalThreshold = 5;
+          batteryWarningThreshold = 20;
+          cpuCriticalThreshold = 90;
+          cpuWarningThreshold = 80;
+          criticalColor = "";
+          diskAvailCriticalThreshold = 10;
+          diskAvailWarningThreshold = 20;
+          diskCriticalThreshold = 90;
+          diskWarningThreshold = 80;
+          enableDgpuMonitoring = false;
+          externalMonitor = "resources || missioncenter || jdsystemmonitor || corestats || system-monitoring-center || gnome-system-monitor || plasma-systemmonitor || mate-system-monitor || ukui-system-monitor || deepin-system-monitor || pantheon-system-monitor";
+          gpuCriticalThreshold = 90;
+          gpuWarningThreshold = 80;
+          memCriticalThreshold = 90;
+          memWarningThreshold = 80;
+          swapCriticalThreshold = 90;
+          swapWarningThreshold = 80;
+          tempCriticalThreshold = 90;
+          tempWarningThreshold = 80;
+          useCustomColors = false;
+          warningColor = "";
+        };
+        templates = {
+          activeTemplates = [ ];
+          enableUserTheming = false;
+        };
+        ui = {
+          boxBorderEnabled = false;
+          fontDefault = "Sans Serif";
+          fontDefaultScale = 1;
+          fontFixed = "monospace";
+          fontFixedScale = 1;
+          panelBackgroundOpacity = 0.93;
+          panelsAttachedToBar = true;
+          scrollbarAlwaysVisible = true;
+          settingsPanelMode = "attached";
+          settingsPanelSideBarCardStyle = false;
+          tooltipsEnabled = true;
+          translucentWidgets = false;
+        };
+        wallpaper = {
+          automationEnabled = false;
+          directory = "/home/pim/Pictures/Wallpapers";
+          enableMultiMonitorDirectories = false;
+          enabled = false;
+          favorites = [ ];
+          fillColor = "#000000";
+          fillMode = "crop";
+          hideWallpaperFilenames = false;
+          linkLightAndDarkWallpapers = true;
+          monitorDirectories = [ ];
+          overviewBlur = 0.4;
+          overviewEnabled = false;
+          overviewTint = 0.6;
+          panelPosition = "follow_bar";
+          randomIntervalSec = 300;
+          setWallpaperOnAllMonitors = true;
+          showHiddenFiles = false;
+          skipStartupTransition = false;
+          solidColor = "#1a1a2e";
+          sortOrder = "name";
+          transitionDuration = 1500;
+          transitionEdgeSmoothness = 0.05;
+          transitionType = [
+            "fade"
+            "disc"
+            "stripes"
+            "wipe"
+            "pixelate"
+            "honeycomb"
+          ];
+          useOriginalImages = false;
+          useSolidColor = false;
+          useWallhaven = false;
+          viewMode = "single";
+          wallhavenApiKey = "";
+          wallhavenCategories = "111";
+          wallhavenOrder = "desc";
+          wallhavenPurity = "100";
+          wallhavenQuery = "";
+          wallhavenRatios = "";
+          wallhavenResolutionHeight = "";
+          wallhavenResolutionMode = "atleast";
+          wallhavenResolutionWidth = "";
+          wallhavenSorting = "relevance";
+          wallpaperChangeMode = "random";
         };
       };
     };
-
-    home.activation.noctaliaSettingsInit = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      SETTINGS_FILE="$HOME/.config/noctalia/settings.json"
-      TEMPLATE_FILE="$HOME/.config/noctalia/settings.json.template"
-
-      if [ ! -f "$SETTINGS_FILE" ] || [ -L "$SETTINGS_FILE" ]; then
-        $DRY_RUN_CMD rm -f "$SETTINGS_FILE"
-        $DRY_RUN_CMD cp "$TEMPLATE_FILE" "$SETTINGS_FILE"
-        $DRY_RUN_CMD chmod 644 "$SETTINGS_FILE"
-      fi
-    '';
-
-    home.activation.noctaliaWarning = lib.hm.dag.entryAfter ["noctaliaSettingsInit"] ''
-      $DRY_RUN_CMD echo ""
-      $DRY_RUN_CMD echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-      $DRY_RUN_CMD echo "🌙 Noctalia Shell is ENABLED"
-      $DRY_RUN_CMD echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-      $DRY_RUN_CMD echo ""
-      $DRY_RUN_CMD echo "⚠️  Waybar has been automatically disabled"
-      $DRY_RUN_CMD echo ""
-      $DRY_RUN_CMD echo "📝 Configuration: ~/.config/noctalia/settings.json (GUI-editable)"
-      $DRY_RUN_CMD echo "🎨 Settings synced from GUI (use ./sync-from-gui.py to update)"
-      $DRY_RUN_CMD echo "✏️  All GUI changes persist across reboots"
-      $DRY_RUN_CMD echo ""
-      $DRY_RUN_CMD echo "💡 To update Nix template from GUI changes:"
-      $DRY_RUN_CMD echo "   cd modules/home/noctalia-shell && ./sync-from-gui.py"
-      $DRY_RUN_CMD echo ""
-      $DRY_RUN_CMD echo "📚 Docs: https://docs.noctalia.dev"
-      $DRY_RUN_CMD echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-      $DRY_RUN_CMD echo ""
-    '';
   };
 }
