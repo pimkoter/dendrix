@@ -23,6 +23,7 @@
         directories = [
           "/var/lib/tailscale/"
           "/var/lib/systemd/timers"
+          "/var/lib/howdy/models/"
           "/var/lib/nixos"
           "/var/log"
           "/var/lib/bluetooth"
