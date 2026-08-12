@@ -17,6 +17,7 @@
       drivers
       howdy
       ly
+      mangowc
       misc
       networking
       niri

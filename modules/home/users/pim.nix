@@ -15,6 +15,7 @@
         git
         kitty
         lazygit
+        mangowc
         niri
         noctalia
         nvf
