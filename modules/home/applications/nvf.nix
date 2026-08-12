@@ -91,7 +91,17 @@
             rust.enable = true;
             markdown = {
               enable = true;
-              extensions.render-markdown-nvim.enable = true;
+              extensions = {
+                render-markdown-nvim = {
+                  enable = true;
+                  setupOpts = {
+                    latex = {
+                      enabled = true;
+                      converter = "latex2text";
+                    };
+                  };
+                };
+              };
             };
           };
 
