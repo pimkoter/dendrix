@@ -89,6 +89,10 @@
             python.enable = true;
             clang.enable = true;
             rust.enable = true;
+            markdown = {
+              enable = true;
+              extensions.render-markdown-nvim.enable = true;
+            };
           };
 
           git = {
