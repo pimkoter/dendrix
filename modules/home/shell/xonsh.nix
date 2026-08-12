@@ -55,6 +55,8 @@
 
             fastfetch
 
+        $XONSH_SHOW_TRACEBACK = True
+
         # Aliases
         ${aliasLines}
 
