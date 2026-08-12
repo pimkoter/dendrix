@@ -88,11 +88,8 @@
 
           treesitter = {
             enable = true;
-            grammars = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
-              markdown
-              markdown_inline
-              latex
-            ];
+            addDefaultGrammars = true;
+            grammars = pkgs.vimPlugins.nvim-treesitter.allGrammars;
           };
 
           languages = {
