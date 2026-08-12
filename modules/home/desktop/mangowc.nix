@@ -78,12 +78,9 @@
           # MONITORS
           # =====================
 
-          monitorrule=name:${monitors.left},scale:1,x:0,y:0,width:1920,height:1080,rr:60
-
-          monitorrule=name:${monitors.middle},scale:1,x:1920,y:0,width:1920,height:1080,rr:165
-
-          monitorrule=name:${monitors.right},scale:1.5,x:3840,y:0,width:2560,height:1600,rr:60
-
+          monitorrule=name:${monitors.left},transform:0,scale:1,x:0,y:0,width:1920,height:1080,rr:60
+          monitorrule=name:${monitors.middle},transform:0,scale:1,x:1920,y:0,width:1920,height:1080,rr:165
+          monitorrule=name:${monitors.right},transform:0,scale:1.5,x:3840,y:0,width:2560,height:1600,rr:60
 
           # =====================
           # TAGS
