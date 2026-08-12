@@ -19,6 +19,10 @@
             plenary-nvim
           ];
 
+          extraPackages = with pkgs; [
+            python3Packages.pylatexenc
+          ];
+
           # --- Clipboard settings ---
           clipboard = {
             enable = true;
@@ -44,6 +48,9 @@
             cmdheight = 0;
             ignorecase = true;
             smartcase = true;
+
+            conceallevel = 2;
+            concealcursor = "nc";
           };
 
           # --- Plugins ---
@@ -79,6 +86,15 @@
             formatOnSave = true;
           };
 
+          treesitter = {
+            enable = true;
+            grammars = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
+              markdown
+              markdown_inline
+              latex
+            ];
+          };
+
           languages = {
             enableFormat = true;
             enableTreesitter = true;
@@ -87,6 +103,7 @@
               format.type = [ "nixfmt" ];
             };
             python.enable = true;
+            tex.enable = true;
             clang.enable = true;
             rust.enable = true;
             markdown = {
@@ -97,7 +114,6 @@
                   setupOpts = {
                     latex = {
                       enabled = true;
-                      converter = "latex2text";
                     };
                   };
                 };
