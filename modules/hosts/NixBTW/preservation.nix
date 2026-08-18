@@ -29,22 +29,6 @@
           "/var/lib/bluetooth"
           "/etc/NetworkManager/system-connections"
         ];
-
-        users.pim = {
-          directories = [
-            "Downloads"
-            "Pictures"
-            "Backups"
-            "Notes"
-            "Projects"
-            "Repos"
-            "Games"
-            ".config/zen"
-            ".local/share/xonsh/history_json"
-            ".local/share/zoxide"
-          ]
-          ++ [ ".ssh" ];
-        };
       };
     };
   };
