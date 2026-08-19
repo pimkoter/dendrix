@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.nixosModules.preservation-NixBTW = {
+  flake.nixosModules.preservation = {
     imports = [ inputs.preservation.nixosModules.default ];
 
     # Disable Systemd warning for id-commit
@@ -25,8 +25,8 @@
           "/var/lib/systemd/timers"
           "/var/lib/howdy/models/"
           "/var/lib/nixos"
-          "/var/log"
           "/var/lib/bluetooth"
+          "/var/log"
           "/etc/NetworkManager/system-connections"
         ];
       };
