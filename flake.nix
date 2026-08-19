@@ -8,6 +8,7 @@
     import-tree.url = "github:vic/import-tree";
     zennotes.url = "github:pimkoter/zennotes";
     preservation.url = "github:nix-community/preservation";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
