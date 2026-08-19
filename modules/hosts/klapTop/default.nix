@@ -9,7 +9,7 @@
       # Hardware
       { nixpkgs.hostPlatform = "x86_64-linux"; }
       { networking.hostName = "klapTop"; }
-      klapTop
+      disko-klapTop
 
       # Core modules
       boot
