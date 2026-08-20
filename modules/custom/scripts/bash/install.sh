@@ -29,6 +29,7 @@ trap cleanup EXIT
 
 echo "Welcome to the Dendrix installer"
 echo
+echo
 
 # Discover hosts
 mapfile -t HOSTS < <(
@@ -48,8 +49,6 @@ for i in "${!HOSTS[@]}"; do
     printf '%d. %s\n' "$((i + 1))" "${HOSTS[$i]}"
 done
 
-echo
-echo
 echo
 printf 'Select a host: '
 read -r CHOICE
@@ -131,9 +130,7 @@ sudo rm -rf "$INSTALL_FLAKE"
 sudo cp -a "$FLAKE" "$INSTALL_FLAKE"
 sudo chown -R root:root "$INSTALL_FLAKE"
 
-echo
 echo "> Partitioning and mounting disks..."
-echo
 
 sudo nix --extra-experimental-features 'nix-command flakes' \
     run github:nix-community/disko/latest -- \
@@ -142,9 +139,7 @@ sudo nix --extra-experimental-features 'nix-command flakes' \
     --yes-wipe-all-disks \
     >/dev/null 2>&1
 
-echo
 echo "> Disks set up successfully."
-echo
 
 # Find and activate the swap partition created by Disko.
 echo "> Activating swap..."
