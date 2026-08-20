@@ -17,7 +17,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nvf = {
-      url = "github:notashelf/nvf";
+      url = "github:pimkoter/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     disko = {
