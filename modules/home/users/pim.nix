@@ -57,7 +57,6 @@
             clang
             compose2nix
             dig
-            gh
             nmap
             python315
             rustc
@@ -83,6 +82,9 @@
             ripgrep
             unzip
             wl-clipboard-rs
+
+            # Misc
+            (lib.lowPrio pkgs.gh)
 
             inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
             inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
