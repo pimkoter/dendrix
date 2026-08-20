@@ -1,18 +1,25 @@
-{
-  inputs,
-  ...
-}:
-{
-  flake.nixosModules.klapTop = {
-    imports = [
-      inputs.disko.nixosModules.disko
-    ];
+{ inputs, ... }: {
+  flake.nixosModules.disko-klapTop = {
+    imports = [ inputs.disko.nixosModules.disko ];
+
+    fileSystems."/nix".neededForBoot = true;
+    fileSystems."/preserve".neededForBoot = true;
 
     disko.devices = {
+      nodev = {
+        "/" = {
+          fsType = "tmpfs";
+          mountOptions = [
+            "size=25%"
+            "mode=755"
+          ];
+        };
+      };
+
       disk = {
-        main = {
+        system = {
           type = "disk";
-          device = "/dev/nvme0n1";
+          device = "/dev/disk/by-id/nvme-KBG30ZMV256G_TOSHIBA_199PC7NHPZXP";
 
           content = {
             type = "gpt";
@@ -26,26 +33,38 @@
                   type = "filesystem";
                   format = "vfat";
                   mountpoint = "/boot";
-                  mountOptions = [ "umask=0077" ];
+                  mountOptions = [
+                    "fmask=0077"
+                    "dmask=0077"
+                  ];
                 };
               };
 
               swap = {
                 size = "4G";
-                type = "8200";
 
                 content = {
                   type = "swap";
                 };
               };
 
-              root = {
+              nix = {
+                size = "100G";
+
+                content = {
+                  type = "filesystem";
+                  format = "ext4";
+                  mountpoint = "/nix";
+                };
+              };
+
+              preserve = {
                 size = "100%";
 
                 content = {
                   type = "filesystem";
                   format = "ext4";
-                  mountpoint = "/";
+                  mountpoint = "/preserve";
                 };
               };
             };

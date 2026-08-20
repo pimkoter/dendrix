@@ -10,7 +10,7 @@
       { nixpkgs.hostPlatform = "x86_64-linux"; }
       { networking.hostName = "NixBTW"; }
       disko-NixBTW
-      preservation-NixBTW
+      preservation
 
       # Core modules
       boot

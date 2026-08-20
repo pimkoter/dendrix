@@ -21,7 +21,7 @@ fi
 
 if ! command -v nixfmt >/dev/null 2>&1; then
     echo "error: nixfmt is required" >&2
-    echo "Install it with: nix shell nixpkgs#nixfmt-rfc-style" >&2
+    echo "Install it with: nix shell nixpkgs#nixfmt" >&2
     exit 1
 fi
 

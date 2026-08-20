@@ -103,6 +103,7 @@
             tex.enable = true;
             clang.enable = true;
             rust.enable = true;
+            html.enable = true;
             markdown = {
               enable = true;
               extensions = {

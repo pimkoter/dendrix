@@ -8,7 +8,8 @@
     modules = with self.nixosModules; [
       # Hardware
       { nixpkgs.hostPlatform = "x86_64-linux"; }
-      klapTop
+      { networking.hostName = "klapTop"; }
+      disko-klapTop
 
       # Core modules
       boot
