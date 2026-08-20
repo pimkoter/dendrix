@@ -40,6 +40,7 @@
             "Repos"
             "Games"
             ".config/zen"
+            ".config/gh/hosts.yml"
             ".local/share/xonsh/history_json"
             ".local/share/zoxide"
           ]
