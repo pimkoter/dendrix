@@ -16,9 +16,24 @@ if [[ ! -f "$FLAKE/flake.nix" ]]; then
     exit 1
 fi
 
+# Temporary installation flake
+INSTALL_FLAKE="/var/tmp/nixos-install-flake"
+
+# Clean up temporary resources on exit
+cleanup() {
+    sudo rm -rf "$INSTALL_FLAKE"
+}
+
+trap cleanup EXIT
+
+
+echo "Welcome to the Dendrix installer"
+echo
+
 # Discover hosts
 mapfile -t HOSTS < <(
-    nix --extra-experimental-features 'nix-command flakes' eval --raw "$FLAKE#nixosConfigurations" \
+    nix --extra-experimental-features 'nix-command flakes' \
+        eval --raw "$FLAKE#nixosConfigurations" \
         --apply 'x: builtins.concatStringsSep "\n" (builtins.attrNames x)' \
         </dev/null
 )
@@ -34,6 +49,8 @@ for i in "${!HOSTS[@]}"; do
 done
 
 echo
+echo
+echo
 printf 'Select a host: '
 read -r CHOICE
 
@@ -47,13 +64,14 @@ HOST="${HOSTS[$((CHOICE - 1))]}"
 
 echo
 echo "Selected host: $HOST"
-echo 
-
 echo
+
+# Show disk layout
 echo "Disk layout:"
 echo
 
-nix --extra-experimental-features 'nix-command flakes' eval --raw "$FLAKE#nixosConfigurations.$HOST.config.disko.devices" \
+nix --extra-experimental-features 'nix-command flakes' \
+    eval --raw "$FLAKE#nixosConfigurations.$HOST.config.disko.devices" \
     --apply '
       devices:
       let
@@ -93,8 +111,6 @@ echo
 echo
 read -r -p "Continue with installation? [y/N] " CONFIRM
 
-[[ "$CONFIRM" =~ ^[Yy]$ ]] || exit 0
-
 if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
     echo "Installation cancelled."
     exit 0
@@ -103,33 +119,74 @@ fi
 echo
 echo "Installing $HOST..."
 echo
-# Partition, format and mount
-echo
-echo "Partitioning and mounting disks..."
 
-if ! sudo disko \
-    --flake "$FLAKE#$HOST" \
+# Create a root-owned copy of the flake.
+#
+# nixos-install runs as root, and Nix may reject evaluating a flake
+# owned by the normal user. The temporary copy avoids that problem
+# without changing ownership of the actual Git repository.
+echo "> Preparing flake for installation..."
+
+sudo rm -rf "$INSTALL_FLAKE"
+sudo cp -a "$FLAKE" "$INSTALL_FLAKE"
+sudo chown -R root:root "$INSTALL_FLAKE"
+
+echo
+echo "> Partitioning and mounting disks..."
+echo
+
+sudo nix --extra-experimental-features 'nix-command flakes' \
+    run github:nix-community/disko/latest -- \
+    --flake "$INSTALL_FLAKE#$HOST" \
     --mode destroy,format,mount \
     --yes-wipe-all-disks \
-    >/dev/null 2>&1; then
-    echo "Error: Disko failed."
+    >/dev/null 2>&1
+
+echo
+echo "> Disks set up successfully."
+echo
+
+# Find and activate the swap partition created by Disko.
+echo "> Activating swap..."
+
+SWAP_DEVICE="$(
+    lsblk -nrpo NAME,FSTYPE |
+        awk '$2 == "swap" { print $1; exit }'
+)"
+
+if [[ -z "$SWAP_DEVICE" ]]; then
+    echo "Error: could not find a swap partition."
     exit 1
 fi
 
-echo "Disks set up successfully."
-echo
+echo "> Found swap: $SWAP_DEVICE"
 
-# Install NixOS
-echo "Installing NixOS..."
-echo
-
-if ! sudo nixos-install --flake "$FLAKE#$HOST"; then
-    echo "Error: NixOS installation failed."
-    exit 1
-fi
+sudo swapon "$SWAP_DEVICE"
 
 echo
-echo "Installation completed successfully."
+echo "Active swap:"
+swapon --show
+
+echo
+echo "Memory available:"
+free -h
+
+# Install NixOS.
+#
+# max-jobs 1 prevents multiple derivations from being built simultaneously.
+# cores 1 limits each build to a single CPU core, reducing peak memory use.
+echo
+echo "> Installing NixOS..."
+echo
+
+sudo nixos-install \
+    --flake "$INSTALL_FLAKE#$HOST" \
+    --option max-jobs 1 \
+    --option cores 1
+
+echo
+echo "> Installation completed successfully."
+echo
 
 read -r -p "Reboot now? [y/N] " REBOOT
 
