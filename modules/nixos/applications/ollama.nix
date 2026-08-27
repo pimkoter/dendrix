@@ -1,9 +1,5 @@
 {
-  self,
-  inputs,
-  ...
-}: {
-  flake.nixosModules.ollama = {pkgs, ...}: {
+  flake.nixosModules.ollama = { pkgs, ... }: {
     services = {
       ollama = {
         enable = true;

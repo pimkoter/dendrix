@@ -2,7 +2,6 @@
   flake.homeModules.tmux =
     {
       config,
-      lib,
       pkgs,
       ...
     }:

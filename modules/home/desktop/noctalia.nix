@@ -3,7 +3,7 @@
   ...
 }:
 {
-  flake.homeModules.noctalia = { lib, ... }: {
+  flake.homeModules.noctalia = {
     imports = [ inputs.noctalia.homeModules.default ];
     home.file.".config/noctalia/settings.json" = {
       text = builtins.toJSON {

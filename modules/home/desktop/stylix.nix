@@ -49,16 +49,18 @@
       };
     };
 
-  flake.homeModules.stylix = {
-    imports = [
-      self.commonModules.stylix
-    ];
-  };
+  flake = {
+    homeModules.stylix = {
+      imports = [
+        self.commonModules.stylix
+      ];
+    };
 
-  flake.nixosModules.stylix = {
-    imports = [
-      inputs.stylix.nixosModules.stylix
-      self.commonModules.stylix
-    ];
+    nixosModules.stylix = {
+      imports = [
+        inputs.stylix.nixosModules.stylix
+        self.commonModules.stylix
+      ];
+    };
   };
 }

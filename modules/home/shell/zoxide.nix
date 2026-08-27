@@ -1,8 +1,4 @@
 {
-  self,
-  inputs,
-  ...
-}: {
   flake.homeModules.zoxide = {
     programs = {
       zoxide = {
