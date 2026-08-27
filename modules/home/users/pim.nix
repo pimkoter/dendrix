@@ -28,8 +28,7 @@
           noctalia
           nvf
           rofi
-          bashScripts
-          pythonScripts
+          scripts
           starship
           stylix
           tmux
