@@ -1,3 +1,4 @@
+{ self, ... }:
 {
   flake.homeModules.tmux =
     {
@@ -8,7 +9,13 @@
     let
       c = config.lib.stylix.colors.withHashtag;
     in
+
     {
+
+      home.packages = [
+        self.packages.${pkgs.stdenv.hostPlatform.system}.tmux-sessionizer
+      ];
+
       programs.tmux = {
         enable = true;
         clock24 = true;
@@ -19,14 +26,37 @@
         baseIndex = 1;
         newSession = true;
         mouse = false;
+
+        plugins = with pkgs.tmuxPlugins; [
+          resurrect
+          continuum
+        ];
+
         extraConfig = ''
           set -ga terminal-overrides ",*:RGB"
           set -g set-clipboard on
           set -g focus-events on
 
+          ##### Prefix #####
+
           unbind C-b
           set -g prefix C-a
           bind-key C-a send-prefix
+
+          ##### Persistence #####
+
+          # tmux-resurrect
+          set -g @resurrect-capture-pane-contents 'on'
+          set -g @resurrect-strategy-nvim 'session'
+
+          # tmux-continuum
+          set -g @continuum-restore 'on'
+          set -g @continuum-save-interval '5'
+
+          ##### Sessionizer #####
+
+          unbind f
+          bind f display-popup -E '${pkgs.tmux-sessionizer}/bin/sh'
 
           ##### Splits #####
 
@@ -46,7 +76,7 @@
           bind k select-pane -U
           bind l select-pane -R
 
-          # alt+hjkl to switch panes without prefix
+          # Alt+hjkl to switch panes without prefix
           bind -n M-h select-pane -L
           bind -n M-j select-pane -D
           bind -n M-k select-pane -U
@@ -100,7 +130,6 @@
 
           set -g window-status-activity-style "fg=${c.base09},bg=${c.base00},none"
           set -g window-status-separator ""
-          # Set the default window style background to base02 for the tab shape
           set -g window-status-style "fg=${c.base03},bg=${c.base02},none"
 
           ##### Messages #####
@@ -108,19 +137,17 @@
           set -g message-style "fg=${c.base05},bg=${c.base01},align=centre"
           set -g message-command-style "fg=${c.base05},bg=${c.base01},align=centre"
 
-          ##### Status line current window #####
+          ##### Current Window #####
 
           set -g window-status-current-format "#[fg=${c.base00},bg=${c.base0D}] #I: #[fg=${c.base00},bg=${c.base0D}](✓) #[fg=${c.base00},bg=${c.base0D}]#(echo '#{pane_current_path}' | rev | cut -d'/' -f-2 | rev) #[fg=${c.base00},bg=${c.base0D}]"
 
-          ##### Statusline - other windows #####
+          ##### Other Windows #####
 
           set -g window-status-format "#[fg=${c.base03},bg=${c.base02}] #I: #[fg=${c.base03},bg=${c.base02}]#W #[fg=${c.base03},bg=${c.base02}]"
 
-          ##### Statusline - Left & Right Side overrides #####
-          # Show your session name (#S) in base05/base00 colors, followed by the vim-tpipeline left status
-          set -g status-left "#[fg=${c.base05},bg=${c.base00}] #S #[fg=default,bg=default] #(cat #{socket_path}-\#{session_id}-vimbridge)"
+          ##### Statusline #####
 
-          # Show the vim-tpipeline right status on the right side
+          set -g status-left "#[fg=${c.base05},bg=${c.base00}] #S #[fg=default,bg=default] #(cat #{socket_path}-\#{session_id}-vimbridge)"
           set -g status-right "#(cat #{socket_path}-\#{session_id}-vimbridge-R)"
 
           ##### Modes #####
