@@ -45,7 +45,7 @@
 
           sessionVariables = {
             # Tmux sessionizer path settings
-            TS_SEARCH_PATHS = "$HOME:1 $HOME/Repos:1 $HOME/Projects:2";
+            TS_SEARCH_PATHS = "$HOME:1 $HOME/Repos:2 $HOME/Projects:2";
           };
 
           packages = with pkgs; [
