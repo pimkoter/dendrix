@@ -19,8 +19,8 @@
 
     environment.systemPackages = with pkgs; [
       qemu_kvm
-      virt-manager
-      virt-viewer
+      qemu_full
+      udev
       OVMF # UEFI for Windows/Linux
     ];
 

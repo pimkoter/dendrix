@@ -162,6 +162,7 @@
             "Projects"
             "Repos"
             "Games"
+            "Virtualmachines"
             ".thunderbird"
             ".config/zen"
             ".local/share/xonsh/history_json"
