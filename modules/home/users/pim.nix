@@ -136,7 +136,6 @@
             "kvm"
           ];
           ignoreShellProgramCheck = true;
-          shell = pkgs.xonsh;
         };
 
         # ------------------------------------------------------------

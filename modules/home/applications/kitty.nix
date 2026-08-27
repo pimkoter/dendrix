@@ -1,11 +1,10 @@
 {
-  flake.homeModules.kitty = {pkgs, ...} @ args: {
+  flake.homeModules.kitty = { pkgs, ... }: {
     programs.kitty = {
       enable = true;
       package = pkgs.kitty;
-      shellIntegration.enableZshIntegration = true;
       settings = {
-        # Use configured shell based on defaultShell variable
+        shell = "${pkgs.xonsh}/bin/xonsh";
         font_size = 12;
         wheel_scroll_min_lines = 1;
         window_padding_width = 4;
