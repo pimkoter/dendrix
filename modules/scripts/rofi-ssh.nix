@@ -21,7 +21,7 @@
             for (i = 2; i <= NF; i++)
               print $i
           }' "$HOME/.ssh/config" 2>/dev/null |
-          grep -v '^*'
+          grep -v '^\*$'
         )"
 
         known_hosts="$(

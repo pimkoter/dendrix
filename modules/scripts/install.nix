@@ -11,6 +11,7 @@
         gawk
         util-linux
         sudo
+        jq
       ];
 
       text = ''
@@ -40,17 +41,23 @@
         echo
         echo
 
+        # --------------------------------------------------------------------
+        # Find available NixOS hosts.
+        # --------------------------------------------------------------------
+
         mapfile -t HOSTS < <(
           nix --extra-experimental-features 'nix-command flakes' \
-            eval --raw "$FLAKE#nixosConfigurations" \
-            --apply 'x: builtins.concatStringsSep "\n" (builtins.attrNames x)' \
-            /dev/null
+            eval --json "$FLAKE#nixosConfigurations" |
+            jq -r 'keys[]'
         )
 
         if (( ''${#HOSTS[@]} == 0 )); then
           echo "Error: no NixOS hosts found."
           exit 1
         fi
+
+        echo "Available hosts:"
+        echo
 
         for i in "''${!HOSTS[@]}"; do
           printf '%d. %s\n' "$((i + 1))" "''${HOSTS[$i]}"
@@ -72,46 +79,69 @@
         echo "Selected host: $HOST"
         echo
 
+        # --------------------------------------------------------------------
+        # Display disk layout.
+        #
+        # The Nix expression is passed as an environment variable rather than
+        # embedded in a shell string. This keeps Bash and Nix quoting separate.
+        # --------------------------------------------------------------------
+
+        DISK_LAYOUT_EXPR='
+          devices:
+          let
+            formatPartition = disk: name: last:
+              let
+                partition = builtins.getAttr name disk.content.partitions;
+                content = partition.content;
+                format = content.format or content.type;
+                mountpoint = content.mountpoint or "";
+                prefix = if last then "  └─" else "  ├─";
+                suffix =
+                  if mountpoint == ""
+                  then ""
+                  else "  " + mountpoint;
+              in
+                prefix
+                + " "
+                + name
+                + "  "
+                + partition.size
+                + "  "
+                + format
+                + suffix;
+
+            formatDisk = name:
+              let
+                disk = builtins.getAttr name devices.disk;
+                partitions = builtins.attrNames disk.content.partitions;
+                count = builtins.length partitions;
+              in
+                "  "
+                + disk.device
+                + "\n"
+                + "  ├─ "
+                + disk.content.type
+                + "\n"
+                + builtins.concatStringsSep "\n"
+                  (builtins.genList
+                    (i:
+                      formatPartition
+                        disk
+                        (builtins.elemAt partitions i)
+                        (i == count - 1))
+                    count);
+          in
+            builtins.concatStringsSep "\n\n"
+              (builtins.map formatDisk (builtins.attrNames devices.disk))
+        '
+
         echo "Disk layout:"
         echo
 
         nix --extra-experimental-features 'nix-command flakes' \
-          eval --raw "$FLAKE#nixosConfigurations.$HOST.config.disko.devices" \
-          --apply '
-            devices:
-            let
-              formatPartition = disk: name: last:
-                let
-                  partition = builtins.getAttr name disk.content.partitions;
-                  content = partition.content;
-                  format = content.format or content.type;
-                  mountpoint = content.mountpoint or "";
-                  prefix = if last then "  └─" else "  ├─";
-                  suffix = if mountpoint == "" then "" else "  '## Nix escaping starts here
-                    ''${mountpoint}";
-                in
-                  "''${prefix} ''${name}  ''${partition.size}  ''${format}''${suffix}";
-
-              formatDisk = name:
-                let
-                  disk = builtins.getAttr name devices.disk;
-                  partitions = builtins.attrNames disk.content.partitions;
-                  count = builtins.length partitions;
-                in
-                  "  ''${disk.device}\n"
-                  + "  ├─ ''${disk.content.type}\n"
-                  + builtins.concatStringsSep "\n"
-                    (builtins.genList
-                      (i:
-                        formatPartition
-                          disk
-                          (builtins.elemAt partitions i)
-                          (i == count - 1))
-                      count);
-            in
-              builtins.concatStringsSep "\n\n"
-                (builtins.map formatDisk (builtins.attrNames devices.disk))
-          '
+          eval --raw \
+          "$FLAKE#nixosConfigurations.$HOST.config.disko.devices" \
+          --apply "$DISK_LAYOUT_EXPR"
 
         echo
         echo
@@ -127,11 +157,19 @@
         echo "Installing $HOST..."
         echo
 
+        # --------------------------------------------------------------------
+        # Prepare a root-owned copy of the flake.
+        # --------------------------------------------------------------------
+
         echo "> Preparing flake for installation..."
 
         sudo rm -rf "$INSTALL_FLAKE"
         sudo cp -a "$FLAKE" "$INSTALL_FLAKE"
         sudo chown -R root:root "$INSTALL_FLAKE"
+
+        # --------------------------------------------------------------------
+        # Partition and mount disks.
+        # --------------------------------------------------------------------
 
         echo "> Partitioning and mounting disks..."
 
@@ -142,6 +180,11 @@
           >/dev/null 2>&1
 
         echo "> Disks set up successfully."
+
+        # --------------------------------------------------------------------
+        # Activate swap.
+        # --------------------------------------------------------------------
+
         echo "> Activating swap..."
 
         SWAP_DEVICE="$(
@@ -166,18 +209,24 @@
         echo "Memory available:"
         free -h
 
+        # --------------------------------------------------------------------
+        # Install NixOS.
+        # --------------------------------------------------------------------
+
         echo
         echo "> Installing NixOS..."
         echo
 
         sudo nixos-install \
           --flake "$INSTALL_FLAKE#$HOST" \
-          --option max-jobs 1 \
-          --option cores 1
 
         echo
         echo "> Installation completed successfully."
         echo
+
+        # --------------------------------------------------------------------
+        # Reboot.
+        # --------------------------------------------------------------------
 
         read -r -p "Reboot now? [y/N] " REBOOT
 
