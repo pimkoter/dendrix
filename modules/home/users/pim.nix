@@ -154,6 +154,7 @@
             "Projects"
             "Repos"
             "Games"
+            ".thunderbird"
             ".config/zen"
             ".local/share/xonsh/history_json"
             ".local/share/zoxide"
