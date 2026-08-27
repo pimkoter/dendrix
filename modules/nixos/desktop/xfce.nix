@@ -1,9 +1,5 @@
 {
-  self,
-  inputs,
-  ...
-}: {
-  flake.nixosModules.xfce = {pkgs, ...}: {
+  flake.nixosModules.xfce = { pkgs, ... }: {
     services.xserver = {
       enable = true;
 

@@ -1,4 +1,3 @@
-{ inputs, ... }:
 {
   flake.nixosModules.i3 =
     { pkgs, ... }:

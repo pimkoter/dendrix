@@ -1,7 +1,7 @@
 { self, ... }:
 {
   flake.homeModules.scripts =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     {
       home.packages = with self.packages.${pkgs.stdenv.hostPlatform.system}; [
         add-ip

@@ -1,28 +1,26 @@
 {
-  self,
-  inputs,
-  ...
-}: {
-  flake.homeModules.bat = {
-    pkgs,
-    lib,
-    ...
-  } @ args: {
-    programs.bat = {
-      enable = true;
-      config = {
-        pager = "less -FR";
-        style = "full";
-        theme = lib.mkForce "Dracula";
+  flake.homeModules.bat =
+    {
+      pkgs,
+      lib,
+      ...
+    }:
+    {
+      programs.bat = {
+        enable = true;
+        config = {
+          pager = "less -FR";
+          style = "full";
+          theme = lib.mkForce "Dracula";
+        };
+        extraPackages = with pkgs.bat-extras; [
+          batman
+          batpipe
+        ];
       };
-      extraPackages = with args.pkgs.bat-extras; [
-        batman
-        batpipe
-      ];
+      home.sessionVariables = {
+        MANPAGER = "sh -c 'col -bx | bat -l man -p '";
+        MANROFFOPT = "-c";
+      };
     };
-    home.sessionVariables = {
-      MANPAGER = "sh -c 'col -bx | bat -l man -p '";
-      MANROFFOPT = "-c";
-    };
-  };
 }

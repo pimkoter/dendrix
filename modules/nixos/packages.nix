@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.pkgs = {pkgs, ...}: {
+  flake.nixosModules.pkgs = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
       # --- Display & Wayland Environment ---
       xdg-desktop-portal-gnome # Screensharing tool / portal

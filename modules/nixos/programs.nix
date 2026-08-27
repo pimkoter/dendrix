@@ -1,9 +1,5 @@
 {
-  self,
-  inputs,
-  ...
-}: {
-  flake.nixosModules.programs = {pkgs, ...}: {
+  flake.nixosModules.programs = {
     programs = {
       nix-ld.enable = true;
       xwayland.enable = true;

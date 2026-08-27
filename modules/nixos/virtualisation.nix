@@ -1,9 +1,5 @@
 {
-  self,
-  inputs,
-  ...
-}: {
-  flake.nixosModules.virtualisation = {pkgs, ...}: {
+  flake.nixosModules.virtualisation = { pkgs, ... }: {
     virtualisation = {
       libvirtd = {
         enable = true;
@@ -31,6 +27,6 @@
     services.spice-vdagentd.enable = true;
 
     # KVM acceleration
-    boot.kernelModules = ["kvm-intel"];
+    boot.kernelModules = [ "kvm-intel" ];
   };
 }
