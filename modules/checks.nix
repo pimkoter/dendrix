@@ -4,7 +4,8 @@
     inputs.git-hooks.flakeModule
   ];
 
-  perSystem = {
+  perSystem = { pkgs, ... }: {
+    formatter = pkgs.nixfmt-tree;
     pre-commit = {
       check.enable = true;
 
