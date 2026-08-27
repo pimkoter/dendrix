@@ -206,7 +206,7 @@
                 fi
 
                 if [[ -d "$path" ]]; then
-                    find "$path" -mindepth 1 -maxdepth "''${depth:-''${TS_MAX_DEPTH:-1}}" -path '*/.git' -prune -o -type d -print
+                    find "$path" -mindepth 1 -maxdepth "''${depth:-''${TS_MAX_DEPTH:-1}}" -path '*/.git' -prune -o -type d -not -path '*/.*' -print
                 fi
             done
         }
