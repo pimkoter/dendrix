@@ -49,32 +49,39 @@
           };
 
           packages = with pkgs; [
+            # Desktop applications
             evince
             qbittorrent
             spotify
             thunderbird
 
-            adb-sync
+            # Development
             android-studio
             android-tools
+            adb-sync
             cargo
             clang
             compose2nix
-            dig
-            nmap
             python315
             rustc
             sdkmanager
 
+            # Networking
+            dig
+            nmap
+
+            # Gaming
             heroic
             prismlauncher
             satisfactorymodmanager
+
+            # Communication
             vesktop
 
-            cava
-            cmatrix
-            gping
+            # Terminal / TUI
+            vm-curator
 
+            # CLI utilities
             bat
             bottom
             fd
@@ -82,17 +89,18 @@
             fzf
             jq
             lazygit
-            sops
             ripgrep
+            sops
             unzip
             wl-clipboard-rs
 
+            # Browsers / Desktop
+            inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+            inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+            inputs.zennotes.packages.${pkgs.stdenv.hostPlatform.system}.zennotes-desktop
+
             # Misc
             (lib.lowPrio pkgs.gh)
-
-            inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
-            inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-            inputs.zennotes.packages.${pkgs.stdenv.hostPlatform.system}.zennotes-desktop
           ];
         };
       };
