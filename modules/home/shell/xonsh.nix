@@ -51,7 +51,7 @@
         if $XONSH_INTERACTIVE:
             if not __xonsh__.env.get("TMUX"):
                 import os
-                os.execvp("tmux", ["tmux"])
+                os.execvp("tmux", ["tmux", "new-session", "-A", "-s", "main"])
 
             fastfetch
 
