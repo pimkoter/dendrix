@@ -12,6 +12,7 @@
         rofi-repos
         rofi-ssh
         rofi-wallpaper
+        tmux-sessionizer
       ];
     };
 }
