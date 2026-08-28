@@ -5,7 +5,10 @@
       ...
     }:
     {
-      xdg.portal.wlr.enable = true;
+      xdg.portal = {
+        wlr.enable = true;
+        config.common.default = "*";
+      };
 
       fonts = {
         fontconfig.enable = true;
