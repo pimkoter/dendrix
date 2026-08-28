@@ -18,7 +18,7 @@
       wsl
 
       # Users
-      pim
+      wsl
     ];
   };
 }
