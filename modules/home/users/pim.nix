@@ -78,9 +78,6 @@
             # Communication
             vesktop
 
-            # Terminal / TUI
-            vm-curator
-
             # CLI utilities
             bat
             bottom
@@ -95,6 +92,7 @@
             wl-clipboard-rs
 
             # Browsers / Desktop
+            inputs.vm-curator.packages.${pkgs.stdenv.hostPlatform.system}.default
             inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
             inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
             inputs.zennotes.packages.${pkgs.stdenv.hostPlatform.system}.zennotes-desktop

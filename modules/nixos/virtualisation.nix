@@ -21,7 +21,8 @@
       qemu_kvm
       qemu_full
       udev
-      OVMF # UEFI for Windows/Linux
+      swtpm
+      OVMF
     ];
 
     services.spice-vdagentd.enable = true;
