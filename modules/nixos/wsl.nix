@@ -5,7 +5,7 @@
 
     wsl = {
       enable = true;
-      defaultUser = "Pim Zeeman";
+      defaultUser = "pimko";
     };
 
     boot.isContainer = true;
