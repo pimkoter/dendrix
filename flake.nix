@@ -8,6 +8,10 @@
     import-tree.url = "github:vic/import-tree";
     zennotes.url = "github:pimkoter/zennotes";
     preservation.url = "github:nix-community/preservation";
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
