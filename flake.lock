@@ -628,13 +628,13 @@
       "locked": {
         "lastModified": 1786476083,
         "narHash": "sha256-W0UsPEsUQfAfnQ6rkgBX1L23Fr2iPQ1Z7la9yzKl1ZA=",
-        "owner": "mroboff",
+        "owner": "pimkoter",
         "repo": "vm-curator",
         "rev": "cdcf2acc2027a4db07e9f65b046d4e3119ee8a08",
         "type": "github"
       },
       "original": {
-        "owner": "mroboff",
+        "owner": "pimkoter",
         "repo": "vm-curator",
         "type": "github"
       }
@@ -664,15 +664,15 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1786488153,
-        "narHash": "sha256-K46Y/0OyX/3E76+UyeeCTfq1j4Arq1uPuz+mEBmu4sQ=",
-        "owner": "pimkoter",
+        "lastModified": 1787933629,
+        "narHash": "sha256-tHxHFMK26Avf9A+XoA+rM07OHbSEJajLyo/wIpQxV3c=",
+        "owner": "zennotes",
         "repo": "zennotes",
-        "rev": "1ebdd7f83722a5c34d09c1d3f18a9f1499179226",
+        "rev": "35ff3f6c4fd74022f9bd8990b5031cf19c1fda73",
         "type": "github"
       },
       "original": {
-        "owner": "pimkoter",
+        "owner": "zennotes",
         "repo": "zennotes",
         "type": "github"
       }

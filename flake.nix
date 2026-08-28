@@ -6,7 +6,7 @@
     nixpkgs-stable.url = "github:nixos/nixpkgs/26.05";
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
-    zennotes.url = "github:pimkoter/zennotes";
+    zennotes.url = "github:zennotes/zennotes";
     preservation.url = "github:nix-community/preservation";
     home-manager = {
       url = "github:nix-community/home-manager";
