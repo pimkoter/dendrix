@@ -135,7 +135,7 @@
         users.users.pim = {
           isNormalUser = true;
           description = "Pim";
-          initialPassword = "12345";
+          hashedPasswordFile = config.sops.secrets."passwords/pim".path;
           extraGroups = [
             "wheel"
             "networkmanager"
@@ -166,6 +166,10 @@
             ".local/share/xonsh/history_json"
             ".local/share/zoxide"
             ".ssh"
+          ];
+
+          files = [
+            ".config/sops/age/keys.txt"
           ];
         };
 
