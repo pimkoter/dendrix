@@ -12,6 +12,7 @@
 
       secrets = {
         "passwords/pim".neededForUsers = true;
+        "passwords/root".neededForUsers = true;
         "private_keys/pim" = {
           path = "/home/pim/.ssh/id_ed25519";
           owner = "pim";

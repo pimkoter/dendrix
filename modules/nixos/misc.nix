@@ -2,6 +2,7 @@
   flake.nixosModules.misc =
     {
       pkgs,
+      config,
       ...
     }:
     {
@@ -38,7 +39,12 @@
         "flakes"
       ];
 
-      users.mutableUsers = false;
+      users = {
+        mutableUsers = false;
+        users.root = {
+          hashedPasswordFile = config.sops.secrets."passwords/root".path;
+        };
+      };
 
       nixpkgs.config = {
         allowUnfree = true;
