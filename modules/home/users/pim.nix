@@ -13,10 +13,12 @@
     homeModules.pim =
       {
         pkgs,
+        inputs,
         ...
       }:
       {
         imports = with self.homeModules; [
+          inputs.sops-nix.homeManagerModules.sops
           awww
           bat
           eza
@@ -36,6 +38,11 @@
           xonsh
           zoxide
         ];
+
+        sops = {
+          defaultSopsFile = ../../secrets/secrets.yaml;
+          age.keyFile = "/home/pim/.config/sops/age/keys.txt";
+        };
 
         home = {
           username = "pim";
@@ -166,7 +173,10 @@
             ".config/sops"
             ".local/share/xonsh/history_json"
             ".local/share/zoxide"
-            ".ssh"
+          ];
+          files = [
+            ".ssh/known_hosts"
+            ".ssh/authorized_keys"
           ];
         };
 
