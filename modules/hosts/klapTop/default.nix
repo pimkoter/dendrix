@@ -21,6 +21,7 @@
       pkgs
       programs
       services
+      sops
       stylix
       virtualisation
 
