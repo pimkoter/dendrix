@@ -22,15 +22,15 @@
             ++ [
               self.packages.${pkgs.stdenv.hostPlatform.system}.dendrix-install
             ];
-
-          programs.bash.interactiveShellInit = ''
-             if [[ -z "''$TMUX" ]]; then
-               exec ${pkgs.tmux}/bin/tmux
-             fi
-
-            dendrix-install
-          '';
         };
+
+        programs.bash.interactiveShellInit = ''
+           if [[ -z "''$TMUX" ]]; then
+             exec ${pkgs.tmux}/bin/tmux
+           fi
+
+          dendrix-install
+        '';
 
         users.users.nixos = {
           isNormalUser = true;
