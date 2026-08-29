@@ -6,6 +6,7 @@ keys:
   # Hosts SSH-to-AGE keys
   - &hosts:
     - &NixBTW age1qfgg7wy3xl04zwn4nytzz0qr7u5jr250mk7pc0gflgh7yerm092q46s9wl
+    - &klapTop age1_REPLACE_WITH_ACTUAL_KEY_FROM_KLAPTOP
 
 creation_rules:
   - path_regex: secrets.yaml$
@@ -13,3 +14,4 @@ creation_rules:
     - age:
       - *pim
       - *NixBTW
+      - *klapTop
