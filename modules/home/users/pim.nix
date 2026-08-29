@@ -163,13 +163,10 @@
             "Virtualmachines"
             ".thunderbird"
             ".config/zen"
+            ".config/sops"
             ".local/share/xonsh/history_json"
             ".local/share/zoxide"
             ".ssh"
-          ];
-
-          files = [
-            ".config/sops/age/keys.txt"
           ];
         };
 
