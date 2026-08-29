@@ -51,7 +51,6 @@
       imports = [
         (inputs.import-tree ./modules)
         inputs.home-manager.flakeModules.home-manager
-        inputs.sops-nix.nixosModules.sops
       ];
       systems = [
         "x86_64-linux"
