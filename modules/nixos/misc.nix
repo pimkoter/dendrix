@@ -38,6 +38,8 @@
         "flakes"
       ];
 
+      users.mutableUsers = false;
+
       nixpkgs.config = {
         allowUnfree = true;
         permittedInsecurePackages = [
