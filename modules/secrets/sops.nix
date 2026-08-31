@@ -5,7 +5,10 @@
     sops = {
       defaultSopsFile = ./secrets.yaml;
       age = {
-        sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+        sshKeyPaths = [
+          "/etc/ssh/ssh_host_ed25519_key"
+          "/preserve/etc/ssh/ssh_host_ed25519_key"
+        ];
         keyFile = "/var/lib/sops-nix/key.txt";
         generateKey = true;
       };
@@ -21,5 +24,13 @@
         };
       };
     };
+
+    # Allow the users group to read the host key for Home Manager secret decryption
+    systemd.tmpfiles.rules = [
+      "z /etc/ssh/ssh_host_ed25519_key 0640 root users - -"
+      "z /preserve/etc/ssh/ssh_host_ed25519_key 0640 root users - -"
+    ];
+
+    users.groups.sops = { };
   };
 }
