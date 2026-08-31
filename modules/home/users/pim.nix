@@ -67,6 +67,7 @@
             sdkmanager
 
             # Networking
+            geteduroam
             dig
             nmap
 
