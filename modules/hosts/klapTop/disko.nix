@@ -2,20 +2,7 @@
   flake.nixosModules.disko-klapTop = {
     imports = [ inputs.disko.nixosModules.disko ];
 
-    fileSystems."/nix".neededForBoot = true;
-    fileSystems."/preserve".neededForBoot = true;
-
     disko.devices = {
-      nodev = {
-        "/" = {
-          fsType = "tmpfs";
-          mountOptions = [
-            "size=25%"
-            "mode=755"
-          ];
-        };
-      };
-
       disk = {
         system = {
           type = "disk";
@@ -41,30 +28,20 @@
               };
 
               swap = {
-                size = "4G";
+                size = "8G";
 
                 content = {
                   type = "swap";
                 };
               };
 
-              nix = {
-                size = "100G";
-
-                content = {
-                  type = "filesystem";
-                  format = "ext4";
-                  mountpoint = "/nix";
-                };
-              };
-
-              preserve = {
+              root = {
                 size = "100%";
 
                 content = {
                   type = "filesystem";
                   format = "ext4";
-                  mountpoint = "/preserve";
+                  mountpoint = "/";
                 };
               };
             };
