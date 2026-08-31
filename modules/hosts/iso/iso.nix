@@ -9,43 +9,28 @@
           self.nixosModules.i3
         ];
 
-        isoImage = {
-          squashfsCompression = "gzip -Xcompression-level 1";
-          contents = [
-            {
-              source = ../..;
-              target = "/etc/dendrix";
-            }
-          ];
-        };
-
-        zramSwap = {
-          enable = true;
-          algorithm = "zstd";
-          memoryPercent = 50;
-        };
-
         environment = {
-          systemPackages = with pkgs; [
-            neovim # Editor
-            tmux # Terminal multiplexer
-            git # Git CLI tool
-            disko # Declarative partition manager
-          ];
+          systemPackages =
+            (with pkgs; [
+              neovim # Editor
+              tmux # Terminal multiplexer
+              git # Git CLI tool
+              disko # Declarative partition manager
+              ripgrep # Better grep
 
-          shellAliases = {
-            install = "/etc/dendrix/modules/custom/scripts/install.sh";
-          };
-
-          interactiveShellInit = "
-            ██████╗ ███████╗███╗   ██╗██████╗ ██████╗ ██╗██╗  ██╗
-            ██╔══██╗██╔════╝████╗  ██║██╔══██╗██╔══██╗██║╚██╗██╔╝
-            ██║  ██║█████╗  ██╔██╗ ██║██║  ██║██████╔╝██║ ╚███╔╝
-            ██║  ██║██╔══╝  ██║╚██╗██║██║  ██║██╔══██╗██║ ██╔██╗
-            ██████╔╝███████╗██║ ╚████║██████╔╝██║  ██║██║██╔╝ ██╗
-            ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝
-            ";
+            ])
+            ++ [
+              self.packages.${pkgs.stdenv.hostPlatform.system}.dendrix-install
+            ];
         };
+
+        programs.bash.interactiveShellInit = ''
+           if [[ -z "''$TMUX" ]]; then
+             exec ${pkgs.tmux}/bin/tmux
+           fi
+
+          dendrix-install
+        '';
 
         users.users.nixos = {
           isNormalUser = true;
@@ -62,6 +47,11 @@
           hibernate.enable = false;
           hybrid-sleep.enable = false;
         };
+
+        nix.settings.experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
 
         nixpkgs = {
           config.allowUnfree = true;

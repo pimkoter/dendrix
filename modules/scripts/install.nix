@@ -4,6 +4,7 @@
       name = "dendrix-install";
 
       runtimeInputs = with pkgs; [
+        networkmanager
         nix
         nixos-install-tools
         disko
@@ -12,22 +13,36 @@
         util-linux
         sudo
         jq
+        git
       ];
 
       text = ''
         set -euo pipefail
 
+        # --------------------------------------------------------------------
+        # Network setup.
+        # --------------------------------------------------------------------
+
+        nmtui
+
+        echo
+        echo '██████╗ ███████╗███╗   ██╗██████╗ ██████╗ ██╗██╗  ██╗'
+        echo '██╔══██╗██╔════╝████╗  ██║██╔══██╗██╔══██╗██║╚██╗██╔╝'
+        echo '██║  ██║█████╗  ██╔██╗ ██║██║  ██║██████╔╝██║ ╚███╔╝'
+        echo '██║  ██║██╔══╝  ██║╚██╗██║██║  ██║██╔══██╗██║ ██╔██╗'
+        echo '██████╔╝███████╗██║ ╚████║██████╔╝██║  ██║██║██╔╝ ██╗'
+        echo '╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝'
+
+        echo
+        echo "Welcome to the Dendrix installer."
+        echo
+
+        # --------------------------------------------------------------------
+        # Obtain the flake.
+        #
         # Use the supplied path or search upward from the current directory.
-        FLAKE="''${1:-$PWD}"
-
-        while [[ "$FLAKE" != "/" && ! -f "$FLAKE/flake.nix" ]]; do
-          FLAKE="$(dirname "$FLAKE")"
-        done
-
-        if [[ ! -f "$FLAKE/flake.nix" ]]; then
-          echo "Error: could not find flake.nix."
-          exit 1
-        fi
+        # If no path is supplied, clone the Dendrix repository.
+        # --------------------------------------------------------------------
 
         INSTALL_FLAKE="/var/tmp/nixos-install-flake"
 
@@ -37,27 +52,56 @@
 
         trap cleanup EXIT
 
-        echo "Welcome to the Dendrix installer"
-        echo
+        sudo rm -rf "$INSTALL_FLAKE"
+
+        if [[ -n "''${1:-}" ]]; then
+          FLAKE="$1"
+
+          while [[ "$FLAKE" != "/" && ! -f "$FLAKE/flake.nix" ]]; do
+            FLAKE="$(dirname "$FLAKE")"
+          done
+
+          if [[ ! -f "$FLAKE/flake.nix" ]]; then
+            echo "Error: could not find flake.nix."
+            exit 1
+          fi
+
+          echo "> Using flake: $FLAKE"
+
+          sudo cp -a "$FLAKE" "$INSTALL_FLAKE"
+        else
+          echo "> Cloning Dendrix..."
+
+          git clone \
+            https://github.com/pimkoter/dendrix \
+            "$INSTALL_FLAKE"
+        fi
+
+        sudo chown -R root:root "$INSTALL_FLAKE"
+
+        FLAKE="$INSTALL_FLAKE"
+
+        echo "> Using installation flake: $FLAKE"
         echo
 
         # --------------------------------------------------------------------
         # Find available NixOS hosts.
         # --------------------------------------------------------------------
 
+        echo "Available NixOS hosts:"
+        echo
+
         mapfile -t HOSTS < <(
           nix --extra-experimental-features 'nix-command flakes' \
             eval --json "$FLAKE#nixosConfigurations" |
-            jq -r 'keys[]'
+            jq -r 'keys[]' |
+            sort
         )
 
         if (( ''${#HOSTS[@]} == 0 )); then
           echo "Error: no NixOS hosts found."
           exit 1
         fi
-
-        echo "Available hosts:"
-        echo
 
         for i in "''${!HOSTS[@]}"; do
           printf '%d. %s\n' "$((i + 1))" "''${HOSTS[$i]}"
@@ -68,7 +112,7 @@
         read -r CHOICE
 
         if [[ ! "$CHOICE" =~ ^[0-9]+$ ]] ||
-           (( CHOICE < 1 || CHOICE > ''${#HOSTS[@]} )); then
+          (( CHOICE < 1 || CHOICE > ''${#HOSTS[@]} )); then
           echo "Invalid selection."
           exit 1
         fi
@@ -80,10 +124,21 @@
         echo
 
         # --------------------------------------------------------------------
+        # Verify that the host has a Disko configuration.
+        # --------------------------------------------------------------------
+
+        if ! nix --extra-experimental-features 'nix-command flakes' \
+          eval "$FLAKE#nixosConfigurations.$HOST.config.disko.devices" \
+          >/dev/null 2>&1; then
+          echo "Error: host '$HOST' does not have a valid Disko configuration."
+          exit 1
+        fi
+
+        # --------------------------------------------------------------------
         # Display disk layout.
         #
-        # The Nix expression is passed as an environment variable rather than
-        # embedded in a shell string. This keeps Bash and Nix quoting separate.
+        # The Nix expression is passed as an argument to nix rather than
+        # embedded into the shell command itself.
         # --------------------------------------------------------------------
 
         DISK_LAYOUT_EXPR='
@@ -158,33 +213,24 @@
         echo
 
         # --------------------------------------------------------------------
-        # Prepare a root-owned copy of the flake.
-        # --------------------------------------------------------------------
-
-        echo "> Preparing flake for installation..."
-
-        sudo rm -rf "$INSTALL_FLAKE"
-        sudo cp -a "$FLAKE" "$INSTALL_FLAKE"
-        sudo chown -R root:root "$INSTALL_FLAKE"
-
-        # --------------------------------------------------------------------
         # Partition and mount disks.
         # --------------------------------------------------------------------
 
         echo "> Partitioning and mounting disks..."
 
         sudo disko \
-          --flake "$INSTALL_FLAKE#$HOST" \
+          --flake "$FLAKE#$HOST" \
           --mode destroy,format,mount \
-          --yes-wipe-all-disks \
-          >/dev/null 2>&1
+          --yes-wipe-all-disks
 
+        echo
         echo "> Disks set up successfully."
 
         # --------------------------------------------------------------------
         # Activate swap.
         # --------------------------------------------------------------------
 
+        echo
         echo "> Activating swap..."
 
         SWAP_DEVICE="$(
@@ -218,7 +264,7 @@
         echo
 
         sudo nixos-install \
-          --flake "$INSTALL_FLAKE#$HOST" \
+          --flake "$FLAKE#$HOST"
 
         echo
         echo "> Installation completed successfully."
@@ -230,7 +276,7 @@
 
         read -r -p "Reboot now? [y/N] " REBOOT
 
-        if [[ "$REBOOT" =~ ^[Yy][Ee][Ss]$ || "$REBOOT" =~ ^[Yy]$ ]]; then
+        if [[ "$REBOOT" =~ ^[Yy]([Ee][Ss])?$ ]]; then
           sudo reboot
         fi
       '';
