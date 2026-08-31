@@ -99,6 +99,7 @@
               enable = true;
               format.type = [ "nixfmt" ];
             };
+            yaml.enable = true;
             python.enable = true;
             tex.enable = true;
             clang.enable = true;
