@@ -41,7 +41,13 @@
 
         sops = {
           defaultSopsFile = ../../secrets/secrets.yaml;
-          age.keyFile = "/home/pim/.config/sops/age/keys.txt";
+          age = {
+            keyFile = "/home/pim/.config/sops/age/keys.txt";
+            sshKeyPaths = [
+              "/etc/ssh/ssh_host_ed25519_key"
+              "/preserve/etc/ssh/ssh_host_ed25519_key"
+            ];
+          };
         };
 
         home = {
@@ -152,6 +158,7 @@
             "docker"
             "libvirtd"
             "kvm"
+            "sops"
           ];
           ignoreShellProgramCheck = true;
         };
