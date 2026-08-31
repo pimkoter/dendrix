@@ -4,7 +4,7 @@
       enable = true;
       settings = {
         user.name = "pimkoter";
-        user.email = "pim@koter";
+        user.email = "pimkoter69@gmail.com";
         init.defaultBranch = "main";
         pull.rebase = true;
         color.ui = "auto";

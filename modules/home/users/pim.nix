@@ -13,10 +13,12 @@
     homeModules.pim =
       {
         pkgs,
+        inputs,
         ...
       }:
       {
         imports = with self.homeModules; [
+          inputs.sops-nix.homeManagerModules.sops
           awww
           bat
           eza
@@ -36,6 +38,17 @@
           xonsh
           zoxide
         ];
+
+        sops = {
+          defaultSopsFile = ../../secrets/secrets.yaml;
+          age = {
+            keyFile = "/home/pim/.config/sops/age/keys.txt";
+            sshKeyPaths = [
+              "/etc/ssh/ssh_host_ed25519_key"
+              "/preserve/etc/ssh/ssh_host_ed25519_key"
+            ];
+          };
+        };
 
         home = {
           username = "pim";
@@ -137,7 +150,7 @@
         users.users.pim = {
           isNormalUser = true;
           description = "Pim";
-          initialPassword = "12345";
+          hashedPasswordFile = config.sops.secrets."passwords/pim".path;
           extraGroups = [
             "wheel"
             "networkmanager"
@@ -145,6 +158,7 @@
             "docker"
             "libvirtd"
             "kvm"
+            "sops"
           ];
           ignoreShellProgramCheck = true;
         };
@@ -165,9 +179,13 @@
             "Virtualmachines"
             ".thunderbird"
             ".config/zen"
+            ".config/sops"
             ".local/share/xonsh/history_json"
             ".local/share/zoxide"
-            ".ssh"
+          ];
+          files = [
+            ".ssh/known_hosts"
+            ".ssh/authorized_keys"
           ];
         };
 
