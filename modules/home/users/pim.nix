@@ -67,6 +67,7 @@
             sdkmanager
 
             # Networking
+            wifi-qr
             geteduroam
             dig
             nmap
