@@ -64,6 +64,7 @@
           packages = with pkgs; [
             # Desktop applications
             evince
+            blender
             qbittorrent
             spotify
             thunderbird
