@@ -20,14 +20,17 @@
 
           (defalias
             a (tap-hold-release $tap-time $hold-time a lmet)
-            s (tap-hold-release $tap-time $hold-time r lalt)
-            d (tap-hold-release $tap-time $hold-time s lctl)
-            f (tap-hold-release $tap-time $hold-time t lsft)
+            r (tap-hold-release $tap-time $hold-time r lalt)
+            s (tap-hold-release $tap-time $hold-time s lctl)
+            t (tap-hold-release $tap-time $hold-time t lsft)
 
-            j (tap-hold-release $tap-time $hold-time n rsft)
-            k (tap-hold-release $tap-time $hold-time e rctl)
-            l (tap-hold-release $tap-time $hold-time i ralt)
-            ; (tap-hold-release $tap-time $hold-time o rmet)
+            n (tap-hold-release $tap-time $hold-time n rsft)
+            e (tap-hold-release $tap-time $hold-time e rctl)
+            i (tap-hold-release $tap-time $hold-time i ralt)
+            o (tap-hold-release $tap-time $hold-time o rmet)
+
+            nav (tap-hold-release $tap-time $hold-time lalt (layer-while-held navigation)
+            )
           )
 
           (defsrc
@@ -51,11 +54,25 @@
 
             tab  q w f p b j l u y ; [ ] \
 
-            esc @a @s @d @f g m @j @k @l @; ' ret
+            esc @a @r @s @t g m @n @e @i @o ' ret
 
             lsft 102d x c d v z k h , . / rsft
 
-            lctl lmet lalt spc ralt rmet rctl
+            lctl lmet @nav spc ralt rmet rctl
+          )
+
+          (deflayer navigation
+            _
+
+            _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+            _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+            _ lmet lalt lctl lsft _ left down up right _ _ _ _
+
+            _ _ _ _ _ _ _ _ _ _ _ _
+
+            _ _ _ _ _ _ _
           )
         '';
       };
