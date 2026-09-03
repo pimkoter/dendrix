@@ -39,7 +39,6 @@
         ff = "fastfetch";
         gens = "sudo nix-env -p /nix/var/nix/profiles/system --list-generations";
 
-        tsh = "tailscale ssh";
         shell = "nix-shell -p";
         nd = "nix develop --impure -c zsh";
 

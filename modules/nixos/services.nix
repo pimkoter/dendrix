@@ -16,10 +16,6 @@
       blueman.enable = true;
       tailscale = {
         enable = true;
-        extraUpFlags = [
-          "--netfilter-mode=nodivert"
-          "--no-logs-no-support"
-        ];
       };
       fail2ban = {
         enable = true;
