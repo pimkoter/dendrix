@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.services = { pkgs, ... }: {
+  flake.nixosModules.services = {
     services = {
       resolved = {
         enable = true;

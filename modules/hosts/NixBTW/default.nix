@@ -16,6 +16,7 @@
       boot
       drivers
       howdy
+      kanata
       ly
       misc
       networking
