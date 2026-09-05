@@ -1,18 +1,16 @@
 {
   flake.nixosModules.kanata = {
+    boot.kernelModules = [ "uinput" ];
+    users.groups.uinput = { };
     services.kanata = {
       enable = true;
 
       keyboards.laptop = {
         devices = [
-          "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
+          "/dev/input/by-path/pci-0000:00:14.0-usb-0:9:1.0-event-kbd"
         ];
 
         config = ''
-          (defcfg
-            process-unmapped-keys yes
-          )
-
           (defvar
             tap-time 200
             hold-time 250

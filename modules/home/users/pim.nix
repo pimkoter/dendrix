@@ -159,6 +159,8 @@
             "libvirtd"
             "kvm"
             "sops"
+            "input"
+            "uinput"
           ];
           ignoreShellProgramCheck = true;
         };
