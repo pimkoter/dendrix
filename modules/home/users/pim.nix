@@ -185,6 +185,7 @@
             ".config/sops"
             ".local/share/xonsh/history_json"
             ".local/share/zoxide"
+            ".local/share/PrismLauncher"
           ];
           files = [
             ".ssh/known_hosts"
