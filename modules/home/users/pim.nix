@@ -72,7 +72,7 @@
             # Development
             android-studio
             android-tools
-            adb-sync
+            better-adb-sync
             cargo
             clang
             compose2nix
@@ -181,11 +181,13 @@
             "Games"
             "Virtualmachines"
             ".thunderbird"
+            ".steam"
             ".config/zen"
             ".config/sops"
             ".local/share/xonsh/history_json"
             ".local/share/zoxide"
             ".local/share/PrismLauncher"
+            ".local/share/steam"
           ];
           files = [
             ".ssh/known_hosts"
