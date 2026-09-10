@@ -30,13 +30,13 @@
         # Scrolling
         map ctrl+shift+up        scroll_line_up
         map ctrl+shift+down      scroll_line_down
-        map ctrl+shift+k         scroll_line_up
-        map ctrl+shift+j         scroll_line_down
+        map ctrl+shift+e         scroll_line_up
+        map ctrl+shift+n         scroll_line_down
         map ctrl+shift+page_up   scroll_page_up
         map ctrl+shift+page_down scroll_page_down
         map ctrl+shift+home      scroll_home
         map ctrl+shift+end       scroll_end
-        map ctrl+shift+h         show_scrollback
+        map ctrl+shift+m         show_scrollback
 
         # Window management
         map alt+n               new_os_window
@@ -62,7 +62,7 @@
         map ctrl+shift+left     previous_tab
         map ctrl+shift+t        new_tab
         map ctrl+shift+q        close_tab
-        map ctrl+shift+l        next_layout
+        map ctrl+shift+o        next_layout
         map ctrl+shift+.        move_tab_forward
         map ctrl+shift+,        move_tab_backward
 
