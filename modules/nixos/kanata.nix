@@ -18,17 +18,14 @@
           )
 
           (defalias
-            a (tap-hold-release $tap-time $hold-time a lmet)
-            r (tap-hold-release $tap-time $hold-time r lalt)
-            s (tap-hold-release $tap-time $hold-time s lctl)
-            t (tap-hold-release $tap-time $hold-time t lsft)
+            r (tap-hold-release $tap-time $hold-time r lctl)
+            s (tap-hold-release $tap-time $hold-time s lalt)
+            t (tap-hold-release $tap-time $hold-time t lmet)
 
-            n (tap-hold-release $tap-time $hold-time n rsft)
-            e (tap-hold-release $tap-time $hold-time e rctl)
-            i (tap-hold-release $tap-time $hold-time i ralt)
-            o (tap-hold-release $tap-time $hold-time o rmet)
-
-            nav (tap-hold-release $tap-time $hold-time lalt (layer-while-held navigation)
+            n (tap-hold-release $tap-time $hold-time n rmet)
+            e (tap-hold-release $tap-time $hold-time e ralt)
+            i (tap-hold-release $tap-time $hold-time i rctl)
+            nav (layer-while-held navigation)
             )
           )
 
