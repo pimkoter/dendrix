@@ -26,7 +26,6 @@
             e (tap-hold-release $tap-time $hold-time e ralt)
             i (tap-hold-release $tap-time $hold-time i rctl)
             nav (layer-while-held navigation)
-            )
           )
 
           (defsrc
@@ -64,62 +63,11 @@
 
             _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
-            _ lmet lalt lctl lsft _ left down up right _ _ _ _
+            _ _ _ _ _ _ left down up right _ _ _ _
 
             _ _ _ _ _ _ _ _ _ _ _ _
 
             _ _ _ _ _ _ _
-          )
-        '';
-      };
-
-      keyboards.laptop = {
-        devices = [
-          "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
-        ];
-
-        config = ''
-          (defvar
-            tap-time 200
-            hold-time 250
-          )
-
-          (defalias
-            s (tap-hold-release $tap-time $hold-time s lctl)
-            d (tap-hold-release $tap-time $hold-time d lalt)
-            f (tap-hold-release $tap-time $hold-time f lmet)
-
-            j (tap-hold-release $tap-time $hold-time j rmet)
-            k (tap-hold-release $tap-time $hold-time k ralt)
-            l (tap-hold-release $tap-time $hold-time l rctl)
-          )
-
-          (defsrc
-            esc
-
-            grv  1 2 3 4 5 6 7 8 9 0 - = bspc
-
-            tab  q w e r t y u i o p [ ] \
-
-            caps a s d f g h j k l ; ' ret
-
-            lsft 102d z x c v b n m , . / rsft
-
-            lctl lmet lalt spc ralt rmet rctl
-          )
-
-          (deflayer qwerty-hrm
-            esc
-
-            grv  1 2 3 4 5 6 7 8 9 0 - = bspc
-
-            tab  q w e r t y u i o p [ ] \
-
-            caps a @s @d @f g h @j @k l ; ' ret
-
-            lsft 102d z x c v b n m , . / rsft
-
-            - - - spc - - -
           )
         '';
       };
