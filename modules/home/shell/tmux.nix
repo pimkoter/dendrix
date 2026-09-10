@@ -71,16 +71,16 @@
 
           ##### Pane Navigation #####
 
-          bind h select-pane -L
-          bind j select-pane -D
-          bind k select-pane -U
-          bind l select-pane -R
+          bind m select-pane -L
+          bind n select-pane -D
+          bind e select-pane -U
+          bind i select-pane -R
 
-          # Alt+hjkl to switch panes without prefix
-          bind -n M-h select-pane -L
-          bind -n M-j select-pane -D
-          bind -n M-k select-pane -U
-          bind -n M-l select-pane -R
+          # Alt+mnei to switch panes without prefix
+          bind -n M-m select-pane -L
+          bind -n M-n select-pane -D
+          bind -n M-e select-pane -U
+          bind -n M-i select-pane -R
 
           ##### QOL configs #####
 
