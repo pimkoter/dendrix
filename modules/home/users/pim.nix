@@ -70,7 +70,6 @@
             thunderbird
 
             # Development
-            android-studio
             android-tools
             better-adb-sync
             cargo
