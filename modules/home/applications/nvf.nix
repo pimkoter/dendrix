@@ -375,28 +375,28 @@
           keymaps = [
             # --- WINDOW NAVIGATION ---
             {
-              key = "<C-h>";
+              key = "<C-m>";
               mode = "n";
               action = "<C-w>h";
               desc = "Move to left window";
               silent = true;
             }
             {
-              key = "<C-j>";
+              key = "<C-n>";
               mode = "n";
               action = "<C-w>j";
               desc = "Move to lower window";
               silent = true;
             }
             {
-              key = "<C-k>";
+              key = "<C-e>";
               mode = "n";
               action = "<C-w>k";
               desc = "Move to upper window";
               silent = true;
             }
             {
-              key = "<C-l>";
+              key = "<C-i>";
               mode = "n";
               action = "<C-w>l";
               desc = "Move to right window";
