@@ -35,10 +35,9 @@
               Mod+Y        cooldown-ms=200            { spawn-sh "rofi-bookmarks"; }
               Mod+G        cooldown-ms=200            { spawn-sh "rofi-repos"; }
               Mod+V        cooldown-ms=200            { spawn-sh "rofi-wallpaper"; }
-              Mod+N        cooldown-ms=200            { spawn-sh "nix"; }
               Mod+T        cooldown-ms=200            { spawn "kitty"; }
               Mod+B        cooldown-ms=200            { spawn "zen"; }
-              Mod+Shift+M  cooldown-ms=200            { spawn "pavucontrol"; }
+              Mod+Shift+H  cooldown-ms=200            { spawn "pavucontrol"; }
 
               // --- Media / Volume ---
               XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
@@ -59,15 +58,15 @@
               Mod+X repeat=false { toggle-overview; }
 
               Mod+A { focus-column-left; }
-              Mod+D { focus-column-right; }
-              Mod+S { focus-workspace-down; }
+              Mod+S { focus-column-right; }
+              Mod+R { focus-workspace-down; }
               Mod+W { focus-workspace-up; }
               Mod+Right { focus-column-right; } // Fixed the lowercase 'mod+D' conflict/typo here
 
-              Mod+H { focus-column-left; }
-              Mod+J { focus-workspace-down; }
-              Mod+K { focus-workspace-up; }
-              Mod+L { focus-column-right; }
+              Mod+M { focus-column-left; }
+              Mod+N { focus-workspace-down; }
+              Mod+E { focus-workspace-up; }
+              Mod+I { focus-column-right; }
 
               Mod+Left  { focus-column-left; }
               Mod+Down  { focus-workspace-down; }
@@ -75,39 +74,39 @@
 
               // --- Move Windows / Columns ---
               Mod+Ctrl+A { move-column-left; }
-              Mod+Ctrl+D { move-column-right; }
+              Mod+Ctrl+S { move-column-right; }
 
-              Mod+Ctrl+H { move-column-left; }
-              Mod+Ctrl+L { move-column-right; }
+              Mod+Ctrl+M { move-column-left; }
+              Mod+Ctrl+I { move-column-right; }
 
               Mod+Ctrl+Left  { move-column-left; }
               Mod+Ctrl+Right { move-column-right; }
 
               // --- Monitor Focus ---
               Mod+Shift+A { focus-monitor-left; }
-              Mod+Shift+D { focus-monitor-right; }
+              Mod+Shift+S { focus-monitor-right; }
 
-              Mod+Shift+H { focus-monitor-left; }
-              Mod+Shift+L { focus-monitor-right; }
+              Mod+Shift+M { focus-monitor-left; }
+              Mod+Shift+I { focus-monitor-right; }
 
               Mod+Shift+Ctrl+A { move-column-to-monitor-left; }
-              Mod+Shift+Ctrl+D { move-column-to-monitor-right; }
+              Mod+Shift+Ctrl+S { move-column-to-monitor-right; }
 
-              Mod+Shift+Ctrl+H { move-column-to-monitor-left; }
-              Mod+Shift+Ctrl+L { move-column-to-monitor-right; }
+              Mod+Shift+Ctrl+M { move-column-to-monitor-left; }
+              Mod+Shift+Ctrl+I { move-column-to-monitor-right; }
 
               // --- Workspaces ---
-              Mod+Shift+S { focus-workspace-down; }
+              Mod+Shift+R { focus-workspace-down; }
               Mod+Shift+W { focus-workspace-up; }
 
-              Mod+Shift+J { focus-workspace-down; }
-              Mod+Shift+K { focus-workspace-up; }
+              Mod+Shift+N { focus-workspace-down; }
+              Mod+Shift+E { focus-workspace-up; }
 
-              Mod+Ctrl+S { move-column-to-workspace-down; }
+              Mod+Ctrl+R { move-column-to-workspace-down; }
               Mod+Ctrl+W { move-column-to-workspace-up; }
 
-              Mod+Ctrl+J { move-column-to-workspace-down; }
-              Mod+Ctrl+K { move-column-to-workspace-up; }
+              Mod+Ctrl+N { move-column-to-workspace-down; }
+              Mod+Ctrl+E { move-column-to-workspace-up; }
 
               // Workspace numbers
               Mod+1 { focus-workspace 1; }
@@ -130,8 +129,8 @@
               Mod+Ctrl+9 { move-column-to-workspace 9; }
 
               // --- Column Layout ---
-              Mod+R        { switch-preset-column-width; }
-              Mod+Ctrl+R   { reset-window-height; }
+              Mod+P        { switch-preset-column-width; }
+              Mod+Ctrl+P   { reset-window-height; }
 
               Mod+Minus { set-column-width "-10%"; }
               Mod+Equal { set-column-width "+10%"; }
