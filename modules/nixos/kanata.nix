@@ -53,7 +53,7 @@
 
             tab  q w f p b j l u y ; [ ] \
 
-            esc @a @r @s @t g m @n @e @i @o ' ret
+            esc a @r @s @t g m @n @e @i o ' ret
 
             lsft 102d x c d v z k h , . / rsft
 
