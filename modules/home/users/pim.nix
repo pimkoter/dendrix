@@ -78,6 +78,7 @@
             python315
             rustc
             sdkmanager
+            verible
 
             # Networking
             wifi-qr
