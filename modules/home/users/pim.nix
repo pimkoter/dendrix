@@ -65,6 +65,7 @@
             # Desktop applications
             evince
             blender
+            kicad
             qbittorrent
             spotify
             thunderbird
@@ -189,6 +190,7 @@
             ".local/share/zoxide"
             ".local/share/PrismLauncher"
             ".local/share/steam"
+            ".local/share/kicad"
           ];
           files = [
             ".ssh/known_hosts"
