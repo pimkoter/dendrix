@@ -183,6 +183,7 @@
             ".thunderbird"
             ".steam"
             ".config/zen"
+            ".config/heroic"
             ".config/sops"
             ".local/share/xonsh/history_json"
             ".local/share/zoxide"
