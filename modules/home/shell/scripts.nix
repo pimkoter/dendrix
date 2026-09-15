@@ -7,6 +7,7 @@
         add-ip
         clone-repos
         dendrix-install
+        hackermode
         noctalia-to-nix
         rofi-bookmarks
         rofi-repos
