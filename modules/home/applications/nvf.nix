@@ -141,6 +141,12 @@
             };
           };
 
+          luaConfigRC.saveWithoutFormat = ''
+            vim.api.nvim_create_user_command("W", function()
+              vim.cmd("noautocmd write")
+            end, {})
+          '';
+
           utility.oil-nvim.enable = true;
 
           # Enable harpoon and configure settings
