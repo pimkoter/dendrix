@@ -19,7 +19,7 @@
       disk = {
         system = {
           type = "disk";
-          device = "/dev/disk/by-id/nvme-CT2000T500SSD8_25094E70AC15";
+          device = "/dev/disk/by-id/nvme-PCSPECIALIST_PCS3480_256GB_MQ16B75900699";
 
           content = {
             type = "gpt";
@@ -63,7 +63,7 @@
 
         preserve = {
           type = "disk";
-          device = "/dev/disk/by-id/nvme-PCSPECIALIST_PCS3480_256GB_MQ16B75900699";
+          device = "/dev/disk/by-id/nvme-CT2000T500SSD8_25094E70AC15";
 
           content = {
             type = "gpt";
