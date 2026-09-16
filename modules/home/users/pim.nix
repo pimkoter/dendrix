@@ -31,6 +31,7 @@
           nvf
           rofi
           scripts
+          spicetify
           starship
           stylix
           tmux
@@ -67,7 +68,6 @@
             blender
             kicad
             qbittorrent
-            spotify
             thunderbird
 
             # Development
@@ -116,6 +116,7 @@
 
             # Misc
             (lib.lowPrio pkgs.gh)
+            (lib.lowPrio pkgs.spotify)
           ];
         };
       };
@@ -183,6 +184,7 @@
             "Virtualmachines"
             ".thunderbird"
             ".steam"
+            ".config/spotify"
             ".config/zen"
             ".config/heroic"
             ".config/sops"
