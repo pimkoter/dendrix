@@ -18,6 +18,7 @@
           )
 
           (defalias
+            a (tap-hold-release $tap-time $hold-time a (layer-while-held navigation))
             r (tap-hold-release $tap-time $hold-time r lctl)
             s (tap-hold-release $tap-time $hold-time s lalt)
             t (tap-hold-release $tap-time $hold-time t lmet)
@@ -49,11 +50,11 @@
 
             tab  q w f p b j l u y ; [ ] \
 
-            esc a @r @s @t g m @n @e @i o ' ret
+            esc @a @r @s @t g m @n @e @i o ' ret
 
             lsft 102d x c d v z k h , . / rsft
 
-            lctl lmet @nav spc ralt rmet rctl
+            lctl lalt lmet spc ralt rmet rctl
           )
 
           (deflayer navigation
