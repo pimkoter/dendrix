@@ -26,7 +26,6 @@
       services
       sops
       stylix
-      virtualisation
 
       # Users
       pim
