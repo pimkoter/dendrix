@@ -188,6 +188,7 @@
             ".config/zen"
             ".config/heroic"
             ".config/sops"
+            ".local/share/steam"
             ".local/share/xonsh/history_json"
             ".local/share/zoxide"
             ".local/share/PrismLauncher"
