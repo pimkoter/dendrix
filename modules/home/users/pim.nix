@@ -16,6 +16,9 @@
         inputs,
         ...
       }:
+      let
+        stable = inputs.nixpkgs-stable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+      in
       {
         imports = with self.homeModules; [
           inputs.sops-nix.homeManagerModules.sops
@@ -76,7 +79,7 @@
             cargo
             clang
             compose2nix
-            python315
+            stable.python315
             rustc
             sdkmanager
             verible
