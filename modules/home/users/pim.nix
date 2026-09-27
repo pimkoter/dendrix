@@ -68,6 +68,7 @@
           packages = with pkgs; [
             # Desktop applications
             evince
+            orca-slicer
             blender
             kicad
             qbittorrent
@@ -191,6 +192,7 @@
             ".config/zen"
             ".config/heroic"
             ".config/sops"
+            ".config/OrcaSlicer"
             ".local/share/steam"
             ".local/share/xonsh/history_json"
             ".local/share/zoxide"
