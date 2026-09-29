@@ -16,8 +16,14 @@
       secrets = {
         "passwords/pim".neededForUsers = true;
         "passwords/root".neededForUsers = true;
-        "private_keys/pim" = {
+        "keys/pim-private" = {
           path = "/home/pim/.ssh/id_ed25519";
+          owner = "pim";
+          group = "users";
+          mode = "0600";
+        };
+        "keys/pim-public" = {
+          path = "/home/pim/.ssh/id_ed25519.pub";
           owner = "pim";
           group = "users";
           mode = "0600";
