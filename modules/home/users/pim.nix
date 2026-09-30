@@ -60,6 +60,10 @@
           stateVersion = "25.05";
           pointerCursor.enable = true;
 
+          sessionPath = [
+            "$HOME/.cargo/bin"
+          ];
+
           sessionVariables = {
             # Tmux sessionizer path settings
             TS_SEARCH_PATHS = "$HOME:1 $HOME/Repos:2 $HOME/Projects:2";
