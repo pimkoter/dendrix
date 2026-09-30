@@ -67,10 +67,12 @@
 
           packages = with pkgs; [
             # Desktop applications
+            android-studio
             evince
             orca-slicer
             blender
             kicad
+            freecad
             qbittorrent
             thunderbird
 
@@ -193,11 +195,10 @@
             ".config/heroic"
             ".config/sops"
             ".config/OrcaSlicer"
-            ".local/share/steam"
             ".local/share/xonsh/history_json"
             ".local/share/zoxide"
             ".local/share/PrismLauncher"
-            ".local/share/steam"
+            ".local/share/Steam"
             ".local/share/kicad"
           ];
           files = [
