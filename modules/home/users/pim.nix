@@ -236,6 +236,7 @@
             "android-sdk-platform-tools"
             "platform-tools"
             "android-studio"
+            "cuda_cudart"
           ];
       };
   };
