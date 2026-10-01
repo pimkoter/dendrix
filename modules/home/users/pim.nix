@@ -30,7 +30,6 @@
           kanshi
           kitty
           lazygit
-          niri
           noctalia
           nvf
           rofi

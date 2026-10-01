@@ -1,238 +1,212 @@
-{
-  flake.nixosModules.niri = {
-    programs.niri.enable = true;
-  };
+{ self, inputs, ... }:
 
-  flake.homeModules.niri =
-    { config, ... }:
+{
+  imports = [
+    inputs.nix-wrapper-modules.flakeModules.wrappers
+  ];
+
+  flake.wrappers.niri =
+    { wlib, ... }:
+    {
+      imports = [
+        wlib.wrapperModules.niri
+      ];
+
+      settings = {
+        spawn-at-startup = [
+          "noctalia-shell"
+        ];
+
+        # KEYBINDS
+        binds = {
+          "Mod+Slash".show-hotkey-overlay = _: { };
+
+          # APPLICATIONS
+          "Mod+Space" = _: {
+            props.cooldown-ms = 200;
+            content.spawn-sh = "rofi -show drun";
+          };
+
+          "Mod+Y" = _: {
+            props.cooldown-ms = 200;
+            content.spawn-sh = "rofi-bookmarks";
+          };
+
+          "Mod+R" = _: {
+            props.cooldown-ms = 200;
+            content.spawn-sh = "rofi-repos";
+          };
+
+          "Mod+W" = _: {
+            props.cooldown-ms = 200;
+            content.spawn-sh = "rofi-wallpaper";
+          };
+
+          "Mod+T" = _: {
+            props.cooldown-ms = 200;
+            content.spawn = [ "kitty" ];
+          };
+
+          "Mod+B" = _: {
+            props.cooldown-ms = 200;
+            content.spawn = [ "zen" ];
+          };
+
+          "Mod+V" = _: {
+            props.cooldown-ms = 200;
+            content.spawn = [ "pavucontrol" ];
+          };
+
+          # WINDOW BASICS
+          "Ctrl+Alt+Shift+Q" = _: {
+            props.repeat = false;
+            content.close-window = _: { };
+          };
+
+          "Ctrl+Alt+Shift+O" = _: {
+            props.repeat = false;
+            content.toggle-overview = _: { };
+          };
+
+          # FOCUS
+          "Ctrl+Alt+Shift+M".focus-column-left = _: { };
+          "Ctrl+Alt+Shift+I".focus-column-right = _: { };
+          "Ctrl+Alt+Shift+N".focus-workspace-down = _: { };
+          "Ctrl+Alt+Shift+E".focus-workspace-up = _: { };
+
+          # MOVE
+          "Mod+Ctrl+Alt+Shift+M".move-column-left-or-to-monitor-left = _: { };
+          "Mod+Ctrl+Alt+Shift+I".move-column-right-or-to-monitor-right = _: { };
+
+          "Mod+Ctrl+Alt+Shift+E".move-column-to-monitor-up = _: { };
+          "Mod+Ctrl+Alt+Shift+N".move-column-to-monitor-down = _: { };
+
+          # MONITOR FOCUS
+          "Mod+M".focus-monitor-left = _: { };
+          "Mod+I".focus-monitor-right = _: { };
+          "Mod+E".focus-monitor-up = _: { };
+          "Mod+N".focus-monitor-down = _: { };
+
+          # RELATIVE WORKSPACE MOVEMENT
+          "Mod+Ctrl+Alt+Shift+U".move-column-to-workspace-down = _: { };
+          "Mod+Ctrl+Alt+Shift+O".move-column-to-workspace-up = _: { };
+
+          # COLUMN LAYOUT
+          "Ctrl+Alt+Shift+P".switch-preset-column-width = _: { };
+          "Ctrl+Alt+Shift+F".maximize-column = _: { };
+          "Mod+Ctrl+Alt+Shift+F".fullscreen-window = _: { };
+          "Ctrl+Alt+Shift+C".center-column = _: { };
+          "Mod+Ctrl+Alt+Shift+C".center-visible-columns = _: { };
+
+          # SCREENSHOTS
+          "Mod+S".screenshot = _: { };
+        };
+
+        # HOTKEY OVERLAY
+        hotkey-overlay.skip-at-startup = _: { };
+
+        # ENVIRONMENT
+        environment = {
+          QT_QPA_PLATFORM = "wayland";
+          ELECTRON_OZONE_PLATFORM_HINT = "auto";
+          QT_QPA_PLATFORMTHEME = "kvantum";
+          QT_STYLE_OVERRIDE = "kvantum";
+          TERMINAL = "kitty";
+          XCURSOR_THEME = "Bibata-Modern-Ice";
+          XCURSOR_SIZE = "24";
+        };
+
+        # GESTURES
+        gestures.hot-corners.off = _: { };
+
+        # INPUT
+        input = {
+          keyboard = {
+            xkb = _: { };
+            numlock = _: { };
+          };
+
+          touchpad = {
+            tap = _: { };
+            natural-scroll = _: { };
+          };
+
+          mouse = _: { };
+          trackpoint = _: { };
+
+          focus-follows-mouse = _: {
+            props.max-scroll-amount = "0%";
+          };
+        };
+
+        # LAYOUT
+        layout = {
+          gaps = 8;
+
+          center-focused-column = "on-overflow";
+
+          always-center-single-column = _: { };
+
+          preset-column-widths = [
+            {
+              proportion = 0.33333;
+            }
+            {
+              proportion = 0.5;
+            }
+            {
+              proportion = 1.0;
+            }
+          ];
+
+          default-column-width = {
+            proportion = 0.5;
+          };
+
+          focus-ring.off = _: { };
+
+          border.width = 2;
+
+          struts = _: { };
+        };
+
+        # WINDOW RULES
+        prefer-no-csd = true;
+
+        window-rules = [
+          {
+            matches = [
+              {
+                app-id = "Minecraft";
+              }
+            ];
+
+            open-fullscreen = true;
+          }
+        ];
+      };
+    };
+
+  # NIXOS MODULE
+  flake.nixosModules.niri =
+    { config, pkgs, ... }:
     let
       colors = config.stylix.base16Scheme;
     in
     {
-      xdg.configFile."niri/config.kdl" = {
-        force = true;
-        text = ''
+      programs.niri = {
+        enable = true;
 
-          // =====================
-          // STARTUP APPS
-          // =====================
-          spawn-at-startup "noctalia-shell"
+        package = self.wrappers.niri.wrap {
+          inherit pkgs;
 
-          // =====================
-          // KEYBINDS
-          // =====================
-          binds {
-
-              Mod+Shift+Slash { show-hotkey-overlay; }
-
-              // --- Applications ---
-              Mod+Space    cooldown-ms=200            { spawn-sh "rofi -show drun"; }
-              Mod+Y        cooldown-ms=200            { spawn-sh "rofi-bookmarks"; }
-              Mod+G        cooldown-ms=200            { spawn-sh "rofi-repos"; }
-              Mod+V        cooldown-ms=200            { spawn-sh "rofi-wallpaper"; }
-              Mod+T        cooldown-ms=200            { spawn "kitty"; }
-              Mod+B        cooldown-ms=200            { spawn "zen"; }
-              Mod+Shift+H  cooldown-ms=200            { spawn "pavucontrol"; }
-
-              // --- Media / Volume ---
-              XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
-              XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
-              XF86AudioMute allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
-              XF86AudioMicMute allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
-              XF86AudioPlay allow-when-locked=true { spawn-sh "playerctl play-pause"; }
-              XF86AudioStop allow-when-locked=true { spawn-sh "playerctl stop"; }
-              XF86AudioPrev allow-when-locked=true { spawn-sh "playerctl previous"; }
-              XF86AudioNext allow-when-locked=true { spawn-sh "playerctl next"; }
-
-              // --- Brightness ---
-              XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
-              XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
-
-              // --- Window / Column Navigation ---
-              Mod+Q repeat=false { close-window; }
-              Mod+X repeat=false { toggle-overview; }
-
-              Mod+A { focus-column-left; }
-              Mod+S { focus-column-right; }
-              Mod+R { focus-workspace-down; }
-              Mod+W { focus-workspace-up; }
-              Mod+Right { focus-column-right; } // Fixed the lowercase 'mod+D' conflict/typo here
-
-              Mod+M { focus-column-left; }
-              Mod+N { focus-workspace-down; }
-              Mod+E { focus-workspace-up; }
-              Mod+I { focus-column-right; }
-
-              Mod+Left  { focus-column-left; }
-              Mod+Down  { focus-workspace-down; }
-              Mod+Up    { focus-workspace-up; }
-
-              // --- Move Windows / Columns ---
-              Mod+Ctrl+A { move-column-left; }
-              Mod+Ctrl+S { move-column-right; }
-
-              Mod+Ctrl+M { move-column-left; }
-              Mod+Ctrl+I { move-column-right; }
-
-              Mod+Ctrl+Left  { move-column-left; }
-              Mod+Ctrl+Right { move-column-right; }
-
-              // --- Monitor Focus ---
-              Mod+Shift+A { focus-monitor-left; }
-              Mod+Shift+S { focus-monitor-right; }
-
-              Mod+Shift+M { focus-monitor-left; }
-              Mod+Shift+I { focus-monitor-right; }
-
-              Mod+Shift+Ctrl+A { move-column-to-monitor-left; }
-              Mod+Shift+Ctrl+S { move-column-to-monitor-right; }
-
-              Mod+Shift+Ctrl+M { move-column-to-monitor-left; }
-              Mod+Shift+Ctrl+I { move-column-to-monitor-right; }
-
-              // --- Workspaces ---
-              Mod+Shift+R { focus-workspace-down; }
-              Mod+Shift+W { focus-workspace-up; }
-
-              Mod+Shift+N { focus-workspace-down; }
-              Mod+Shift+E { focus-workspace-up; }
-
-              Mod+Ctrl+R { move-column-to-workspace-down; }
-              Mod+Ctrl+W { move-column-to-workspace-up; }
-
-              Mod+Ctrl+N { move-column-to-workspace-down; }
-              Mod+Ctrl+E { move-column-to-workspace-up; }
-
-              // Workspace numbers
-              Mod+1 { focus-workspace 1; }
-              Mod+2 { focus-workspace 2; }
-              Mod+3 { focus-workspace 3; }
-              Mod+4 { focus-workspace 4; }
-              Mod+5 { focus-workspace 5; }
-              Mod+6 { focus-workspace 6; }
-              Mod+7 { focus-workspace 7; }
-              Mod+8 { focus-workspace 8; }
-              Mod+9 { focus-workspace 9; }
-              Mod+Ctrl+1 { move-column-to-workspace 1; }
-              Mod+Ctrl+2 { move-column-to-workspace 2; }
-              Mod+Ctrl+3 { move-column-to-workspace 3; }
-              Mod+Ctrl+4 { move-column-to-workspace 4; }
-              Mod+Ctrl+5 { move-column-to-workspace 5; }
-              Mod+Ctrl+6 { move-column-to-workspace 6; }
-              Mod+Ctrl+7 { move-column-to-workspace 7; }
-              Mod+Ctrl+8 { move-column-to-workspace 8; }
-              Mod+Ctrl+9 { move-column-to-workspace 9; }
-
-              // --- Column Layout ---
-              Mod+P        { switch-preset-column-width; }
-              Mod+Ctrl+P   { reset-window-height; }
-
-              Mod+Minus { set-column-width "-10%"; }
-              Mod+Equal { set-column-width "+10%"; }
-
-              Mod+Shift+Minus { set-window-height "-10%"; }
-              Mod+Shift+Equal { set-window-height "+10%"; }
-
-              Mod+Shift+F  { maximize-column; }
-              Mod+Control+F { fullscreen-window; }
-
-              Mod+C      { center-column; }
-              Mod+Alt+C  { center-visible-columns; }
-
-              // --- Screenshots ---
-              Mod+Shift+P { screenshot; }
-              Ctrl+P  { screenshot-screen; }
-              Alt+P   { screenshot-window; }
-          }
-
-          // ENVIRONMENT
-          // =====================
-          hotkey-overlay {
-              skip-at-startup
-          }
-
-          environment {
-              QT_QPA_PLATFORM "wayland"
-              ELECTRON_OZONE_PLATFORM_HINT "auto"
-              QT_QPA_PLATFORMTHEME "kvantum"
-              QT_STYLE_OVERRIDE "kvantum"
-              TERMINAL "kitty"
-              XCURSOR_THEME "Bibata-Modern-Ice"
-              XCURSOR_SIZE "24"
-          }
-
-          // =====================
-          // Gestures
-          // =====================
-          gestures {
-            hot-corners {
-              off
-            }
-          }
-
-          // =====================
-          // INPUT
-          // =====================
-          input {
-              keyboard {
-                  xkb {}
-                  numlock
-              }
-
-              touchpad {
-                  tap
-                  natural-scroll
-              }
-
-              mouse {}
-              trackpoint {}
-
-              focus-follows-mouse max-scroll-amount="0%"
-          }
-
-          // =====================
-          // LAYOUT
-          // =====================
-          layout {
-              gaps 9
-              center-focused-column "on-overflow"
-              always-center-single-column
-
-              preset-column-widths {
-                  proportion 0.33333
-                  proportion 0.5
-                  proportion 1.0
-              }
-
-              default-column-width { proportion 0.5; }
-
-              focus-ring {
-                  off
-              }
-
-              border {
-                  width 2
-                  active-color "#${colors.base0D}"
-                  inactive-color "#${colors.base03}"
-                  urgent-color "#${colors.base08}"
-              }
-
-              struts {}
-          }
-
-          // =====================
-          // WINDOW RULES
-          // =====================
-
-          prefer-no-csd true
-
-          window-rule {
-              match app-id="Minecraft"
-              open-fullscreen true
-              max-width 1920
-              max-height 1080
-          }
-        '';
+          settings.layout.border = {
+            width = 2;
+            active-color = "#${colors.base0D}";
+            inactive-color = "#${colors.base03}";
+            urgent-color = "#${colors.base08}";
+          };
+        };
       };
     };
 }

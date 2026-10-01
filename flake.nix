@@ -8,6 +8,10 @@
     import-tree.url = "github:vic/import-tree";
     zennotes.url = "github:zennotes/zennotes";
     preservation.url = "github:nix-community/preservation";
+    nix-wrapper-modules = {
+      url = "github:nix-community/nix-wrapper-modules";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
