@@ -9,6 +9,7 @@
       # --- Hardware & Audio Management ---
       blueman # Bluetooth manager GUI
       pavucontrol # PulseAudio/pipewire volume control GUI
+      wdisplays # For hot-swapping monitor configs
 
       # --- Core System Utilities ---
       curl # Command-line HTTP client
