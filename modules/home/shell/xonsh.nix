@@ -20,7 +20,7 @@
         ssn = "sudo systemctl poweroff";
         srn = "sudo systemctl reboot";
 
-        ff = "fastfetch";
+        ff = "clear && fastfetch";
 
         shell = "nix-shell -p";
         nd = "nix develop --impure -c xonsh";
