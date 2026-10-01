@@ -204,6 +204,7 @@
             ".local/share/PrismLauncher"
             ".local/share/Steam"
             ".local/share/kicad"
+            "/var/lib/ollama"
           ];
           files = [
             ".ssh/known_hosts"
