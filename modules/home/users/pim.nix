@@ -27,6 +27,7 @@
           eza
           fastfetch
           git
+          kanshi
           kitty
           lazygit
           niri

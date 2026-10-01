@@ -7,11 +7,6 @@
     { config, ... }:
     let
       colors = config.stylix.base16Scheme;
-      monitors = {
-        left = "DP-4";
-        middle = "DP-5";
-        right = "eDP-1";
-      };
     in
     {
       xdg.configFile."niri/config.kdl" = {
@@ -223,25 +218,6 @@
               }
 
               struts {}
-          }
-
-          // =====================
-          // OUTPUTS
-          // =====================
-          output "${monitors.left}" {
-              mode "1920x1080@60"
-              position x=0    y=0
-          }
-
-          output "${monitors.middle}" {
-              mode "1920x1080@164.999"
-              position x=1920 y=0
-          }
-
-          output "${monitors.right}" {
-              mode "2560x1600@60"
-              scale 1.5
-              position x=3840 y=0
           }
 
           // =====================
