@@ -2,6 +2,7 @@
   flake.nixosModules.kanata = {
     boot.kernelModules = [ "uinput" ];
     users.groups.uinput = { };
+
     services.kanata = {
       enable = true;
 
@@ -17,16 +18,126 @@
             hold-time 250
           )
 
-          (defalias
-            a (tap-hold-release $tap-time $hold-time a (layer-while-held navigation))
-            r (tap-hold-release $tap-time $hold-time r lctl)
-            s (tap-hold-release $tap-time $hold-time s lalt)
-            t (tap-hold-release $tap-time $hold-time t lmet)
+          (defhands
+            (left
+              q w e r t
+              a s d f g
+              z x c v b
+            )
 
-            n (tap-hold-release $tap-time $hold-time n rmet)
-            e (tap-hold-release $tap-time $hold-time e ralt)
-            i (tap-hold-release $tap-time $hold-time i rctl)
-            nav (layer-while-held navigation)
+            (right
+              y u i o p
+              h j k l ;
+              n m , . /
+            )
+          )
+
+          (defalias
+            norepeat kana
+
+            meh
+              (multi
+                lctl
+                lalt
+                lsft
+              )
+
+            esc
+              (multi
+                @norepeat
+                (tap-hold-release
+                  $tap-time
+                  $hold-time
+                  esc
+                  (multi
+                    @meh
+                    (layer-while-held esc-navigation)
+                  )
+                )
+              )
+
+            a
+              (multi
+                @norepeat
+                (tap-hold-release
+                  $tap-time
+                  $hold-time
+                  a
+                  (layer-while-held navigation)
+                )
+              )
+
+            s-alt
+              (multi
+                @norepeat
+                (tap-hold-opposite-hand-release
+                  $hold-time
+                  s
+                  lalt
+                  (same-hand tap)
+                  (timeout hold)
+                )
+              )
+
+            d-ctrl
+              (multi
+                @norepeat
+                (tap-hold-opposite-hand-release
+                  $hold-time
+                  d
+                  lctl
+                  (same-hand tap)
+                  (timeout hold)
+                )
+              )
+
+            f-super
+              (multi
+                @norepeat
+                (tap-hold-opposite-hand-release
+                  $hold-time
+                  f
+                  lmet
+                  (same-hand tap)
+                  (timeout hold)
+                )
+              )
+
+            j-super
+              (multi
+                @norepeat
+                (tap-hold-opposite-hand-release
+                  $hold-time
+                  j
+                  rmet
+                  (same-hand tap)
+                  (timeout hold)
+                )
+              )
+
+            k-ctrl
+              (multi
+                @norepeat
+                (tap-hold-opposite-hand-release
+                  $hold-time
+                  k
+                  rctl
+                  (same-hand tap)
+                  (timeout hold)
+                )
+              )
+
+            l-alt
+              (multi
+                @norepeat
+                (tap-hold-opposite-hand-release
+                  $hold-time
+                  l
+                  ralt
+                  (same-hand tap)
+                  (timeout hold)
+                )
+              )
           )
 
           (defsrc
@@ -43,18 +154,18 @@
             lctl lmet lalt spc ralt rmet rctl
           )
 
-          (deflayer colemak-dh
-            grv
+          (deflayer qwerty
+            caps
 
-            caps  1 2 3 4 5 6 7 8 9 0 - = bspc
+            grv  1 2 3 4 5 6 7 8 9 0 - = bspc
 
-            tab  q w f p b j l u y ; [ ] \
+            tab  q w e r t y u i o p [ ] \
 
-            esc @a @r @s @t g m @n @e @i o ' ret
+            @esc @a @s-alt @d-ctrl @f-super g h @j-super @k-ctrl @l-alt ; ' ret
 
-            lsft 102d x c d v z k h , . / rsft
+            lsft 102d z x c v b n m , . / rsft
 
-            lctl lalt lmet spc ralt rmet rctl
+            lctl lmet lalt spc ralt rmet rctl
           )
 
           (deflayer navigation
@@ -64,9 +175,23 @@
 
             _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
-            _ _ _ _ _ _ left down up right _ _ _ _
+            _ _ _ _ _ _ left down up right _ _ _
 
-            _ _ _ _ _ _ _ _ _ _ _ _
+            _ _ _ _ _ _ _ _ _ _ _ _ _
+
+            _ _ _ _ _ _ _
+          )
+
+          (deflayer esc-navigation
+            _
+
+            _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+            _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+            _ _ _ _ _ _ m n e i _ _ _
+
+            _ _ _ _ _ _ _ _ _ _ _ _ _
 
             _ _ _ _ _ _ _
           )
