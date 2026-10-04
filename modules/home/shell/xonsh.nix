@@ -6,6 +6,7 @@
       aliases = {
         cd = "z";
         cdi = "zi";
+        cg = "cd \"$(git rev-parse --show-toplevel 2>/dev/null)\"";
 
         v = "nvim";
         V = "sudo nvim";
