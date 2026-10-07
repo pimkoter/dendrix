@@ -4,7 +4,7 @@
       enable = true;
       package = pkgs.kitty;
       settings = {
-        shell = "${pkgs.xonsh}/bin/xonsh";
+        shell = "${pkgs.bash}/bin/bash";
         font_size = 12;
         wheel_scroll_min_lines = 1;
         window_padding_width = 4;
