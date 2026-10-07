@@ -23,6 +23,7 @@
         imports = with self.homeModules; [
           inputs.sops-nix.homeManagerModules.sops
           awww
+          bash
           bat
           eza
           fastfetch
@@ -37,9 +38,8 @@
           spicetify
           starship
           stylix
-          tmux
+          herdr
           wallpapers
-          xonsh
           zoxide
         ];
 
@@ -199,7 +199,6 @@
             ".config/heroic"
             ".config/sops"
             ".config/OrcaSlicer"
-            ".local/share/xonsh/history_json"
             ".local/share/zoxide"
             ".local/share/PrismLauncher"
             ".local/share/Steam"
