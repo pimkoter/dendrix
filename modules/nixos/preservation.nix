@@ -37,6 +37,7 @@
         ];
 
         directories = [
+          "/va/lib/ollama"
           "/var/lib/tailscale/"
           "/var/lib/systemd/timers"
           "/var/lib/howdy/models/"
