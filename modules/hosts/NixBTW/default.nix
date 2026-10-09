@@ -21,6 +21,7 @@
       misc
       networking
       niri
+      ollama
       pkgs
       programs
       services
