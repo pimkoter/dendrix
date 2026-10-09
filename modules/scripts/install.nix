@@ -91,12 +91,16 @@
         echo "Available NixOS hosts:"
         echo
 
-        mapfile -t HOSTS < <(
+        if ! HOSTS_JSON="$(
           nix --extra-experimental-features 'nix-command flakes' \
-            eval --json "$FLAKE#nixosConfigurations" |
-            jq -r 'keys[]' |
-            sort
-        )
+            eval --json "$FLAKE#nixosConfigurations" \
+            --apply builtins.attrNames
+        )"; then
+          echo "Error: could not evaluate NixOS host names."
+          exit 1
+        fi
+
+        mapfile -t HOSTS < <(printf '%s\n' "$HOSTS_JSON" | jq -r '.[]')
 
         if (( ''${#HOSTS[@]} == 0 )); then
           echo "Error: no NixOS hosts found."
