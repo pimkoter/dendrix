@@ -43,6 +43,11 @@
             content.spawn-sh = "rofi-wallpaper";
           };
 
+          "Mod+P" = _: {
+            props.cooldown-ms = 200;
+            content.spawn-sh = "rofi-clipboard";
+          };
+
           "Mod+T" = _: {
             props.cooldown-ms = 200;
             content.spawn = [ "kitty" ];
