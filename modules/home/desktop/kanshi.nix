@@ -36,7 +36,7 @@
 
               {
                 # Side monitor
-                criteria = "DP-3";
+                criteria = "DP-4";
                 mode = "1920x1080@60Hz";
                 scale = 1.0;
                 status = "enable";
