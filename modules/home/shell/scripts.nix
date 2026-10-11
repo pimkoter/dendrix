@@ -10,6 +10,7 @@
         hackermode
         noctalia-to-nix
         rofi-bookmarks
+        rofi-clipboard
         rofi-repos
         rofi-ssh
         rofi-wallpaper
