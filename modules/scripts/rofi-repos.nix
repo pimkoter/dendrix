@@ -7,15 +7,13 @@
       runtimeInputs = with pkgs; [
         rofi
         kitty
-        tmux
-        procps
+        herdr
         coreutils
+        findutils
       ];
 
       text = ''
         set -eu
-
-        terminal="kitty"
         repo_dir="Repos"
 
         configs="$(
@@ -37,10 +35,7 @@
 
         dir="$HOME/$repo_dir/$chosen"
 
-        pkill -x "$terminal" 2>/dev/null || true
-        sleep 0.1
-
-        exec "$terminal" -e tmux new-session -As "$chosen" -c "$dir"
+        exec herdr workspace create --focus --cwd "$dir" --label "$chosen"
       '';
     };
   };
