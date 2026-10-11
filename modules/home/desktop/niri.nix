@@ -15,6 +15,7 @@
       settings = {
         spawn-at-startup = [
           "noctalia-shell"
+          "spotify"
         ];
 
         # KEYBINDS
