@@ -197,6 +197,7 @@
             ".config/zen"
             ".config/heroic"
             ".config/sops"
+            ".config/gh"
             ".config/OrcaSlicer"
             ".local/share/zoxide"
             ".local/share/PrismLauncher"
