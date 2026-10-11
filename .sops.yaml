@@ -5,7 +5,7 @@ keys:
 
   # Hosts SSH-to-AGE keys
   - &hosts:
-    - &NixBTW age1qfgg7wy3xl04zwn4nytzz0qr7u5jr250mk7pc0gflgh7yerm092q46s9wl
+    - &NixBTW age1g5qjzm27e6zfmt3ll5cj07qvvj8fn64l0eecwq3gw9v7u55l0d9sa0xj7v
 
 creation_rules:
   - path_regex: secrets.yaml$
