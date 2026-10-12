@@ -24,16 +24,6 @@
             mode = "0644";
             inInitrd = true;
           }
-          {
-            file = "/etc/ssh/ssh_host_rsa_key";
-            mode = "0600";
-            inInitrd = true;
-          }
-          {
-            file = "/etc/ssh/ssh_host_rsa_key.pub";
-            mode = "0644";
-            inInitrd = true;
-          }
         ];
 
         directories = [
