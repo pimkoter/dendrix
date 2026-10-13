@@ -695,29 +695,6 @@
             name = lib.mkForce "catppuccin";
             style = lib.mkForce "mocha";
             transparent = lib.mkForce true;
-
-            twilight = {
-              enable = true;
-              setupOpts = {
-                dimming = {
-                  alpha = 0.85;
-                  color = [
-                    "Normal"
-                    "#ffffff"
-                  ];
-                  inactive = false;
-                };
-                context = 10;
-                treesitter = true;
-                expand = [
-                  "attrset_expression"
-                  "function"
-                  "method"
-                  "table"
-                  "if_statement"
-                ];
-              };
-            };
           };
 
           luaConfigRC.floats = ''

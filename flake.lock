@@ -290,11 +290,11 @@
     },
     "mnw": {
       "locked": {
-        "lastModified": 1780772958,
-        "narHash": "sha256-VKKe8r4pwCGWZ3Yr9CPN129R4S3CKLSrlYqdYz3vKpM=",
+        "lastModified": 1784154424,
+        "narHash": "sha256-HRn4O1X2ShYtbq5Egji72/aemyc2cIQicjRZD9hBqM8=",
         "owner": "Gerg-L",
         "repo": "mnw",
-        "rev": "0871dbf63a53610c95db04439ed8ea4d6ec9c160",
+        "rev": "0151d9fa87992cbeb67c86616fb9170dcec830b6",
         "type": "github"
       },
       "original": {
@@ -465,15 +465,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1788367567,
-        "narHash": "sha256-LDTcLmoWSqXBnBWLL+Qs7BAa2VXxdKunDtjV7hpz9Po=",
-        "owner": "pimkoter",
+        "lastModified": 1791651540,
+        "narHash": "sha256-cxmegj6Tg0xYk8A2icSl3v1+SeVDj+bESU2BnCqERPE=",
+        "owner": "notashelf",
         "repo": "nvf",
-        "rev": "9097fa5fb12019a80c26cf4408c8c11e364733b6",
+        "rev": "19992540d372466340ededda0c065a3a0a962fd6",
         "type": "github"
       },
       "original": {
-        "owner": "pimkoter",
+        "owner": "notashelf",
         "repo": "nvf",
         "type": "github"
       }

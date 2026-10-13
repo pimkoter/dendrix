@@ -190,6 +190,7 @@
             "Projects"
             "Repos"
             "Games"
+            "Theo"
             "Virtualmachines"
             ".thunderbird"
             ".steam"
