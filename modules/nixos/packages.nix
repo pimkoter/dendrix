@@ -10,6 +10,8 @@
       blueman # Bluetooth manager GUI
       pavucontrol # PulseAudio/pipewire volume control GUI
       wdisplays # For hot-swapping monitor configs
+      playerctl # Music control
+      brightnessctl # Brightness control
 
       # --- Core System Utilities ---
       curl # Command-line HTTP client
