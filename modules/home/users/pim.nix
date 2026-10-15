@@ -31,6 +31,7 @@
           kanshi
           kitty
           lazygit
+          librewolf
           noctalia
           nvf
           rofi
@@ -119,7 +120,6 @@
 
             # Browsers / Desktop
             inputs.vm-curator.packages.${pkgs.stdenv.hostPlatform.system}.default
-            inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
             inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
             inputs.zennotes.packages.${pkgs.stdenv.hostPlatform.system}.zennotes-desktop
 
@@ -192,10 +192,10 @@
             "Games"
             "Theo"
             "Virtualmachines"
+            ".librewolf"
             ".thunderbird"
             ".steam"
             ".config/spotify"
-            ".config/zen"
             ".config/heroic"
             ".config/sops"
             ".config/gh"

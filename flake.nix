@@ -8,6 +8,14 @@
     import-tree.url = "github:vic/import-tree";
     zennotes.url = "github:zennotes/zennotes";
     preservation.url = "github:nix-community/preservation";
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    omnisearch = {
+      url = "path:/home/pim/Repos/OmniSearch";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     herdr = {
       url = "github:herdrdev/herdr/v0.9.3";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -50,10 +58,6 @@
     };
     sops-nix = {
       url = "github:mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    zen-browser = {
-      url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

@@ -68,6 +68,24 @@
         "type": "github"
       }
     },
+    "beaker-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790704008,
+        "narHash": "sha256-Al/BE7uVRSmUGF/t1m0pWxF9jNgzdCVUrc5ZHkcPiQg=",
+        "ref": "refs/heads/master",
+        "rev": "10be7f581fb828e74f064ea7ad4fb0534ee8540a",
+        "revCount": 46,
+        "shallow": false,
+        "type": "git",
+        "url": "https://git.bwaaa.space/beaker"
+      },
+      "original": {
+        "shallow": false,
+        "type": "git",
+        "url": "https://git.bwaaa.space/beaker"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -155,6 +173,27 @@
       }
     },
     "flake-parts_2": {
+      "inputs": {
+        "nixpkgs-lib": [
+          "nur",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1733312601,
+        "narHash": "sha256-4pDvzqnegAfRkPwO3wmwBhVi/Sye1mzps0zHWYnP88c=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "205b12d8b7cd4802fbcb8e8ef6a0f1408781a4f9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_3": {
       "inputs": {
         "nixpkgs-lib": [
           "stylix",
@@ -433,6 +472,27 @@
     },
     "nur": {
       "inputs": {
+        "flake-parts": "flake-parts_2",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792080343,
+        "narHash": "sha256-dKptOF1A7gVMJTqNbcocyi8Te809CoZvf+16wF0s3MY=",
+        "owner": "nix-community",
+        "repo": "NUR",
+        "rev": "02b4fd5f4275f967f5beab65611472086d7618fa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "NUR",
+        "type": "github"
+      }
+    },
+    "nur_2": {
+      "inputs": {
         "flake-parts": [
           "stylix",
           "flake-parts"
@@ -478,6 +538,41 @@
         "type": "github"
       }
     },
+    "omnisearch": {
+      "inputs": {
+        "beaker-src": "beaker-src",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "omnisearch-src": "omnisearch-src"
+      },
+      "locked": {
+        "lastModified": 1791994365,
+        "narHash": "sha256-G1O4SPC8PSdHjSaibJrcuLjiGXy+9sqjvZvOtKcrR8I=",
+        "path": "/home/pim/Repos/OmniSearch",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/pim/Repos/OmniSearch",
+        "type": "path"
+      }
+    },
+    "omnisearch-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787423031,
+        "narHash": "sha256-3l6j1mDX2UtNX9cIL9pvEnpmSDgxtr6r4dZZSRbAY0I=",
+        "ref": "refs/heads/master",
+        "rev": "aace4b8f91487d8cb6b7c6fcd38efaa0a83cf1cc",
+        "revCount": 151,
+        "type": "git",
+        "url": "https://codeberg.org/gabrielf/omnisearch"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/gabrielf/omnisearch"
+      }
+    },
     "preservation": {
       "locked": {
         "lastModified": 1757436102,
@@ -505,13 +600,14 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
         "noctalia": "noctalia",
+        "nur": "nur",
         "nvf": "nvf",
+        "omnisearch": "omnisearch",
         "preservation": "preservation",
         "sops-nix": "sops-nix",
         "spicetify-nix": "spicetify-nix",
         "stylix": "stylix",
         "vm-curator": "vm-curator",
-        "zen-browser": "zen-browser",
         "zennotes": "zennotes"
       }
     },
@@ -584,12 +680,12 @@
         "base16-helix": "base16-helix",
         "base16-vim": "base16-vim",
         "firefox-gnome-theme": "firefox-gnome-theme",
-        "flake-parts": "flake-parts_2",
+        "flake-parts": "flake-parts_3",
         "gnome-shell": "gnome-shell",
         "nixpkgs": [
           "nixpkgs"
         ],
-        "nur": "nur",
+        "nur": "nur_2",
         "systems": "systems_3",
         "tinted-kitty": "tinted-kitty",
         "tinted-schemes": "tinted-schemes",
@@ -759,26 +855,6 @@
       "original": {
         "owner": "pimkoter",
         "repo": "vm-curator",
-        "type": "github"
-      }
-    },
-    "zen-browser": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1790843023,
-        "narHash": "sha256-vO6WFunNqHCjEaQc3ytshsGhHMqAIeW+5/rEJRLQLxQ=",
-        "owner": "youwen5",
-        "repo": "zen-browser-flake",
-        "rev": "710bb85c6cb4f186de8a710615be5b93b5f98885",
-        "type": "github"
-      },
-      "original": {
-        "owner": "youwen5",
-        "repo": "zen-browser-flake",
         "type": "github"
       }
     },

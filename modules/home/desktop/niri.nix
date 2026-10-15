@@ -55,7 +55,7 @@
 
           "Mod+B" = _: {
             props.cooldown-ms = 200;
-            content.spawn = [ "zen" ];
+            content.spawn = [ "librewolf" ];
           };
 
           "Mod+V" = _: {
