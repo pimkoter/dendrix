@@ -190,7 +190,6 @@
             "Projects"
             "Repos"
             "Games"
-            "Theo"
             "Virtualmachines"
             ".librewolf"
             ".thunderbird"
