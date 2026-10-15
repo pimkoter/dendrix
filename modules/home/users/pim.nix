@@ -31,6 +31,7 @@
           kanshi
           kitty
           lazygit
+          librewolf
           noctalia
           nvf
           rofi
@@ -192,6 +193,7 @@
             "Games"
             "Theo"
             "Virtualmachines"
+            ".librewolf"
             ".thunderbird"
             ".steam"
             ".config/spotify"
