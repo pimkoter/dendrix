@@ -8,6 +8,10 @@
     import-tree.url = "github:vic/import-tree";
     zennotes.url = "github:zennotes/zennotes";
     preservation.url = "github:nix-community/preservation";
+    omnisearch = {
+      url = "path:/home/pim/Repos/OmniSearch";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     herdr = {
       url = "github:herdrdev/herdr/v0.9.3";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -68,6 +68,24 @@
         "type": "github"
       }
     },
+    "beaker-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790704008,
+        "narHash": "sha256-Al/BE7uVRSmUGF/t1m0pWxF9jNgzdCVUrc5ZHkcPiQg=",
+        "ref": "refs/heads/master",
+        "rev": "10be7f581fb828e74f064ea7ad4fb0534ee8540a",
+        "revCount": 46,
+        "shallow": false,
+        "type": "git",
+        "url": "https://git.bwaaa.space/beaker"
+      },
+      "original": {
+        "shallow": false,
+        "type": "git",
+        "url": "https://git.bwaaa.space/beaker"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -478,6 +496,41 @@
         "type": "github"
       }
     },
+    "omnisearch": {
+      "inputs": {
+        "beaker-src": "beaker-src",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "omnisearch-src": "omnisearch-src"
+      },
+      "locked": {
+        "lastModified": 1791994365,
+        "narHash": "sha256-G1O4SPC8PSdHjSaibJrcuLjiGXy+9sqjvZvOtKcrR8I=",
+        "path": "/home/pim/Repos/OmniSearch",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/pim/Repos/OmniSearch",
+        "type": "path"
+      }
+    },
+    "omnisearch-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787423031,
+        "narHash": "sha256-3l6j1mDX2UtNX9cIL9pvEnpmSDgxtr6r4dZZSRbAY0I=",
+        "ref": "refs/heads/master",
+        "rev": "aace4b8f91487d8cb6b7c6fcd38efaa0a83cf1cc",
+        "revCount": 151,
+        "type": "git",
+        "url": "https://codeberg.org/gabrielf/omnisearch"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/gabrielf/omnisearch"
+      }
+    },
     "preservation": {
       "locked": {
         "lastModified": 1757436102,
@@ -506,6 +559,7 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "noctalia": "noctalia",
         "nvf": "nvf",
+        "omnisearch": "omnisearch",
         "preservation": "preservation",
         "sops-nix": "sops-nix",
         "spicetify-nix": "spicetify-nix",
