@@ -98,6 +98,7 @@
             nmap
 
             # Gaming
+            steam-run
             heroic
             prismlauncher
             satisfactorymodmanager
