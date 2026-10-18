@@ -2,7 +2,7 @@
   flake.homeModules.rofi = {
     programs.rofi = {
       enable = true;
-      extraConfig = {
+      settings = {
         show-icons = true;
         icon-theme = "Papirus-Dark";
         modi = "drun";
