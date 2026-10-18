@@ -201,6 +201,7 @@
             ".config/sops"
             ".config/gh"
             ".config/OrcaSlicer"
+            ".local/share/atuin"
             ".local/share/zoxide"
             ".local/share/PrismLauncher"
             ".local/share/Steam"
