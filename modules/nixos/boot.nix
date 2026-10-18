@@ -6,6 +6,7 @@
       ...
     }:
     {
+      systemd.services.NetworkManager-wait-online.enable = false;
       boot = {
         kernelPackages = pkgs.linuxPackages_zen;
         extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
