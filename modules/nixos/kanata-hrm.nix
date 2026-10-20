@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.kanata = {
+  flake.nixosModules.kanata-hrm = {
     boot.kernelModules = [ "uinput" ];
     users.groups.uinput = { };
 
