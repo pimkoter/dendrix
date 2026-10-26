@@ -692,9 +692,7 @@
           # --- Theme ---
           theme = {
             enable = true;
-            name = lib.mkForce "catppuccin";
-            style = lib.mkForce "mocha";
-            transparent = lib.mkForce true;
+            transparent = true;
           };
 
           luaConfigRC.floats = ''
