@@ -6,7 +6,7 @@
       ...
     }:
     let
-      c = config.stylix.base16Scheme;
+      c = config.lib.stylix.colors;
     in
     {
       programs.starship = {

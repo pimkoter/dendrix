@@ -14,13 +14,15 @@
 
       # Core modules
       boot
+      docker
       drivers
       howdy
-      kanata
+      kanata-hrm
       ly
       misc
       networking
       niri
+      ollama
       omnisearch
       pkgs
       programs

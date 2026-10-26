@@ -11,7 +11,7 @@
         gnused
         gnugrep
         libnotify
-        alacritty
+        kitty
         coreutils
       ];
 
@@ -54,7 +54,7 @@
         )"
 
         if [ -n "$chosen_host" ]; then
-          alacritty -e ssh "$chosen_host"
+          kitty -e ssh "$chosen_host"
         fi
       '';
     };

@@ -27,7 +27,12 @@
         ];
 
         directories = [
-          "/var/lib/ollama"
+          {
+            directory = "/var/lib/ollama-models/";
+            user = "ollama";
+            group = "ollama";
+            mode = "0750";
+          }
           "/var/lib/tailscale/"
           "/var/lib/systemd/timers"
           "/var/lib/howdy/models/"

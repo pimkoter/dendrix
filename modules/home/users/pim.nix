@@ -23,7 +23,6 @@
         imports = with self.homeModules; [
           inputs.sops-nix.homeManagerModules.sops
           atuin
-          awww
           bash
           bat
           eza
@@ -41,7 +40,6 @@
           starship
           stylix
           herdr
-          wallpapers
           zoxide
         ];
 
@@ -75,7 +73,8 @@
             # Desktop applications
             android-studio
             evince
-            stable.orca-slicer
+            ltspice
+            orca-slicer
             blender
             kicad
             freecad
@@ -88,7 +87,9 @@
             cargo
             clang
             compose2nix
+            just
             stable.python315
+            nodejs
             rustc
             sdkmanager
             verible
@@ -124,6 +125,7 @@
             inputs.vm-curator.packages.${pkgs.stdenv.hostPlatform.system}.default
             inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
             inputs.zennotes.packages.${pkgs.stdenv.hostPlatform.system}.zennotes-desktop
+            inputs.pi.packages.${pkgs.stdenv.hostPlatform.system}.default
 
             # Misc
             (lib.lowPrio pkgs.gh)
@@ -201,11 +203,13 @@
             ".config/sops"
             ".config/gh"
             ".config/OrcaSlicer"
+            ".config/pi"
             ".local/share/atuin"
             ".local/share/zoxide"
             ".local/share/PrismLauncher"
             ".local/share/Steam"
             ".local/share/kicad"
+            ".pi"
           ];
           files = [
             ".ssh/known_hosts"
@@ -232,15 +236,23 @@
           };
         };
 
-        nixpkgs.config.allowUnfreePredicate =
-          pkg:
-          builtins.elem (lib.getName pkg) [
-            "spotify"
-            "android-sdk-platform-tools"
-            "platform-tools"
-            "android-studio"
-            "cuda_cudart"
-          ];
+        nixpkgs.config = {
+          allowBrokenPredicate =
+            pkg:
+            builtins.elem (lib.getName pkg) [
+              "python3.14-posthog"
+            ];
+          allowUnfreePredicate =
+            pkg:
+            builtins.elem (lib.getName pkg) [
+              "ltspice"
+              "spotify"
+              "android-sdk-platform-tools"
+              "platform-tools"
+              "android-studio"
+              "cuda_cudart"
+            ];
+        };
       };
   };
 }

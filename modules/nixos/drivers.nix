@@ -1,5 +1,6 @@
 {
   flake.nixosModules.drivers = { config, ... }: {
+    boot.blacklistedKernelModules = [ "nouveau" ];
     services.xserver.videoDrivers = [ "nvidia" ];
     hardware = {
       nvidia = {

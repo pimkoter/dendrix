@@ -20,7 +20,7 @@
 
             ])
             ++ [
-              self.packages.${pkgs.stdenv.hostPlatform.system}.dendrix-install
+              self.packages.${pkgs.stdenv.hostPlatform.system}.install
             ];
         };
 

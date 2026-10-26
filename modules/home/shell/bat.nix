@@ -2,7 +2,6 @@
   flake.homeModules.bat =
     {
       pkgs,
-      lib,
       ...
     }:
     {
@@ -11,7 +10,6 @@
         config = {
           pager = "less -FR";
           style = "full";
-          theme = lib.mkForce "Dracula";
         };
         extraPackages = with pkgs.bat-extras; [
           batman

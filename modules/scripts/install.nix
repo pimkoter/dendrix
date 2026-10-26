@@ -1,7 +1,7 @@
 {
   perSystem = { pkgs, ... }: {
-    packages.dendrix-install = pkgs.writeShellApplication {
-      name = "dendrix-install";
+    packages.install = pkgs.writeShellApplication {
+      name = "install";
 
       runtimeInputs = with pkgs; [
         networkmanager
