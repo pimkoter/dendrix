@@ -16,7 +16,7 @@
       boot
       drivers
       howdy
-      kanata
+      kanata-hrm
       ly
       misc
       networking

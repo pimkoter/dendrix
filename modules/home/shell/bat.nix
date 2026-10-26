@@ -11,7 +11,6 @@
         config = {
           pager = "less -FR";
           style = "full";
-          theme = lib.mkForce "Dracula";
         };
         extraPackages = with pkgs.bat-extras; [
           batman

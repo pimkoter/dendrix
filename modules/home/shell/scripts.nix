@@ -13,6 +13,7 @@
         rofi-clipboard
         rofi-repos
         rofi-ssh
+        rofi-theme
         rofi-wallpaper
         tmux-sessionizer
       ];
