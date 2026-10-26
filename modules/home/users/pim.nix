@@ -41,7 +41,6 @@
           starship
           stylix
           herdr
-          wallpapers
           zoxide
         ];
 

@@ -197,7 +197,7 @@
   flake.nixosModules.niri =
     { config, pkgs, ... }:
     let
-      colors = config.stylix.base16Scheme;
+      colors = config.lib.stylix.colors;
     in
     {
       programs.niri = {
