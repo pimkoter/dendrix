@@ -1,4 +1,3 @@
-{ inputs, ... }:
 {
   flake.homeModules.opencode =
     { config, pkgs, ... }:
@@ -50,7 +49,23 @@
         };
 
         "opencode/config.json".text = builtins.toJSON {
+          "$schema" = "https://opencode.ai/config.json";
           theme = "stylix";
+          provider = {
+            ollama = {
+              npm = "@ai-sdk/openai-compatible";
+              name = "Ollama (Local)";
+              options = {
+                baseURL = "http://127.0.0.1:11434/v1";
+              };
+              models = {
+                "qwen2.5-coder:14b" = {
+                  name = "Qwen 2.5 Coder 14B";
+                };
+              };
+            };
+          };
+          model = "ollama/qwen2.5-coder:14b";
         };
       };
     };

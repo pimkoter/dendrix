@@ -29,10 +29,12 @@ in
         let
           themes = builtins.mapAttrs (_: themeFn: themeFn { inherit pkgs; }) (self.themes or { });
           activeTheme = themes.${defaultThemeName} or (builtins.head (builtins.attrValues themes));
-          resolveImage = theme:
-            if builtins.isString theme.defaultWallpaper && !(lib.hasPrefix "/" theme.defaultWallpaper)
-            then "${theme.wallpapers}/${theme.defaultWallpaper}"
-            else theme.defaultWallpaper;
+          resolveImage =
+            theme:
+            if builtins.isString theme.defaultWallpaper && !(lib.hasPrefix "/" theme.defaultWallpaper) then
+              "${theme.wallpapers}/${theme.defaultWallpaper}"
+            else
+              theme.defaultWallpaper;
         in
         {
           stylix = {
@@ -86,10 +88,12 @@ in
         { pkgs, lib, ... }:
         let
           themes = builtins.mapAttrs (_: themeFn: themeFn { inherit pkgs; }) (self.themes or { });
-          resolveImage = theme:
-            if builtins.isString theme.defaultWallpaper && !(lib.hasPrefix "/" theme.defaultWallpaper)
-            then "${theme.wallpapers}/${theme.defaultWallpaper}"
-            else theme.defaultWallpaper;
+          resolveImage =
+            theme:
+            if builtins.isString theme.defaultWallpaper && !(lib.hasPrefix "/" theme.defaultWallpaper) then
+              "${theme.wallpapers}/${theme.defaultWallpaper}"
+            else
+              theme.defaultWallpaper;
         in
         {
           imports = [
@@ -99,37 +103,38 @@ in
 
           home-manager.users.pim = {
             stylix = {
-              base16Scheme = (themes.${defaultThemeName} or (builtins.head (builtins.attrValues themes))).stylixBase16theme;
-              polarity = (themes.${defaultThemeName} or (builtins.head (builtins.attrValues themes))).polarity or "dark";
+              base16Scheme =
+                (themes.${defaultThemeName} or (builtins.head (builtins.attrValues themes))).stylixBase16theme;
+              polarity =
+                (themes.${defaultThemeName} or (builtins.head (builtins.attrValues themes))).polarity or "dark";
               image = resolveImage (themes.${defaultThemeName} or (builtins.head (builtins.attrValues themes)));
             };
-            home.file.".wallpapers".source = (themes.${defaultThemeName} or (builtins.head (builtins.attrValues themes))).wallpapers;
+            home.file.".wallpapers".source =
+              (themes.${defaultThemeName} or (builtins.head (builtins.attrValues themes))).wallpapers;
           };
 
           # -----------------------------------------------------------------
           # NixOS Specialisations for switching themes on the fly
           # -----------------------------------------------------------------
-          specialisation = builtins.mapAttrs (
-            themeName: theme: {
-              inheritParentConfig = true;
-              configuration = {
+          specialisation = builtins.mapAttrs (_: theme: {
+            inheritParentConfig = true;
+            configuration = {
+              stylix = {
+                base16Scheme = lib.mkForce theme.stylixBase16theme;
+                polarity = lib.mkForce (theme.polarity or "dark");
+                image = lib.mkForce (resolveImage theme);
+              };
+
+              home-manager.users.pim = {
                 stylix = {
                   base16Scheme = lib.mkForce theme.stylixBase16theme;
                   polarity = lib.mkForce (theme.polarity or "dark");
                   image = lib.mkForce (resolveImage theme);
                 };
-
-                home-manager.users.pim = {
-                  stylix = {
-                    base16Scheme = lib.mkForce theme.stylixBase16theme;
-                    polarity = lib.mkForce (theme.polarity or "dark");
-                    image = lib.mkForce (resolveImage theme);
-                  };
-                  home.file.".wallpapers".source = lib.mkForce theme.wallpapers;
-                };
+                home.file.".wallpapers".source = lib.mkForce theme.wallpapers;
               };
-            }
-          ) themes;
+            };
+          }) themes;
         };
     };
   };

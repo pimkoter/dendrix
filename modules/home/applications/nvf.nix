@@ -3,7 +3,6 @@
   flake.homeModules.nvf =
     {
       pkgs,
-      lib,
       ...
     }:
     {
