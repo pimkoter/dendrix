@@ -5,11 +5,8 @@
         enable = true;
         package = pkgs.ollama-cuda;
         loadModels = [
-          "qwen3:4b-thinking"
+          "qwen2.5-coder:14b"
         ];
-      };
-      open-webui = {
-        enable = true;
       };
     };
   };

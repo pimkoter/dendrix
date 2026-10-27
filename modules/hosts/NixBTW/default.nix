@@ -21,6 +21,7 @@
       misc
       networking
       niri
+      ollama
       omnisearch
       pkgs
       programs

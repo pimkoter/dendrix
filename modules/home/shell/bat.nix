@@ -2,7 +2,6 @@
   flake.homeModules.bat =
     {
       pkgs,
-      lib,
       ...
     }:
     {
