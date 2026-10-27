@@ -75,7 +75,7 @@
             # Desktop applications
             android-studio
             evince
-            stable.orca-slicer
+            orca-slicer
             blender
             kicad
             freecad
