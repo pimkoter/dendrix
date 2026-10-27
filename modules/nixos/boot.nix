@@ -15,8 +15,6 @@
         };
         kernelModules = [ "nvidia" ];
         initrd = {
-          systemd.enable = true;
-          verbose = false;
           kernelModules = [
             "nvidia"
             "nvidia_modeset"
