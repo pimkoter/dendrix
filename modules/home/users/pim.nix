@@ -35,6 +35,7 @@
           librewolf
           noctalia
           nvf
+          opencode
           rofi
           scripts
           spicetify
