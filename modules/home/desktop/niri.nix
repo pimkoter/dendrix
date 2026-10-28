@@ -14,7 +14,7 @@
 
       settings = {
         spawn-at-startup = [
-          "noctalia-shell"
+          "noctalia"
           "spotify"
         ];
 
