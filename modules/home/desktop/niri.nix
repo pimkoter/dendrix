@@ -25,27 +25,27 @@
           # APPLICATIONS
           "Mod+Space" = _: {
             props.cooldown-ms = 200;
-            content.spawn-sh = "rofi -show drun";
+            content.spawn-sh = "noctalia msg panel-toggle launcher";
           };
 
           "Mod+Y" = _: {
             props.cooldown-ms = 200;
-            content.spawn-sh = "rofi-bookmarks";
+            content.spawn-sh = "noctalia-bookmarks";
           };
 
           "Mod+R" = _: {
             props.cooldown-ms = 200;
-            content.spawn-sh = "rofi-repos";
+            content.spawn-sh = "noctalia-repos";
           };
 
           "Mod+W" = _: {
             props.cooldown-ms = 200;
-            content.spawn-sh = "rofi-wallpaper";
+            content.spawn-sh = "noctalia msg panel-toggle wallpaper";
           };
 
           "Mod+P" = _: {
             props.cooldown-ms = 200;
-            content.spawn-sh = "rofi-clipboard";
+            content.spawn-sh = "noctalia-clipboard";
           };
 
           "Mod+T" = _: {
