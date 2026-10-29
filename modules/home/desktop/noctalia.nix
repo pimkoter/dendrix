@@ -53,7 +53,7 @@
           font_scale = 1.0
           font_weight = 500
           hover_highlight = true
-          layer = "overlay"
+          layer = "top"
           margin_edge = 0
           margin_ends = 0
           margin_opposite_edge = 0
@@ -177,14 +177,15 @@
           type = "clock"
 
           [desktop_widgets.widget.desktop-widget-0000000000000001.settings]
+          background_radius = 0
           format = "{:%H:%M:%S}"
           timezone = "CET"
 
           [desktop_widgets.widget.desktop-widget-0000000000000002]
-          box_height = 160.0
-          box_width = 304.0
-          cx = 317.5
-          cy = 645.5
+          box_height = 224.0
+          box_width = 1824.0
+          cx = 901.5
+          cy = 949.5
           enabled = true
           output = "eDP-1"
           placement_height = 1067.0
@@ -193,25 +194,25 @@
           type = "audio_visualizer"
 
           [desktop_widgets.widget.desktop-widget-0000000000000002.settings]
-          background = true
+          background = false
           background_color = "surface"
           background_opacity = 0.80000000000000004
           background_padding = 10
-          background_radius = 12
-          bands = 32
-          centered = true
+          background_radius = 0
+          bands = 128
+          centered = false
           color_1 = "primary"
           color_2 = "primary"
-          mirrored = true
+          mirrored = false
           reversed = false
           show_wave = false
           show_when_idle = true
 
           [desktop_widgets.widget.desktop-widget-0000000000000003]
-          box_height = 496.0
-          box_width = 576.0
-          cx = 1369.5
-          cy = 794.5
+          box_height = 480.0
+          box_width = 544.0
+          cx = 1381.5
+          cy = 709.5
           enabled = true
           output = "eDP-1"
           placement_height = 1067.0
@@ -220,14 +221,15 @@
           type = "calendar"
 
           [desktop_widgets.widget.desktop-widget-0000000000000003.settings]
+          background_radius = 0
           show_events = false
           show_week_numbers = true
 
           [desktop_widgets.widget.desktop-widget-0000000000000004]
           box_height = 0.0
           box_width = 0.0
-          cx = 584.5
-          cy = 853.5
+          cx = 328.5
+          cy = 719.5
           enabled = true
           output = "eDP-1"
           placement_height = 1067.0
@@ -236,12 +238,13 @@
           type = "media_player"
 
           [desktop_widgets.widget.desktop-widget-0000000000000004.settings]
+          background_radius = 0
 
           [desktop_widgets.widget.desktop-widget-0000000000000005]
-          box_height = 0.0
-          box_width = 0.0
-          cx = 1073.5
-          cy = 276.0
+          box_height = 128.0
+          box_width = 192.0
+          cx = 1269.5
+          cy = 341.5
           enabled = true
           output = "eDP-1"
           placement_height = 1067.0
@@ -250,14 +253,32 @@
           type = "sysmon"
 
           [desktop_widgets.widget.desktop-widget-0000000000000005.settings]
+          background = true
+          background_color = "surface"
+          background_opacity = 1.0
+          background_padding = 10
+          background_radius = 12
+          color = "primary"
+          color2 = "secondary"
+          display = "graph"
+          font_family = ""
+          gauge_layout = "horizontal"
+          highlight_color = "error"
+          interface = ""
+          label_min_width = 0
+          network_speed_compact = false
+          network_speed_decimal_places = 1
+          network_speed_unit = "auto"
+          shadow = true
+          show_label = true
           stat = "cpu_usage"
           stat2 = "cpu_temp"
 
           [desktop_widgets.widget.desktop-widget-0000000000000006]
-          box_height = 0.0
-          box_width = 0.0
-          cx = 1537.5
-          cy = 276.0
+          box_height = 128.0
+          box_width = 192.0
+          cx = 1509.5
+          cy = 277.5
           enabled = true
           output = "eDP-1"
           placement_height = 1067.0
@@ -266,14 +287,16 @@
           type = "sysmon"
 
           [desktop_widgets.widget.desktop-widget-0000000000000006.settings]
+          background_opacity = 1.0
+          background_radius = 0
           stat = "gpu_usage"
           stat2 = "gpu_temp"
 
           [desktop_widgets.widget.desktop-widget-0000000000000007]
-          box_height = 0.0
-          box_width = 0.0
-          cx = 1305.5
-          cy = 276.0
+          box_height = 128.0
+          box_width = 192.0
+          cx = 1045.5
+          cy = 261.5
           enabled = true
           output = "eDP-1"
           placement_height = 1067.0
@@ -282,6 +305,11 @@
           type = "sysmon"
 
           [desktop_widgets.widget.desktop-widget-0000000000000007.settings]
+          background = true
+          background_opacity = 1.0
+          background_padding = 10
+          background_radius = 0
+          display = "gauge"
           stat = "ram_pct"
           stat2 = ""
 
@@ -298,6 +326,7 @@
           type = "weather"
 
           [desktop_widgets.widget.desktop-widget-0000000000000008.settings]
+          background_radius = 0
           show_forecast = false
 
           [dock]
@@ -619,7 +648,7 @@
           name = "community"
 
           [shell]
-          app_icon_colorize = false
+          app_icon_colorize = true
           avatar_path = ""
           button_borders = true
           card_borders = true
@@ -723,8 +752,8 @@
           session_position = "auto"
           shadow = true
           transparency_mode = "solid"
-          wallpaper_placement = "attached"
-          wallpaper_position = "auto"
+          wallpaper_placement = "floating"
+          wallpaper_position = "center"
           wallpaper_show_names = true
 
           [shell.privacy]
@@ -894,11 +923,11 @@
           enable_community_templates = true
 
           [wallpaper]
-          directory = ""
+          directory = "/home/pim/.wallpapers"
           directory_dark = ""
           directory_light = ""
           edge_smoothness = 0.30000001192092896
-          enabled = false
+          enabled = true
           fill_color = ""
           fill_mode = "crop"
           per_monitor_directories = false

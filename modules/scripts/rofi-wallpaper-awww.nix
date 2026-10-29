@@ -1,8 +1,8 @@
 {
   perSystem = { pkgs, ... }: {
 
-    packages.rofi-wallpaper = pkgs.writeShellApplication {
-      name = "rofi-wallpaper";
+    packages.rofi-wallpaper-awww = pkgs.writeShellApplication {
+      name = "rofi-wallpaper-awww";
 
       runtimeInputs = with pkgs; [
         rofi
