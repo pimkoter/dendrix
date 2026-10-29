@@ -23,7 +23,6 @@
         imports = with self.homeModules; [
           inputs.sops-nix.homeManagerModules.sops
           atuin
-          awww
           bash
           bat
           eza
