@@ -89,6 +89,7 @@
             clang
             compose2nix
             stable.python315
+            nodejs
             rustc
             sdkmanager
             verible
