@@ -233,15 +233,22 @@
           };
         };
 
-        nixpkgs.config.allowUnfreePredicate =
-          pkg:
-          builtins.elem (lib.getName pkg) [
-            "spotify"
-            "android-sdk-platform-tools"
-            "platform-tools"
-            "android-studio"
-            "cuda_cudart"
-          ];
+        nixpkgs.config = {
+          allowBrokenPredicate =
+            pkg:
+            builtins.elem (lib.getName pkg) [
+              "python3.14-posthog"
+            ];
+          allowUnfreePredicate =
+            pkg:
+            builtins.elem (lib.getName pkg) [
+              "spotify"
+              "android-sdk-platform-tools"
+              "platform-tools"
+              "android-studio"
+              "cuda_cudart"
+            ];
+        };
       };
   };
 }
