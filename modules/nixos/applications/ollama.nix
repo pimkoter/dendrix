@@ -1,14 +1,12 @@
 {
-  flake.nixosModules.ollama = { pkgs, lib, ... }: {
+  flake.nixosModules.ollama = { pkgs, ... }: {
     services = {
+      open-webui.enable = true;
       ollama = {
         enable = true;
-
         user = "ollama";
         group = "ollama";
-
         modelsDir = "/var/lib/ollama-models";
-
         package = pkgs.ollama-cuda;
         loadModels = [
           "qwen2.5-coder:14b"
