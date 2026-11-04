@@ -87,6 +87,7 @@
             cargo
             clang
             compose2nix
+            just
             stable.python315
             nodejs
             rustc
