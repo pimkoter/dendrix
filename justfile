@@ -9,3 +9,6 @@ switch:
 
 iso:
   nix build .#nixosConfigurations.iso.config.system.build.isoImage
+
+clean:
+ sudo nix-collect-garbage --delete-older-than 5d
