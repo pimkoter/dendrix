@@ -17,6 +17,10 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pi = {
+      url = "path:/home/pim/Repos/Pi";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     omnisearch = {
       url = "path:/home/pim/Repos/OmniSearch";
       inputs.nixpkgs.follows = "nixpkgs";
