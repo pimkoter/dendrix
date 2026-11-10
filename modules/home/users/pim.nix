@@ -73,6 +73,7 @@
             # Desktop applications
             android-studio
             evince
+            ltspice
             orca-slicer
             blender
             kicad
@@ -244,6 +245,7 @@
           allowUnfreePredicate =
             pkg:
             builtins.elem (lib.getName pkg) [
+              "ltspice"
               "spotify"
               "android-sdk-platform-tools"
               "platform-tools"
