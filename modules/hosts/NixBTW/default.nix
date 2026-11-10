@@ -14,6 +14,7 @@
 
       # Core modules
       boot
+      docker
       drivers
       howdy
       kanata-hrm
