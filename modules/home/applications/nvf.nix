@@ -98,6 +98,7 @@
               enable = true;
               format.type = [ "nixfmt" ];
             };
+            json.enable = true;
             yaml.enable = true;
             python.enable = true;
             tex.enable = true;
