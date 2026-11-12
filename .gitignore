@@ -1,3 +1,5 @@
 *.iso
-result*
-.idea*
+.idea/
+result/
+sessions/
+
