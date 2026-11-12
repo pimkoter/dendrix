@@ -77,6 +77,7 @@
             orca-slicer
             blender
             kicad
+            poppler-utils
             freecad
             qbittorrent
             thunderbird
@@ -118,6 +119,7 @@
             lazygit
             ripgrep
             sops
+            tesseract
             unzip
             wl-clipboard-rs
 
