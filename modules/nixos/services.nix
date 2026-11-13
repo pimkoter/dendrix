@@ -22,9 +22,6 @@
       upower.enable = true;
       xserver.xkb.layout = "us";
       blueman.enable = true;
-      tailscale = {
-        enable = true;
-      };
       fail2ban = {
         enable = true;
         bantime = "10m";

@@ -29,6 +29,7 @@
       services
       sops
       stylix
+      tailscale
 
       # Users
       pim
