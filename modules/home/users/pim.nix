@@ -128,6 +128,7 @@
             inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
             inputs.zennotes.packages.${pkgs.stdenv.hostPlatform.system}.zennotes-desktop
             inputs.pi.packages.${pkgs.stdenv.hostPlatform.system}.default
+            inputs.helium.packages.${system}.default
 
             # Misc
             (lib.lowPrio pkgs.gh)
